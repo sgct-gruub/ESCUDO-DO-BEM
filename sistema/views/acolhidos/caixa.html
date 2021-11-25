@@ -1,0 +1,273 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina_Mae}} {{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li><a href="{{path_for('listar_acolhidos')}}">Acolhidos</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>{{item.nome}}</h3> <br />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button class="btn btn-info btn-circle btn-lg pull-right" data-toggle="tooltip" title="Voltar para listagem" onClick="window.location.href='{{path_for('caixa')}}'">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </button>
+
+                                	<!-- <a href="#" class="">
+                                		<div class="circle-md pull-right circle bg-info mytooltip">
+                                			<i class="ti-plus"></i>
+                                			<span class="tooltip-content99">Novo registro</span>
+                                		</div>
+                                	</a> -->
+                                </div>
+                            </div>
+
+                            <form action="{{path_for('post_cadastrar_caixa_acolhido', {'id' : item.id})}}" method="POST">
+                                <div class="row form-group">
+                                    <div class="col-md-2">
+                                        <label for="data" class="control-label">Data</label>
+                                        <input type="text" name="data" id="data" class="form-control" value="{{'now'|date('d/m/Y')}}" required="" onkeyup="mascara(this, mdata)" maxlength="10" />
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label for="descricao" class="control-label">Descrição</label>
+                                        <input type="text" name="descricao" id="descricao" class="form-control" required=""/>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="tipo" class="control-label">Tipo</label>
+                                        <select name="tipo" id="tipo" class="form-control select2" data-live-search="true" required="">
+                                            <option value="">-- SELECIONE</option>
+                                            <option value="1">Crédito</option>
+                                            <option value="0">Débito</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="valor">Valor</label>
+                                        <input type="text" name="valor" id="valor" class="form-control dinheiro" placeholder="R$" required="">
+                                    </div>
+                                </div>
+
+                                <div class="row m-t-20">
+                                    <div class="col-md-12">
+                                        <button type="reset" class="btn btn-default waves-effect waves-light">Recomeçar</button>
+                                        <button type="submit" class="btn btn-success waves-effect waves-light pull-right">Salvar</button>
+                                        <input type="hidden" name="usuario" value="{{session.Auth}}" />
+
+                                        <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                        <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {% if session.Unidade != '' and acesso_usuario.acolhidos.caixa.r == 'on' %}
+                    {% if verifica_caixa[item.id] >= 1 %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">Lançamentos</h2>
+                                    <h5 class="text-muted m-b-40">Abaixo estão listados todos os lançamentos para o caixa deste acolhido</h5>
+                                </div>
+                            </div>
+
+                            <table class="table table-responsive table-hover">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Data</th>
+                                                                                <th>Descrição</th>
+                                                                                <th>Tipo</th>
+                                                                                <th>Valor</th>
+                                                                                <th>Usuário</th>
+                                                                                {% if acesso_usuario.acolhidos.caixa.d == 'on' %}
+                                                                                <th></th>
+                                                                                {% endif %}
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {% for c in caixa %}
+                                                                            {% if item.id == c.acolhido %}
+                                                                            <tr id="caixa-{{c.id}}">
+                                                                                <td>{{c.data|date('d/m/Y')}}</td>
+                                                                                <td>{{c.descricao}}</td>
+                                                                                <td>
+                                                                                    {% if c.tipo == 0 %}
+                                                                                    <span class="badge badge-danger">Débito</span>
+                                                                                    {% else %}
+                                                                                    <span class="badge badge-success">Crédito</span>
+                                                                                    {% endif %}
+                                                                                </td>
+                                                                                <td>R${{c.valor|number_format(2, ',', '.')}}</td>
+                                                                                <td>{{usuario[c.id].name}}</td>
+                                                                                {% if acesso_usuario.acolhidos.caixa.d == 'on' %}
+                                                                                <td><span data-toggle="tooltip" title="Remover"><a href="#" class="btn btn-sm btn-rounded btn-danger remover-caixa-{{ c.id }}"><i class="fa fa-trash-o"></i></a></span></td>
+                                                                                {% endif %}
+                                                                            </tr>
+                                                                            {% endif %}
+                                                                            {% endfor %}
+                                                                            <tr style="font-weight: bold;">
+                                                                                <td align="right" colspan="4">SALDO</td>
+                                                                                <td align="left" colspan="2">R${{saldo_caixa[item.id]|number_format(2, ',', '.')}}</td>
+                                                                            </tr>
+                                                                        </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- Switchery -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet">
+
+    <style>
+        .form-group label 
+        {
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block include_js %}
+    <!--Data Tables -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <!-- start - This is for export functionality only -->
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- end - This is for export functionality only -->
+
+    <!-- Form Validator  -->
+    <script src="{{base_url()}}/public/assets/js/validator.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/mascaras.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+    <!-- <script src="{{base_url()}}/public/assets/js/cpfcnpjmask.js"></script> -->
+    <script src="{{base_url()}}/public/assets/js/jquery.mask.min.js"></script>
+
+    <!-- Sweetchery  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/switchery/dist/switchery.min.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Switchery
+            var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            $('.js-switch').each(function() {
+                new Switchery($(this)[0], $(this).data());
+            });
+
+            $('form').on('reset', () => {
+              $(".select2").select2('val', '');
+            });
+
+            {% if session.Unidade != '' and acesso_usuario.acolhidos.caixa.d == 'on' %}
+            {% for c in caixa %}
+            $('.remover-caixa-{{ c.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e este lançamento será deletado!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: true 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_caixa_acolhido', { 'id' : c.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "Este lançamento foi excluído com sucesso.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        location.reload();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar os dados do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Os dados deste lançamento estão a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+            {% endif %}
+        });
+    </script>
+
+    <script>
+	    $(document).ready(function() {
+            $("input.dinheiro").maskMoney({showSymbol:true, symbol:"R$", decimal:".", thousands:""});
+
+	        $('#myTable').DataTable();
+	    });
+	</script>
+{% endblock %}

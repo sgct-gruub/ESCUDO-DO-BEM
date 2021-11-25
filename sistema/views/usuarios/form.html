@@ -1,0 +1,504 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina_Mae}} {{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li><a href="#">Financeiro</a></li>
+                            <li><a href="{{path_for('contas_a_pagar')}}/mes/{{now|date('m')}}/ano/{{now|date('Y')}}">Contas a Pagar</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button class="btn btn-info btn-circle btn-lg pull-right" data-toggle="tooltip" title="Voltar para listagem" onClick="window.location.href='{{path_for('contas_a_pagar')}}/mes/{{now|date('m')}}/ano/{{now|date('Y')}}'">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </button>
+
+                                	<!-- <a href="#" class="">
+                                		<div class="circle-md pull-right circle bg-info mytooltip">
+                                			<i class="ti-plus"></i>
+                                			<span class="tooltip-content99">Novo registro</span>
+                                		</div>
+                                	</a> -->
+                                </div>
+                            </div>
+
+                            <form name="adicionar-conta" action="" method="POST">
+                                <div class="row form-group">
+                                    <div class="col-md-2">
+                                        <label for="num_nf" class="control-label">Nº Nota Fiscal</label>
+                                        <input type="text" name="num_nf" id="num_nf" class="form-control" value="{{item.num_nf}}" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="descricao" class="control-label"><i class="fa fa-asterisk text-danger"></i> Descrição</label>
+                                        <input type="text" name="descricao" id="descricao" class="form-control" value="{{item.descricao}}" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="data_prevista" class="control-label"><i class="fa fa-asterisk text-danger"></i> Data Prevista</label>
+                                        <input type="text" name="data_prevista" id="data_prevista" class="form-control inputDate" value="{{i.data_prevista|date('d/m/Y')}}" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="valor_previsto" class="control-label"><i class="fa fa-asterisk text-danger"></i> Valor Previsto</label>
+                                        <input type="text" name="valor_previsto" id="valor_previsto" class="form-control dinheiro" placeholder="R$0.00" value="{{item.valor_previsto}}" />
+                                    </div>
+                                </div>
+
+                                <div class="row m-t-20">
+                                    <div class="col-md-3">
+                                        <label for="categoria" class="control-label"><i class="fa fa-asterisk text-danger"></i> Categoria</label>
+                                        <select name="categoria" id="categoria" class="form-control select2" required="">
+                                            <option value="" selected="" disabled="">-- SELECIONE</option>
+                                            {% for c in categorias %}
+                                            <option value="{{c.id}}" {% if item.categoria == c.id %} selected="" {% endif %}>{{c.nome}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="fornecedor" class="control-label">Fornecedor</label>
+                                        <select name="fornecedor" id="fornecedor" class="form-control select2">
+                                            <option value="" selected="" disabled="">-- SELECIONE</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="conta_bancaria" class="control-label"><i class="fa fa-asterisk text-danger"></i> Conta Bancária</label>
+                                        <select name="conta_bancaria" id="conta_bancaria" class="form-control select2" required="">
+                                            <option value="" selected="" disabled="">-- SELECIONE</option>
+                                            {% for cb in contas_bancarias %}
+                                            <option value="{{cb.id}}" {% if item.conta_bancaria == cb.id %} selected="" {% endif %}>{{cb.nome}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label for="status" class="control-label">Pago?</label> <br />
+                                        <input type="checkbox" name="status" id="status" {% if item.status == 1 %} checked {% endif %} class="js-switch" data-color="#99d683" />
+                                    </div>
+
+                                    <div id="formas_pagamento" class="col-md-2" style="{% if item.status == 0 %}display: none;{% else %}display: block;{% endif %}">
+                                        <label for="forma_pagamento" class="control-label"><i class="fa fa-asterisk text-danger"></i> Forma de Pagamento</label>
+                                        <select name="forma_pagamento" id="forma_pagamento" class="form-control select2">
+                                            <option value="" selected="" disabled="">-- SELECIONE</option>
+                                            <option value="dinheiro" {% if item.forma_pagamento == 'dinheiro' %} selected="" {% endif %}>Dinheiro</option>
+                                            <option value="cheque" {% if item.forma_pagamento == 'cheque' %} selected="" {% endif %}>Cheque</option>
+                                            <option value="transferencia" {% if item.forma_pagamento == 'transferencia' %} selected="" {% endif %}>Transferência/Depósito</option>
+                                            <option value="credito" {% if item.forma_pagamento == 'credito' %} selected="" {% endif %}>Cartão Crédito</option>
+                                            <option value="debito" {% if item.forma_pagamento == 'debito' %} selected="" {% endif %}>Cartão Débito</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="dados_dinheiro" class="row m-t-20" style="{% if item.forma_pagamento == 'dinheiro' %}display: block;{% else %}display: none;{% endif %}">
+                                    <div class="col-md-12">
+                                        <label for="valor_efetuado" class="control-label">Valor efetuado</label>
+                                        <input type="text" name="valor_efetuado" id="valor_efetuado" class="form-control dinheiro" value="{{item.valor_efetuado}}" placeholder="R${{item.valor_previsto}}" />
+                                    </div>
+                                </div>
+
+                                <div id="dados_transferencia" class="row m-t-20" style="{% if item.forma_pagamento == 'transferencia' %}display: block;{% else %}display: none;{% endif %}">
+                                    <div class="col-md-3">
+                                        <label for="banco" class="control-label">Banco</label>
+                                        <select name="dados_transferencia[banco]" id="banco" class="form-control select2">
+                                            <option value="" selected="" disabled="">-- SELECIONE</option>
+                                            <option value="bb" {% if dados_pagamento.banco == 'bb' %} selected="" {% endif %}>Banco do Brasil</option>
+                                            <option value="banrisul" {% if dados_pagamento.banco == 'banrisul' %} selected="" {% endif %}>Banrisul</option>
+                                            <option value="bradesco" {% if dados_pagamento.banco == 'bradesco' %} selected="" {% endif %}>Bradesco</option>
+                                            <option value="cef" {% if dados_pagamento.banco == 'cef' %} selected="" {% endif %}>Caixa Econômica Federal</option>
+                                            <option value="itau" {% if dados_pagamento.banco == 'itau' %} selected="" {% endif %}>Itaú</option>
+                                            <option value="santander" {% if dados_pagamento.banco == 'santander' %} selected="" {% endif %}>Santander</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="agencia" class="control-label">Agência</label>
+                                        <input type="number" name="dados_transferencia[agencia]" id="agencia" class="form-control" value="{{dados_pagamento.agencia}}" />
+                                    </div>
+                                    <div class="col-md-1" id="row_dv_ag">
+                                        <label for="dv_ag" class="control-label">Dígito</label>
+                                        <input type="text" name="dados_transferencia[dv_ag]" id="dv_ag" class="form-control" value="{{dados_pagamento.dv_ag}}" />
+                                    </div>
+                                    <div class="col-md-1" id="row_op">
+                                        <label for="op" class="control-label">Operação</label>
+                                        <input type="text" name="dados_transferencia[op]" id="op" class="form-control" value="{{dados_pagamento.op}}" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="conta" class="control-label">Conta</label>
+                                        <input type="number" name="dados_transferencia[conta]" id="conta" class="form-control" value="{{dados_pagamento.conta}}" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label for="dv_cc" class="control-label">Dígito</label>
+                                        <input type="text" name="dados_transferencia[dv_cc]" id="num_nf" class="form-control" value="{{dados_pagamento.dv_cc}}" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="favorecido" class="control-label">Favorecido</label>
+                                        <input type="text" name="dados_transferencia[favorecido]" id="favorecido" class="form-control" value="{{dados_pagamento.favorecido}}" />
+                                    </div>
+                                </div>
+
+                                <div id="dados_cheque" class="row m-t-20" style="{% if item.forma_pagamento == 'cheque' %}display: block;{% else %}display: none;{% endif %}">
+                                    <div class="col-md-3">
+                                        <label for="banco" class="control-label">Banco</label>
+                                        <select name="dados_cheque[banco]" id="banco_2" class="form-control select2">
+                                            <option value="" selected="" disabled="">-- SELECIONE</option>
+                                            <option value="bb" {% if dados_pagamento.banco == 'bb' %} selected="" {% endif %}>Banco do Brasil</option>
+                                            <option value="banrisul" {% if dados_pagamento.banco == 'banrisul' %} selected="" {% endif %}>Banrisul</option>
+                                            <option value="bradesco" {% if dados_pagamento.banco == 'bradesco' %} selected="" {% endif %}>Bradesco</option>
+                                            <option value="cef" {% if dados_pagamento.banco == 'cef' %} selected="" {% endif %}>Caixa Econômica Federal</option>
+                                            <option value="itau" {% if dados_pagamento.banco == 'itau' %} selected="" {% endif %}>Itaú</option>
+                                            <option value="santander" {% if dados_pagamento.banco == 'santander' %} selected="" {% endif %}>Santander</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="num_cheque" class="control-label">Nº do cheque</label>
+                                        <input type="number" name="dados_cheque[numero]" id="num_cheque" class="form-control" value="{{dados_pagamento.numero}}" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="agencia_cheque" class="control-label">Agência</label>
+                                        <input type="number" name="dados_cheque[agencia]" id="agencia_cheque" class="form-control" value="{{dados_pagamento.agencia}}" />
+                                    </div>
+                                    <div class="col-md-1" id="row_dv_ag_2">
+                                        <label for="dv_ag_cheque" class="control-label">Dígito</label>
+                                        <input type="text" name="dados_cheque[dv_ag]" id="dv_ag_cheque" class="form-control" value="{{dados_pagamento.dv_ag}}" />
+                                    </div>
+                                    <div class="col-md-1" id="row_op_2">
+                                        <label for="op" class="control-label">Operação</label>
+                                        <input type="text" name="dados_cheque[op]" id="op" class="form-control" value="{{dados_pagamento.op}}" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="bom_para" class="control-label">Bom para...</label>
+                                        <input type="text" name="dados_cheque[bom_para]" id="bom_para" class="form-control inputDate" placeholder="{{now|date('d/m/Y')}}" value="{{dados_pagamento.bom_para}}" />
+                                    </div>
+                                </div>
+
+                                <div class="row m-t-20">
+                                    <div class="col-md-12">
+                                        <label for="observacoes" class="control-label">Observações</label>
+                                        <textarea name="observacoes" id="observacoes" class="form-control" rows="5"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row m-t-20">
+                                    <div class="col-md-12">
+                                        <button type="reset" class="btn btn-default waves-effect waves-light">Recomeçar</button>
+                                        <button type="button" class="btn btn-success waves-effect waves-light pull-right" id="submit-adicionar-conta">Salvar</button>
+
+                                        <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                        <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- Switchery -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet">
+
+    <style>
+        .form-group label 
+        {
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block include_js %}
+    <!--Data Tables -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <!-- start - This is for export functionality only -->
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- end - This is for export functionality only -->
+
+    <!-- Form Validator  -->
+    <script src="{{base_url()}}/public/assets/js/validator.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+    <script src="{{base_url()}}/public/assets/js/cpfcnpjmask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.mask.min.js"></script>
+
+    <!-- Sweetchery  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/switchery/dist/switchery.min.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Switchery
+            var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            $('.js-switch').each(function() {
+                new Switchery($(this)[0], $(this).data());
+            });
+
+            $('#status').on("change" , function() {
+                if($(this).is(':checked')){
+                    $('#formas_pagamento').css('display', 'block');
+                    $('#forma_pagamento').select2("val", "");
+                } else {
+                    $('#formas_pagamento').css('display', 'none');
+                    $('#dados_transferencia').css('display', 'none');
+                    $('#dados_cheque').css('display', 'none');
+                    $('#dados_dinheiro').css('display', 'none');
+                    $('#forma_pagamento').select2("val", "");
+                }
+            });
+
+            {% if dados_pagamento.banco == 'cef' %}
+                $('#row_op').css('display', 'block');
+                $('#row_dv_ag').css('display', 'none');
+
+                $('#row_op_2').css('display', 'block');
+                $('#row_dv_ag_2').css('display', 'none');
+            {% else %}
+                $('#row_op').css('display', 'none');
+                $('#row_dv_ag').css('display', 'block');
+
+                $('#row_op_2').css('display', 'none');
+                $('#row_dv_ag_2').css('display', 'block');
+            {% endif %}
+
+            $('#banco').on("change" , function() {
+                if($(this).val() == 'cef'){
+                    $('#row_op').css('display', 'block');
+                    $('#row_dv_ag').css('display', 'none');
+                } else {
+                    $('#row_op').css('display', 'none');
+                    $('#row_dv_ag').css('display', 'block');
+                }
+            });
+
+            $('#banco_2').on("change" , function() {
+                if($(this).val() == 'cef'){
+                    $('#row_op_2').css('display', 'block');
+                    $('#row_dv_ag_2').css('display', 'none');
+                } else {
+                    $('#row_op_2').css('display', 'none');
+                    $('#row_dv_ag_2').css('display', 'block');
+                }
+            });
+
+            $('#forma_pagamento').on("change" , function() {
+                if($(this).val() == 'dinheiro'){
+                    $('#dados_dinheiro').css('display', 'block');
+                } else {
+                    $('#dados_dinheiro').css('display', 'none');
+                }
+
+                if($(this).val() == 'transferencia'){
+                    $('#dados_transferencia').css('display', 'block');
+                } else {
+                    $('#dados_transferencia').css('display', 'none');
+                }
+
+                if($(this).val() == 'cheque'){
+                    $('#dados_cheque').css('display', 'block');
+                } else {
+                    $('#dados_cheque').css('display', 'none');
+                }
+            });
+
+            $('form').on('reset', () => {
+              $(".select2").select2('val', '');
+            });
+
+            $('#submit-adicionar-conta').click( function(){
+                var dataString = $('form[name="adicionar-conta"]').serialize();
+
+                var valor_previsto = $('#valor_previsto').val();
+                var valor_efetuado = $('#valor_efetuado').val();
+
+                if(parseFloat(valor_efetuado) > parseFloat(valor_previsto)){
+                    swal("Ooopssss!", "O valor efetuado é maior do que o previsto. Por favor, corrija e tente novamente!", "error")
+                } else if(parseFloat(valor_efetuado) < parseFloat(valor_previsto)){
+                        swal({   
+                            title: "Aviso!",   
+                            text: "O valor efetuado é menor do que o previsto. Isto gerará um saldo pendente para esta conta!",   
+                            type: "warning",
+                            showCancelButton: true,   
+                            cancelButtonColor: "#DD6B55",
+                            confirmButtonText: "Continuar",   
+                            cancelButtonText: "Cancelar",   
+                            closeOnConfirm: false,   
+                            closeOnCancel: true
+                        }, function(isConfirm){
+                            if(isConfirm){
+                                {% if not item %}
+                                $.ajax({
+                                    type: "POST",
+                                    url: "{{path_for('post_cadastrar_conta_a_pagar')}}",
+                                    data: dataString,
+                                    success: function() {
+                                        swal({   
+                                            title: "Dados gravados!",   
+                                            text: "Conta a pagar adicionada com sucesso. E agora, o que você quer fazer?",   
+                                            type: "success",
+                                            showCancelButton: true,   
+                                            // confirmButtonColor: "#DD6B55",   
+                                            confirmButtonText: "Incluir outra",   
+                                            cancelButtonText: "Listar contas",   
+                                            closeOnConfirm: false,   
+                                            closeOnCancel: false
+                                        }, function(isConfirm){
+                                            if(isConfirm){
+                                                location.reload();
+                                            } else {
+                                                window.location.href='{{path_for('contas_a_pagar')}}/mes/{{now|date('m')}}/ano/{{now|date('Y')}}';
+                                            }
+                                        });
+                                    },
+                                    error: function() {
+                                        swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+                                    }
+                                });
+                                {% else %}
+                                $.ajax({
+                                    type: "POST",
+                                    url: "{{path_for('post_editar_conta_a_pagar', {'id' : item.id})}}",
+                                    data: dataString,
+                                    success: function() {
+                                        swal({   
+                                            title: "Dados gravados!",   
+                                            text: "Conta a pagar editada com sucesso. E agora, o que você quer fazer?",   
+                                            type: "success",
+                                            showCancelButton: true,   
+                                            // confirmButtonColor: "#DD6B55",   
+                                            confirmButtonText: "Continuar editando",   
+                                            cancelButtonText: "Listar contas",   
+                                            closeOnConfirm: false,   
+                                            closeOnCancel: false
+                                        }, function(isConfirm){
+                                            if(isConfirm){
+                                                location.reload();
+                                            } else {
+                                                window.location.href='{{path_for('contas_a_pagar')}}/mes/{{now|date('m')}}/ano/{{now|date('Y')}}';
+                                            }
+                                        });
+                                    },
+                                    error: function() {
+                                        swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+                                    }
+                                });
+                                {% endif %}
+                            }
+                        });
+                } else {
+                {% if not item %}
+                $.ajax({
+                    type: "POST",
+                    url: "{{path_for('post_cadastrar_conta_a_pagar')}}",
+                    data: dataString,
+                    success: function() {
+                        swal({   
+                            title: "Dados gravados!",   
+                            text: "Conta a pagar adicionada com sucesso. E agora, o que você quer fazer?",   
+                            type: "success",
+                            showCancelButton: true,   
+                            // confirmButtonColor: "#DD6B55",   
+                            confirmButtonText: "Incluir outra",   
+                            cancelButtonText: "Listar contas",   
+                            closeOnConfirm: false,   
+                            closeOnCancel: false
+                        }, function(isConfirm){
+                            if(isConfirm){
+                                location.reload();
+                            } else {
+                                window.location.href='{{path_for('contas_a_pagar')}}/mes/{{now|date('m')}}/ano/{{now|date('Y')}}';
+                            }
+                        });
+                    },
+                    error: function() {
+                        swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+                    }
+                });
+                {% else %}
+                $.ajax({
+                    type: "POST",
+                    url: "{{path_for('post_editar_conta_a_pagar', {'id' : item.id})}}",
+                    data: dataString,
+                    success: function() {
+                        swal({   
+                            title: "Dados gravados!",   
+                            text: "Conta a pagar editada com sucesso. E agora, o que você quer fazer?",   
+                            type: "success",
+                            showCancelButton: true,   
+                            // confirmButtonColor: "#DD6B55",   
+                            confirmButtonText: "Continuar editando",   
+                            cancelButtonText: "Listar contas",   
+                            closeOnConfirm: false,   
+                            closeOnCancel: false
+                        }, function(isConfirm){
+                            if(isConfirm){
+                                location.reload();
+                            } else {
+                                window.location.href='{{path_for('contas_a_pagar')}}/mes/{{now|date('m')}}/ano/{{now|date('Y')}}';
+                            }
+                        });
+                    },
+                    error: function() {
+                        swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+                    }
+                });
+                {% endif %}
+                }
+
+                return false;
+            });
+        });
+    </script>
+
+    <script>
+	    $(document).ready(function() {
+            $("input.dinheiro").maskMoney({showSymbol:true, symbol:"R$", decimal:".", thousands:""});
+
+	        $('#myTable').DataTable();
+	    });
+	</script>
+
+    
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina_Mae}} {{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                            </div>
+
+                            <form action="{{base_url()}}/pdfs/relatorios/altas.php" method="POST" target="_blank">
+                                <div class="row form-group">
+                                    <div class="col-md-6">
+                                        <label for="periodo">Período</label> 
+                                        <div class="input-group" id="datepicker">
+                                            <input type="date" class="form-control" name="start" autocomplete="off" required="" />
+                                            <span class="input-group-addon">até</span>
+                                            <input type="date" class="form-control" name="end" autocomplete="off" required="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="alta">Tipo de Alta</label> 
+                                        <select name="alta" id="alta" class="form-control select2">
+                                            <option selected="">TODOS OS TIPOS DE ALTA</option>
+                                            <option value="11">Alta Terapêutica</option>
+                                            <option value="12">Alta Solicitada</option>
+                                            <option value="13">Alta Administrativa</option>
+                                            <option value="14">Evasão</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row m-t-20">
+                                    <div class="col-md-12">
+                                        <button type="reset" class="btn btn-default waves-effect waves-light">Recomeçar</button>
+                                        <button type="submit" class="btn btn-success waves-effect waves-light pull-right">Gerar</button>
+
+                                        <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                        <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- Switchery -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet">
+
+    <!-- Dual List -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .form-group label 
+        {
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block include_js %}
+    <!-- Datepicker + Daterangepicker  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- Form Validator  -->
+    <script src="{{base_url()}}/public/assets/js/validator.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/mascaras.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+    <!-- <script src="{{base_url()}}/public/assets/js/cpfcnpjmask.js"></script> -->
+    <script src="{{base_url()}}/public/assets/js/jquery.mask.min.js"></script>
+
+    <!-- Sweetchery  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/switchery/dist/switchery.min.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.input-daterange').datepicker({
+                format: 'dd/mm/yyyy',
+                language: 'pt-BR',
+                orientation: 'bottom-left',
+                autoclose: true,
+                todayHighlight: true,
+            });
+
+            // Switchery
+            var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            $('.js-switch').each(function() {
+                new Switchery($(this)[0], $(this).data());
+            });
+
+            $('form').on('reset', () => {
+              $(".select2").select2('val', '');
+            });
+        });
+    </script>
+
+    <script>
+	    $(document).ready(function() {
+            $("input.dinheiro").maskMoney({showSymbol:true, symbol:"R$", decimal:".", thousands:""});
+	    });
+	</script>
+
+    <script type="text/javascript">
+        // Registra o evento blur do campo "cep", ou seja, quando o usuário sair do campo "cep" faremos a consulta dos dados
+        $("#cep").blur(function(){
+            // Para fazer a consulta, removemos tudo o que não é número do valor informado pelo usuário
+            var cep = this.value.replace(/[^0-9]/, "");
+                
+            // Validação do CEP; caso o CEP não possua 8 números, então cancela a consulta
+            if(cep.length!=8){
+                return false;
+            }
+                
+            // Utilizamos o webservice "viacep.com.br" para buscar as informações do CEP fornecido pelo usuário.
+            // A url consiste no endereço do webservice ("http://viacep.com.br/ws/"), mais o cep que o usuário
+            // informou e também o tipo de retorno que desejamos, podendo ser "xml", "piped", "querty" ou o que
+            // iremos utilizar, que é "json"
+            var url = "https://viacep.com.br/ws/"+cep+"/json/";
+                
+            // Aqui fazemos uma requisição ajax ao webservice, tratando o retorno com try/catch para que caso ocorra algum
+            // erro (o cep pode não existir, por exemplo) o usuário não seja afetado, assim ele pode continuar preenchendo os campos
+            $.getJSON(url, function(dadosRetorno){
+                try{
+                    // Insere os dados em cada campo
+                    $("#endereco").val(dadosRetorno.logradouro);
+                    $("#bairro").val(dadosRetorno.bairro);
+                    $("#cidade").val(dadosRetorno.localidade);
+                    $("#uf").val(dadosRetorno.uf);
+                    $("#num").focus();
+                }catch(ex){}
+            });
+        });
+    </script>
+{% endblock %}

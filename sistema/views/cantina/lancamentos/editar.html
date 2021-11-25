@@ -1,0 +1,348 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina_Mae}} {{Titulo_Pagina}}</h4>
+                    </div>
+                    <div class="col-lg-2 col-sm-3 col-md-3 col-xs-12">
+                        <a href="#" class="btn btn-primary pull-right btn-block m-l-20 waves-effect waves-light" onClick="goBack()">Voltar</a>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                
+                <div class="row conteudo">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                            </div>
+
+                            <form action="{{path_for('post_editar_lancamento', {'id' : item.id})}}" method="POST">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="acolhido">Acolhido</label>
+                                    <select name="acolhido" id="acolhido" class="form-control select2" required="">
+                                        <option value="{{acolhido.id}}" selected="">{{acolhido.nome}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="data">Data do lançamento</label>
+                                    <input type="date" name="data" id="data" class="form-control" value="{{item.data|date('Y-m-d')}}">
+                                </div>
+                            </div>
+                            <hr />
+                            <table class="table table-hover order-list">
+                                <thead>
+                                    <tr>
+                                        <th width="40%">Produto</th>
+                                        <th>Quantidade</th>
+                                        <!-- <th>Valor unitário</th> -->
+                                        <!-- <th>Subtotal</th> -->
+                                    </tr>
+                                </thead>
+                                                            
+                                <tbody>
+                                    {% for il in itens_lancamento %}
+                                    <tr>
+                                        <td>
+                                            <select name="product[]" class="form-control select2" required="" >
+                                                <option value="" selected="" disabled="">-- SELECIONE</option>
+                                                {% for p in produtos %}
+                                                <option value="{{p.id}}" {% if produto[il.id].id == p.id %} selected="" {% endif %}>{{p.nome}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td><input type="number" name="qty[]" class="form-control qtd" placeholder="0" required="" value="{{il.quantidade}}" /></td>
+                                        <!-- <td><input type="text" name="price[]" class="form-control dinheiro" placeholder="R$" required="" /></td> -->
+                                        <!-- <td><input type="text" name="linetotal" readonly="readonly" class="form-control" /></td> -->
+                                        <td><a class="remover-item-{{ il.id }} btn btn-danger btn-circle"> x </a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                                            
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3">
+                                            <button type="button" class="btn btn-primary" id="addrow"><i class="mdi mdi-plus"></i> &nbsp; Adicionar Produto</button>
+                                        </td>
+
+                                        <!-- <td colspan="4" class="text-right">
+                                            <h4><strong>Total R$<span id="grandtotal">0.00</span></strong></h4>
+                                        </td> -->
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="reset" class="btn btn-default">Recomeçar</button>
+                                    <button type="submit" class="btn btn-success pull-right">Editar lançamento</button>
+                                    <input type="hidden" name="valor_total" id="valor_total" />
+                                    <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                    <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- Data Tables -->
+	<link href="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+{% endblock %}
+
+
+{% block include_js %}
+    <!--Data Tables -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+
+    <!-- start - This is for export functionality only -->
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- end - This is for export functionality only -->
+
+    <!-- Form Validator  -->
+    <script src="{{base_url()}}/public/assets/js/validator.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/mascaras.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+        function goBack() {
+            window.history.back();
+        }
+        
+        $(document).ready(function() {
+            {% for il in itens_lancamento %}
+            $('.remover-item-{{ il.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e este item será removido deste lançamento!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: true 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_item_lancamento', { 'id' : il.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "Este ítem foi removido deste lançamento.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        location.reload();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar os dados do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Este item está a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+        });
+    </script>
+
+    <script>
+	    $(document).ready(function() {
+	        $('#myTable').DataTable();
+
+            $("#btn_novo_lancamento").click(function(){
+                $("#novo_lancamento").fadeIn();
+                $("#btn_novo_lancamento").fadeOut();
+                $("#cancelar_lancamento").fadeIn();
+                $(".conteudo").fadeOut();
+            });
+
+            $("#cancelar_lancamento").click(function(){
+                $("#novo_lancamento").fadeOut();
+                $("#btn_novo_lancamento").fadeIn();
+                $("#cancelar_lancamento").fadeOut();
+                $(".conteudo").fadeIn();
+            });
+	    });
+	</script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('form').on('reset', () => {
+              $(".select2").select2('val', '');
+            });
+
+            {% if dados_pagamento.banco == 'cef' %}
+                $('#row_op').css('display', 'block');
+                $('#row_dv_ag').css('display', 'none');
+
+                $('#row_op_2').css('display', 'block');
+                $('#row_dv_ag_2').css('display', 'none');
+            {% else %}
+                $('#row_op').css('display', 'none');
+                $('#row_dv_ag').css('display', 'block');
+
+                $('#row_op_2').css('display', 'none');
+                $('#row_dv_ag_2').css('display', 'block');
+            {% endif %}
+
+            $('#banco').on("change" , function() {
+                if($(this).val() == 'cef'){
+                    $('#row_op').css('display', 'block');
+                    $('#row_dv_ag').css('display', 'none');
+                } else {
+                    $('#row_op').css('display', 'none');
+                    $('#row_dv_ag').css('display', 'block');
+                }
+            });
+
+            $('#banco_2').on("change" , function() {
+                if($(this).val() == 'cef'){
+                    $('#row_op_2').css('display', 'block');
+                    $('#row_dv_ag_2').css('display', 'none');
+                } else {
+                    $('#row_op_2').css('display', 'none');
+                    $('#row_dv_ag_2').css('display', 'block');
+                }
+            });
+
+            $('#forma_pagamento').on("change" , function() {
+                if($(this).val() == 'dinheiro'){
+                    $('#dados_dinheiro').css('display', 'block');
+                } else {
+                    $('#dados_dinheiro').css('display', 'none');
+                }
+
+                if($(this).val() == 'transferencia'){
+                    $('#dados_transferencia').css('display', 'block');
+                } else {
+                    $('#dados_transferencia').css('display', 'none');
+                }
+
+                if($(this).val() == 'cheque'){
+                    $('#dados_cheque').css('display', 'block');
+                } else {
+                    $('#dados_cheque').css('display', 'none');
+                }
+            });
+
+            var counter = 1;
+    
+            $("#addrow").on("click", function () {
+                counter++;
+                
+                var newRow = $("<tr>");
+                var cols = "";
+                cols += '<td><select name="product[]" class="form-control select_'+counter+'">\
+                                                                            <option value="" selected="" disabled="">-- SELECIONE</option>\
+                                                                            {% for p in produtos %}\
+                                                                            <option value="{{p.id}}">{{p.nome}}</option>\
+                                                                            {% endfor %}\
+                                                                        </select></td>';
+                cols += '<td><input type="number" name="qty[]" class="form-control qtd_'+counter+'" placeholder="0" /></td>';
+                // cols += '<td><input type="text" name="price[]" class="form-control dinheiro_'+counter+'" placeholder="R$" /></td>';
+                // cols += '<td><input type="text" name="linetotal" readonly="readonly" class="form-control" /></td>';
+                cols += '<td><a class="deleteRow btn btn-danger btn-circle"> x </a></td>';
+                newRow.append(cols);
+                
+                $("table.order-list").append(newRow);
+                $(".select_"+counter).select2();
+                $(".select_"+counter).select2('val', '');
+                // $("input.qtd_"+counter).maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:"", precision: 2});
+                $("input.dinheiro_"+counter).maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:""});
+            });
+
+            $("table.order-list").on("change keyup keydown paste propertychange bind", 'input[name^="price"], input[name^="qty"]', function (event) {
+                calculateRow($(this).closest("tr"));
+                calculateGrandTotal();
+            });
+            
+            $("table.order-list").on("click", "a.deleteRow", function (event) {
+                $(this).closest("tr").remove();
+                calculateGrandTotal();
+            });
+        });
+
+        function calculateRow(row) {
+            var price = +row.find('input[name^="price"]').val();
+            var qty = +row.find('input[name^="qty"]').val();
+            row.find('input[name^="linetotal"]').val((price * qty).toFixed(2));
+        }
+            
+        function calculateGrandTotal() {
+            var grandTotal = 0;
+
+            $("table.order-list").find('input[name^="linetotal"]').each(function () {
+                grandTotal += +$(this).val();
+            });
+
+            $("#grandtotal").text(grandTotal.toFixed(2));
+            $("#valor_efetuado").val(grandTotal.toFixed(2));
+            $("#valor_total").val(grandTotal.toFixed(2));
+        }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // $("input.qtd").maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:"", precision: 2});
+            $("input.dinheiro").maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:""});
+        });
+    </script>
+    
+{% endblock %}

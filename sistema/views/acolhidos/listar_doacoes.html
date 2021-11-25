@@ -1,0 +1,285 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina_Mae}} {{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li><a href="{{path_for('listar_acolhidos')}}">Acolhidos</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <button class="btn btn-info btn-circle btn-lg pull-right" data-toggle="tooltip" title="Voltar para listagem" onClick="window.location.href='{{path_for('listar_acolhidos')}}'">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-responsive table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Item</th>
+                                            <th>Quantidade</th>
+                                            <th>Unidade</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for d in doacoes %}
+                                        <tr id="{{i.id}}">
+                                            <td data-order="{{ d.data_doacao }}">{{ d.data_doacao|date('d/m/Y') }}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                {% if acesso_usuario.despensa.produtos.u == 'on' %}
+                                                <!-- <span data-toggle="tooltip" title="Editar"><a href="{{path_for('editar_compra', {'id' : c.id})}}" class="btn btn-primary"><i class="fa fa-edit"></i></a></span> -->
+                                                {% endif %}
+
+                                                <span data-toggle="tooltip" title="Ver itens"><a href="#" data-toggle="modal" data-target="#itens-doacao-{{d.id}}" class="btn btn-primary"><i class="fa fa-list"></i></a></span>
+
+                                                {% if acesso_usuario.despensa.produtos.d == 'on' %}
+                                                <span data-toggle="tooltip" title="Remover"><a href="#" class="btn btn-danger remover-doacao-{{ d.id }}"><i class="fa fa-trash-o"></i></a></span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+
+                                        <!-- /.modal itens doação -->
+                                        <div id="itens-doacao-{{d.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        <h4 class="modal-title">Itens da doação</h4>
+                                                    </div>
+                                                    <form name="editar-convenio-{{i.id}}" id="validation" data-toggle="validator" novalidate="true" method="POST">
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                            <div class="col-sm-1">
+                                                                <label>ID</label>
+                                                            </div>
+                                                            <div class="col-sm-5">
+                                                                <label>Nome</label>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <label>Qtd</label>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <label>V. unitário</label>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <label>Total</label>
+                                                            </div>
+                                                            {% for id in itens_doacao %}
+                                                                {% for p in produtos %}
+                                                                    {% if id.doacao == d.id %}
+                                                                        {% if id.produto == p.id %}
+                                                                        <div class="col-sm-1">
+                                                                            {{id.produto}}
+                                                                        </div>
+                                                                        <div class="col-sm-5">
+                                                                            {{p.nome}}
+                                                                        </div>
+                                                                        <div class="col-sm-2">
+                                                                            {{id.quantidade}}
+                                                                        </div>
+                                                                        <div class="col-sm-2">
+                                                                            {{p.unidade}}
+                                                                        </div>
+                                                                        <div class="col-sm-2">
+                                                                            R$0.00
+                                                                        </div>
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                                            <a href="{{base_url()}}/pdfs/imprimir_itens_entrada_despensa.php?tipo=doacao&doacao={{d.id}}" class="btn btn-primary" target="_blank">Imprimir</a>
+                                                        </div>
+                                                        <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                        <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- Data Tables -->
+	<link href="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+{% endblock %}
+
+
+{% block include_js %}
+    <!--Data Tables -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <!-- start - This is for export functionality only -->
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- end - This is for export functionality only -->
+
+    <!-- Form Validator  -->
+    <script src="{{base_url()}}/public/assets/js/validator.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/mascaras.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            {% for i in compras %}
+            $('.remover-{{ i.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e todos os dados desta compra serão deletados!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_compra', { 'id' : i.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "Todos os dados desta compra foram excluídos.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        location.reload();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar os dados do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Os dados desta compra estão a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+
+            {% for d in doacoes %}
+            $('.remover-doacao-{{ d.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e todos os dados desta doação serão deletados!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_doacao', { 'id' : d.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "Todos os dados desta doação foram excluídos.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        location.reload();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar os dados do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Os dados desta doação estão a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+        });
+    </script>
+
+    <script>
+	    $(document).ready(function() {
+	        $('#myTable').DataTable();
+	    });
+	</script>
+
+    
+{% endblock %}

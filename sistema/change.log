@@ -1,0 +1,25 @@
+####################################
+### CHANGE.LOG - CENTRO RENOVAÇÃO ##
+####################################
+
+### LEGENDA ########################
+### + (adicionado) #################
+### = (alterado) ###################
+### - (removido) ###################
+
+05/08/2021
++ Opção para alterar a Fase do acolhimento
++ Incluído a Fase do acolhimento na listagem
+
+22/07/2021
+- Mensalidades com status cancelado não aparecem na listagem
+
+21/07/2021
++ Opção para selecionar/editar o Terapeuta ao editar o acolhimento
++ Opção para selecionar/editar se é Voluntário ao editar o acolhimento
++ Opção para selecionar/editar se é Terceirizado ao editar o acolhimento
++ Corrigido bug que não estava salvando as informações dos itens acima ao iniciar um novo acolhimento
+= Nome do acolhido para cima do menu de impressão de documentos
+
+20/07/2021
++ Lista de chamada por unidade

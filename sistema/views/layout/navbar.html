@@ -1,0 +1,251 @@
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav slimscrollsidebar">
+                <div class="sidebar-head">
+                    <h3><span class="fa-fw open-close"><i class="ti-close ti-menu"></i></span> <span class="">Navegação</span></h3>
+                </div>
+
+                <div class="user-profile">
+                    <!-- <div class="dropdown user-pro-body">
+                        <div><img src="{{base_url()}}/public/assets/images/users/varun.jpg" alt="user-img" class="img-circle"></div>
+                        <a href="#" class="dropdown-toggle u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{session.UserName}} <span class="caret"></span></a>
+                        <ul class="dropdown-menu animated flipInY">
+                            <li><a href="#"><i class="ti-user"></i> Meu Perfil</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{path_for('logout')}}"><i class="fa fa-power-off"></i> Logout</a></li>
+                        </ul>
+                    </div> -->
+                </div>
+                <ul class="nav" id="side-menu">
+                  <li> 
+                    <a href="{{path_for('home')}}" class="waves-effect">
+                      <i  class="mdi mdi-av-timer fa-fw"></i> <span class="">Dashboard</span>
+                    </a> 
+                  </li>
+
+                  <li>
+                    <a href="#" class="waves-effect">
+                      <i class="mdi mdi-currency-usd fa-fw" data-icon="v"></i> <span class=""> Financeiro <span class="fa arrow"></span> </span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li> 
+                          <a href="{{path_for('contas_a_pagar')}}/mes/{{now|date('m')}}/ano/{{now|date('Y')}}">
+                            <i class="ti ti-arrow-down text-danger fa-fw"></i><span class="">Contas a Pagar</span>
+                          </a> 
+                        </li>
+
+                        <li> 
+                          <a href="{{path_for('contas_a_receber')}}/mes/{{now|date('m')}}/ano/{{now|date('Y')}}">
+                            <i class="ti ti-arrow-up text-success fa-fw"></i><span class="">Contas a Receber</span>
+                          </a> 
+                        </li>
+
+                        <li> 
+                          <a href="{{path_for('fluxo_de_caixa')}}/{{now|date('m')}}/{{now|date('Y')}}">
+                            <i class="ti ti-exchange-vertical fa-fw"></i><span class="">Fluxo de Caixa</span>
+                          </a> 
+                        </li>
+
+                        <li class="devider"></li>
+
+                        <li> 
+                          <a href="{{path_for('mensalidades')}}">
+                            <i class=" fa-fw">ME</i><span class="">Mensalidades</span>
+                          </a> 
+                        </li>
+
+                        <li> 
+                          <a href="{{path_for('matriculas')}}">
+                            <i class=" fa-fw">MA</i><span class="">Matrículas</span>
+                          </a> 
+                        </li>
+                        
+                        <li class="devider"></li>
+                        
+                        <li> 
+                          <a href="{{path_for('categorias')}}">
+                            <i class=" fa-fw">CA</i><span class="">Categorias</span>
+                          </a> 
+                        </li>
+
+                        <li> 
+                          <a href="{{path_for('contas_bancarias')}}">
+                            <i class=" fa-fw">CB</i><span class="">Contas Bancárias</span>
+                          </a> 
+                        </li>
+
+                        <li class="devider"></li>
+
+                        <li> 
+                          <a href="{{path_for('calendario_financeiro')}}" class="waves-effect">
+                            <i class="mdi mdi-calendar-check fa-fw"></i> <span class="">Calendário</span> <span class="label label-rouded label-warning pull-right">in dev</span>
+                          </a>
+                        </li>
+                    </ul>
+                  </li>
+
+                  <li> <a href="{{path_for('unidades')}}" class="waves-effect"><i  class="mdi mdi-home fa-fw"></i> <span class="">Unidades</span></a> </li>
+
+                  <li> <a href="{{path_for('quartos')}}" class="waves-effect"><i  class="mdi mdi-hotel fa-fw"></i> <span class="">Quartos</span></a> </li>
+                  
+                  <li> <a href="{{path_for('listar_acolhidos_status', {'status' : 'acolhimento'})}}" class="waves-effect"><i  class="mdi mdi-account-multiple fa-fw"></i> <span class="">Acolhidos</span></a> </li>
+
+                  <li> <a href="{{path_for('status_acolhimento', {'status' : 'andamento'})}}" class="waves-effect"><i  class="mdi mdi-hotel fa-fw"></i> <span class="">Acolhimentos</span></a> </li>
+
+                  <li> 
+                    <a href="{{path_for('calendario')}}" class="waves-effect">
+                      <i  class="mdi mdi-calendar fa-fw"></i> <span class="">Calendário Geral</span>
+                    </a> 
+                  </li>
+
+                  <li> <a href="{{path_for('encaminhamentos')}}" class="waves-effect"><i class="mdi mdi-call-split fa-fw"></i> <span class="">Encaminhamentos</span></a> </li>
+
+                  <li> <a href="{{path_for('ressocializacoes')}}" class="waves-effect"><i  class="ti-direction-alt fa-fw"></i> <span class="">Ressocializações</span></a> </li>
+
+                  <li> <a href="{{path_for('oficios')}}" class="waves-effect"><i class="mdi mdi-briefcase fa-fw"></i> <span class="">Atividades Terapêuticas</span></a> </li>
+
+                  <li> <a href="{{path_for('tecnicos_referencia')}}" class="waves-effect"><i class="fa fa-users fa-fw"></i> <span class="">Terapeutas</span></a> </li>
+
+                  <li> <a href="{{path_for('fornecedores')}}" class="waves-effect"><i  class="mdi mdi-cube-send fa-fw"></i> <span class="hide-menu">Fornecedores</span></a> </li>
+                  
+                  <!-- <li> <a href="{{path_for('convenios')}}" class="waves-effect"><i  class="mdi mdi-hospital fa-fw"></i> <span class="">Convênios</span></a> </li> -->
+
+                  <!-- <li> <a href="#" class="waves-effect"><i class="mdi mdi-magnify fa-fw"></i> <span class="">Monitoramentos</span> </a> </li> -->
+
+                  <li> <a href="javascript:void(0)" class="waves-effect"><i class="mdi mdi-food fa-fw"></i> <span class="">Cantina<span class="fa arrow"></span></span></a>
+                    <ul class="nav nav-second-level">
+                      <li> <a href="{{path_for('lancamentos')}}"><i class="mdi mdi-receipt fa-fw"></i><span class="">Lançamentos</span></a> </li>
+                      <li> <a href="{{path_for('produtos')}}"><i class="mdi mdi-package-variant fa-fw"></i><span class="">Todos os Produtos</span></a> </li>
+                    </ul>
+                  </li>
+
+                  <!-- <li> 
+                    <a href="#" class="waves-effect">
+                      <i  class="mdi mdi-heart fa-fw"></i> <span class="">Doações</span> <span class="fa arrow"></span>
+                    </a> 
+                    <ul class="nav nav-second-level">
+                      <li> 
+                        <a href="{{path_for('redes')}}">
+                          <span class="">Redes</span>
+                        </a> 
+                      </li>
+                      <li> 
+                        <a href="{{path_for('doadores')}}">
+                          <span class="">Doadores</span>
+                        </a> 
+                      </li>
+                      <li> 
+                        <a href="{{path_for('cobrancas')}}">
+                          <span class="">Cobranças</span>
+                        </a> 
+                      </li>
+                      <li> 
+                        <a href="{{path_for('planos')}}">
+                          <span class="">Planos</span>
+                        </a> 
+                      </li>
+                      <li> 
+                        <a href="{{path_for('assinaturas')}}">
+                          <span class="">Assinaturas</span>
+                        </a> 
+                      </li>
+                    </ul>
+                  </li> -->
+                  
+                  <li class="devider"></li>
+
+                  <li> <a href="{{path_for('graficos')}}" class="waves-effect"><i  class="mdi mdi-chart-areaspline fa-fw"></i> <span class="">Gráficos</span></a> </li>
+
+                  <li> <a href="javascript:void(0)" class="waves-effect"><i class="mdi mdi-checkbox-multiple-marked-outline fa-fw"></i> <span class="">Relatórios<span class="fa arrow"></span></span></a>
+                    <ul class="nav nav-second-level">
+                      <!-- <li> <a href="javascript:void(0)" class="waves-effect"><i class="mdi mdi-currency-usd fa-fw"></i><span class="">Financeiro </span><span class="fa arrow"></span></a>
+                          <ul class="nav nav-third-level">
+                              <li> <a href="javascript:void(0)"><span class="">Mensalidades</span></a> </li>
+                          </ul>
+                      </li> -->
+
+                      <!-- <li> 
+                        <a href="{{path_for('acolhimentos_por_regiao')}}">
+                          <span class="">Acolhidos por Região</span>
+                        </a> 
+                      </li> -->
+                      <li> 
+                        <a href="{{path_for('acolhimentos_por_periodo')}}">
+                          <span class="">Acolhimentos por Período</span>
+                        </a> 
+                      </li>
+                      <li> 
+                        <a href="{{path_for('altas')}}">
+                          <span class="">Altas por Período</span>
+                        </a> 
+                      </li>
+                      <!-- <li> 
+                        <a href="#">
+                          <span class="">Planilha Matriz</span>
+                        </a> 
+                      </li> -->
+                    </ul>
+                  </li>
+
+                  <li> <a href="javascript:void(0)" class="waves-effect"><i class="mdi mdi-format-list-bulleted fa-fw"></i> <span class="">Listas<span class="fa arrow"></span></span></a>
+                    <ul class="nav nav-second-level">
+                      <li> 
+                        <a href="{{path_for('lista_dinamica')}}">
+                          <span class="">Lista Dinâmica</span>
+                        </a> 
+                      </li>
+                      <li> 
+                        <a href="{{path_for('lista_chamada')}}">
+                          <span class="">Lista de Chamada</span>
+                        </a> 
+                      </li>
+                      <li> 
+                        <a href="{{path_for('lista_medicacao_diaria')}}">
+                          <i class="fa fa-circle text-success"></i> <span class="">Medicação Diária</span>
+                        </a> 
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li class="devider"></li>
+
+                  <li> <a href="{{path_for('contratos')}}" class="waves-effect"><i  class="mdi mdi-file-pdf fa-fw"></i> <span class="">Contratos</span></a> </li>
+
+                  <!-- <li> <a href="javascript:void(0)" class="waves-effect"><i class="mdi mdi-file-multiple fa-fw"></i> <span class="">Documentos<span class="fa arrow"></span></span> <span class="label label-rouded label-danger pull-right">aguarde</span></a>
+                    <ul class="nav nav-second-level">
+                      <li> <a href="javascript:void(0)"><i class=" fa-fw">AV</i><span class="">Alvará VISA</span></a> </li>
+                      <li> <a href="javascript:void(0)"><i class=" fa-fw">AB</i><span class="">Alvará Bombeiros (AVCB)</span></a> </li>
+                      <li> <a href="javascript:void(0)"><i class=" fa-fw">AM</i><span class="">Alvará Municipal / Prefeitura</span></a> </li>
+                      <li> <a href="javascript:void(0)"><i class=" fa-fw">PT</i><span class="">Filiações</span></a> </li>
+                      <li> <a href="javascript:void(0)"><i class=" fa-fw">IN</i><span class="">Inscrição no COMAD/CONED</span></a> </li>
+                      <li> <a href="javascript:void(0)"><i class=" fa-fw">CM</i><span class="">Outros Conselhos Municipais</span></a> </li>
+                      <li> <a href="javascript:void(0)"><i class=" fa-fw">PT</i><span class="">Plano de Trabalho</span></a> </li>
+                      <li> <a href="javascript:void(0)"><i class=" fa-fw">RP</i><span class="">Manual de Rotinas e Procedimentos</span></a> </li>
+                      <li> <a href="javascript:void(0)"><i class=" fa-fw">NM</i><span class="">Normas de Moradia</span></a> </li>
+                    </ul>
+                  </li> -->
+
+                  <li class="devider"></li>
+
+                  <li> <a href="{{path_for('usuarios')}}" class="waves-effect"><i  class="mdi mdi-account-settings-variant fa-fw"></i> <span class="">Usuários</span></a> </li>
+
+                  <li> <a href="{{path_for('funcionarios')}}" class="waves-effect"><i  class="mdi mdi-account-box-outline fa-fw"></i> <span class="">Funcionários</span></a> </li>
+
+                  <li> <a href="{{path_for('config')}}" class="waves-effect"><i  class="mdi mdi-settings fa-fw"></i> <span class="">Configurações</span></a> </li>
+
+                  <li class="devider"></li>
+
+                  <li><a href="{{path_for('logout')}}" class="waves-effect"><i class="mdi mdi-logout fa-fw"></i> <span class="">Sair do Sistema</span></a></li>
+
+                  <!-- <li class="devider"></li>
+
+                  <li><a href="#" class="waves-effect"><i class="fa fa-circle-o text-success"></i> <span class="">Perguntas Frequentes</span></a></li>
+                  <li><a href="#" class="waves-effect"><i class="fa fa-circle-o text-danger"></i> <span class="">Documentação</span></a></li> -->
+                </ul>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+        <!-- ============================================================== -->

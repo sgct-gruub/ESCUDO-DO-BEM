@@ -1,0 +1,1377 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li><a href="{{path_for('listar_acolhidos')}}">Acolhidos</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                                <div class="col-xs-2">
+                                	<button class="btn btn-info btn-circle btn-lg pull-right" data-toggle="tooltip" title="Voltar para listagem" onClick="window.location.href='{{path_for('listar_acolhidos')}}'">
+                                		<i class="fa fa-chevron-left"></i>
+                                	</button>
+
+                                	<!-- <a href="#" class="">
+                                		<div class="circle-md pull-right circle bg-info mytooltip">
+                                			<i class="ti-plus"></i>
+                                			<span class="tooltip-content99">Novo registro</span>
+                                		</div>
+                                	</a> -->
+                                </div>
+                            </div>
+
+                            <section>
+                                <div class="sttabs tabs-style-line">
+                                    <nav>
+                                        <ul>
+                                            <li><a href="#section-linemove-1" class="sticon ti-settings"><span>Dados cadastrais</span></a></li>
+                                            <li><a href="#section-linemove-2" class="sticon ti-user"><span>Contatos</span></a></li>
+                                            <li><a href="#section-linemove-3" class="sticon ti-files"><span>Arquivos</span></a></li>
+                                        </ul>
+                                    </nav>
+                                    <div class="content-wrap">
+                                        <section id="section-linemove-1">
+                                            <div id="exampleValidator" class="wizard">
+				                                <ul class="wizard-steps" role="tablist">
+				                                    <li class="active" role="tab" onClick="goToStep(0)">
+				                                        <h4><span><i class="mdi mdi-account-card-details"></i></span>Informações sobre o acolhido</h4> </li>
+				                                    <li role="tab" onClick="goToStep(1)">
+				                                        <h4><span><i class="mdi mdi-human-child"></i></span>Possui filhos</h4> </li>
+				                                    <li role="tab" onClick="goToStep(2)">
+				                                        <h4><span><i class="mdi mdi-map-marker"></i></span>Sua localização atual</h4> </li>
+				                                    <li role="tab" onClick="goToStep(3)">
+				                                        <h4><span><i class="mdi mdi-human-male-female"></i></span>Informações sobre pai e mãe</h4> </li>
+				                                    <!-- <li role="tab" onClick="goToStep(4)">
+				                                        <h4><span><i class="mdi mdi-webcam"></i></span>Foto do acolhido</h4> </li> -->
+				                                </ul>
+				                                <form id="validation" class="form-horizontal">
+				                                    <div class="wizard-content">
+				                                        <div class="wizard-pane" role="tabpanel">
+				                                            <div class="row form-group">
+				                                            	<div class="col-md-6 col-sm-12">
+					                                                <label for="nome"><i class="fa fa-asterisk text-danger"></i> Nome completo</label>
+					                                                <input type="text" class="form-control" name="nome" id="nome" value="{{item.nome}}" /> 
+					                                            </div>
+					                                            <div class="col-md-2 col-sm-4">
+					                                                <label for="rg">RG</label>
+					                                                <input type="text" class="form-control" name="rg" id="rg" value="{{item.rg}}" /> 
+					                                            </div>
+					                                            <div class="col-md-2 col-sm-4">
+					                                                <label for="cpf">CPF</label>
+					                                                <input type="text" class="form-control" name="cpf" id="cpf" value="{{item.cpf}}" onkeyup="mascara( this, mcpf );" maxlength="14" /> 
+					                                            </div>
+					                                            <div class="col-md-2 col-sm-4">
+					                                                <label for="data_nascimento"><i class="fa fa-asterisk text-danger"></i> Data de nascimento</label>
+					                                                <input type="text" class="form-control" name="data_nascimento" id="data_nascimento" value="{{item.data_nascimento|date('d/m/Y')}}" onkeyup="mascara( this, mdata );" maxlength="10" /> 
+					                                            </div>
+				                                            </div>
+
+				                                            <div class="row form-group">
+				                                            	<div class="col-md-4 col-sm-12">
+					                                                <label for="naturalidade">Naturalidade</label>
+					                                                <input type="text" class="form-control" name="naturalidade" id="naturalidade" value="{{item.naturalidade}}" /> 
+					                                            </div>
+					                                            <div class="col-md-1 col-sm-2">
+					                                                <label for="uf_naturalidade">UF</label>
+					                                                <input type="text" class="form-control" name="uf_naturalidade" id="uf_naturalidade" value="{{item.uf_naturalidade}}" /> 
+					                                            </div>
+					                                            <div class="col-md-2 col-sm-3">
+					                                                <label for="cad_unico">Cad. Único</label>
+					                                                <input type="text" class="form-control" name="cad_unico" id="cad_unico" value="{{item.cad_unico}}" /> 
+					                                            </div>
+					                                            <div class="col-md-2 col-sm-3">
+					                                                <label for="cartao_sus">Cartão SUS</label>
+					                                                <input type="text" class="form-control" name="cartao_sus" id="cartao_sus" value="{{item.cartao_sus}}" /> 
+					                                            </div>
+					                                            <div class="col-md-3 col-sm-4">
+					                                                <label for="pis">PIS</label>
+					                                                <input type="text" class="form-control" name="pis" id="pis" value="{{item.pis}}" /> 
+					                                            </div>
+				                                            </div>
+
+				                                            <div class="row form-group">
+				                                            	<div class="col-md-12">
+					                                                <label>Cor / Raça</label> <br />
+					                                                <div class="radio">
+							                                            <input type="radio" name="cor_raca" id="cor_raca1" value="1" {% if item.cor_raca == 1 %} checked {% endif %}>
+							                                            <label for="cor_raca1"> Branca </label> <br />
+
+							                                            <input type="radio" name="cor_raca" id="cor_raca2" value="2" {% if item.cor_raca == 2 %} checked {% endif %}>
+							                                            <label for="cor_raca2"> Preta </label> <br />
+
+							                                            <input type="radio" name="cor_raca" id="cor_raca3" value="3" {% if item.cor_raca == 3 %} checked {% endif %}>
+							                                            <label for="cor_raca3"> Parda </label> <br />
+
+							                                            <input type="radio" name="cor_raca" id="cor_raca4" value="4" {% if item.cor_raca == 4 %} checked {% endif %}>
+							                                            <label for="cor_raca4"> Amarela (Asiático, Japonês) </label> <br />
+
+							                                            <input type="radio" name="cor_raca" id="cor_raca5" value="5" {% if item.cor_raca == 5 %} checked {% endif %}>
+							                                            <label for="cor_raca5"> Indígena </label> <br />
+
+							                                            <input type="radio" name="cor_raca" id="cor_raca6" value="6" {% if item.cor_raca == 6 %} checked {% endif %}>
+							                                            <label for="cor_raca6"> Outros </label> <br />
+							                                        </div>
+					                                            </div>
+				                                            </div>
+				                                        </div>
+
+				                                        <div class="wizard-pane" role="tabpanel">
+				                                            <div class="row form-group">
+				                                                <div class="col-md-2">
+				                                                	<label><i class="fa fa-asterisk text-danger"></i> Possui filhos?</label> <br />
+					                                                <div class="radio">
+							                                            <input type="radio" name="possui_filhos" id="sim" value="1" {% if item.possui_filhos == 1 %} checked {% endif %}>
+							                                            <label for="sim"> Sim </label> <br />
+
+							                                            <input type="radio" name="possui_filhos" id="nao" value="0" {% if item.possui_filhos == 0 %} checked {% endif %}>
+							                                            <label for="nao"> Não </label>
+							                                        </div>
+					                                            </div>
+
+					                                            {% if item.possui_filhos == 0 %}
+					                                            <div id="rowQuantidadeFilhos" style="display: none;">
+					                                            	<div class="col-md-3">
+					                                            		<label for="quantidadeFilhos"><i class="fa fa-asterisk text-danger"></i> Quantos?</label> <br />
+					                                            		<div class="input-group">
+					                                            			<input type="text" class="form-control" name="quantidadeFilhos" id="quantidadeFilhos" disabled="disabled">
+					                                            			<span class="input-group-btn">
+					                                            				<button type="button" class="btn btn-primary" id="btnAdicionar" disabled="disabled" />Continuar</button>
+					                                            			</span>
+					                                            		</div>
+					                                            	</div>
+
+					                                            	<div class="col-md-7"></div>
+
+					                                            	<div id="divForm" data-qtd="0">
+																	</div>
+
+																	<template id="tmplLinha">
+																		<div class="col-lg-12">
+																			<hr />
+																		</div>
+																		
+																		<div class="col-md-4">
+																			<label for="nome_filho">Nome</label>
+																			<input type="text" class="form-control" id="nome_filho" name="filhos[nome][]">
+																		</div>
+																		<div class="col-md-4">
+																			<label for="data_nascimento_filho">Data de nascimento</label>
+																			<input type="text" class="form-control" id="data_nascimento_filho" name="filhos[data_nascimento][]" onkeyup="mascara( this, mdata );" maxlength="10">
+																		</div>
+																		<div class="col-md-4">
+																			<label for="genero_filho">Gênero</label>
+																			<select id="genero_filho" name="filhos[genero][]" class="form-control">
+																				<option value="">SELECIONE</option>
+																				<option value="masculino">Masculino</option>
+																				<option value="feminino">Feminino</option>
+																			</select>
+																		</div>
+																	</template>
+					                                            </div>
+					                                            {% endif %}
+
+					                                            {% if item.possui_filhos == 1 %}
+					                                            <div id="rowQuantidadeFilhos">
+					                                            	<div class="col-md-3">
+					                                            		<label for="quantidadeFilhos"><i class="fa fa-asterisk text-danger"></i> Quantos?</label> <br />
+					                                            		<div class="input-group">
+					                                            			<input type="text" class="form-control" name="quantidadeFilhos" id="quantidadeFilhos" value="{{quantidadeFilhos}}">
+					                                            			<span class="input-group-btn">
+					                                            				<button type="button" class="btn btn-primary" id="btnAdicionar" />Continuar</button>
+					                                            			</span>
+					                                            		</div>
+					                                            	</div>
+
+					                                            	<div class="col-md-7"></div>
+
+																	{% for i in range(0, filhos) %}
+																		<div class="col-lg-12">
+																			<hr />
+																		</div>
+																		
+																		<div class="col-md-4">
+																			<label for="nome_filho">Nome</label>
+																			<input type="text" class="form-control" id="nome_filho" name="filhos[nome][]" value="{{nome_filho[i]}}">
+																		</div>
+																		<div class="col-md-4">
+																			<label for="data_nascimento_filho">Data de nascimento</label>
+																			<input type="text" class="form-control" id="data_nascimento_filho" name="filhos[data_nascimento][]" onkeyup="mascara( this, mdata );" maxlength="10" value="{{data_nascimento_filho[i]}}">
+																		</div>
+																		<div class="col-md-4">
+																			<label for="genero_filho">Gênero</label>
+																			<select id="genero_filho" name="filhos[genero][]" class="form-control">
+																				<option value="">SELECIONE</option>
+																				<option value="masculino" {% if genero_filho[i] == 'masculino' %} selected {% endif %}>Masculino</option>
+																				<option value="feminino" {% if genero_filho[i] == 'feminino' %} selected {% endif %}>Feminino</option>
+																			</select>
+																		</div>
+																	{% endfor %}
+
+																	<div id="divForm" data-qtd="{{quantidadeFilhos}}">
+																	</div>
+
+																	<template id="tmplLinha">
+																		<div class="col-lg-12">
+																			<hr />
+																		</div>
+																		
+																		<div class="col-md-4">
+																			<label for="nome_filho">Nome</label>
+																			<input type="text" class="form-control" id="nome_filho" name="filhos[nome][]">
+																		</div>
+																		<div class="col-md-4">
+																			<label for="data_nascimento_filho">Data de nascimento</label>
+																			<input type="text" class="form-control" id="data_nascimento_filho" name="filhos[data_nascimento][]" onkeyup="mascara( this, mdata );" maxlength="10">
+																		</div>
+																		<div class="col-md-4">
+																			<label for="genero_filho">Gênero</label>
+																			<select id="genero_filho" name="filhos[genero][]" class="form-control">
+																				<option value="">SELECIONE</option>
+																				<option value="masculino">Masculino</option>
+																				<option value="feminino">Feminino</option>
+																			</select>
+																		</div>
+																	</template>
+					                                            </div>
+					                                            {% endif %}
+				                                            </div>
+				                                        </div>
+
+				                                        <div class="wizard-pane" role="tabpanel">
+				                                        	<div class="row form-group">
+				                                            	<div class="col-md-12">
+					                                            	<label for="situacao_rua">Situação de rua?</label> <br />
+					                                            	<div class="radio">
+								                                        <input type="radio" name="situacao_rua" id="situacao_rua_sim" value="1" {% if item.situacao_rua == 1 %} checked {% endif %}>
+								                                        <label for="situacao_rua_sim"> Sim </label> <br />
+
+								                                        <input type="radio" name="situacao_rua" id="situacao_rua_nao" value="0" {% if item.situacao_rua == 0 %} checked {% endif %}>
+								                                        <label for="situacao_rua_nao"> Não </label>
+								                                    </div>
+							                                	</div>
+				                                            </div>
+
+				                                            <div class="row form-group rowEndereco" style="{% if item.situacao_rua == 1 %}display: none;{% endif %}">
+				                                            	<div class="col-md-2">
+					                                                <label for="cep">CEP</label>
+					                                                <input type="text" class="form-control" name="cep" id="cep" value="{{item.cep}}" /> 
+					                                            </div>
+					                                            <div class="col-md-8">
+					                                                <label for="endereco">Endereço</label>
+					                                                <input type="text" class="form-control" name="endereco" id="endereco" value="{{item.endereco}}" /> 
+					                                            </div>
+					                                            <div class="col-md-2">
+					                                                <label for="num">Nº</label>
+					                                                <input type="text" class="form-control" name="num" id="num" value="{{item.num}}" /> 
+					                                            </div>
+				                                            </div>
+
+				                                            <div class="row form-group rowEndereco" style="{% if item.situacao_rua == 1 %}display: none;{% endif %}">
+				                                            	<div class="col-md-2">
+					                                                <label for="complemento">Complemento</label>
+					                                                <input type="text" class="form-control" name="complemento" id="complemento" value="{{item.complemento}}" /> 
+					                                            </div>
+					                                            <div class="col-md-4">
+					                                                <label for="bairro">Bairro</label>
+					                                                <input type="text" class="form-control" name="bairro" id="bairro" value="{{item.bairro}}" /> 
+					                                            </div>
+					                                            <div class="col-md-4">
+					                                                <label for="cidade">Cidade</label>
+					                                                <input type="text" class="form-control" name="cidade" id="cidade" value="{{item.cidade}}" /> 
+					                                            </div>
+					                                            <div class="col-md-2">
+					                                                <label for="uf">UF</label>
+					                                                <input type="text" class="form-control" name="uf" id="uf" value="{{item.uf}}" /> 
+					                                            </div>
+				                                            </div>
+
+				                                            <div class="row form-group" id="rowCidade" style="{% if item.situacao_rua == 0 %}display: none;{% endif %}">
+					                                            <div class="col-md-4">
+					                                                <label for="cidade2">Cidade</label>
+					                                                <input type="text" class="form-control" name="cidade2" id="cidade2" value="{{item.cidade}}" /> 
+					                                            </div>
+				                                            </div>
+				                                        </div>
+
+				                                        <div class="wizard-pane" role="tabpanel">
+				                                            <div class="row form-group">
+				                                            	<div class="col-md-6">
+					                                                <label for="nome_pai">Nome do Pai</label>
+					                                                <input type="text" class="form-control" name="nome_pai" id="nome_pai" value="{{item.nome_pai}}" /> 
+					                                            </div>
+					                                            <div class="col-md-3">
+					                                                <label for="data_nascimento_pai">Data de Nascimento</label>
+					                                                <input type="text" class="form-control" name="data_nascimento_pai" id="data_nascimento_pai" value="{% if item.data_nascimento_pai != '0000-00-00' %}{{item.data_nascimento_pai|date('d/m/Y')}}{% endif %}" onkeyup="mascara( this, mdata );" maxlength="10" /> 
+					                                            </div>
+					                                            <div class="col-md-3">
+					                                                <label for="profissao_pai">Profissão</label>
+					                                                <input type="text" class="form-control" name="profissao_pai" id="profissao_pai" value="{{item.profissao_pai}}" /> 
+					                                            </div>
+				                                            </div>
+
+				                                            <div class="row form-group">
+				                                            	<div class="col-md-6">
+					                                                <label for="nome_mae">Nome da Mãe</label>
+					                                                <input type="text" class="form-control" name="nome_mae" id="nome_mae" value="{{item.nome_mae}}" /> 
+					                                            </div>
+					                                            <div class="col-md-3">
+					                                                <label for="data_nascimento_mae">Data de Nascimento</label>
+					                                                <input type="text" class="form-control" name="data_nascimento_mae" id="data_nascimento_mae" value="{% if item.data_nascimento_mae != '0000-00-00' %}{{item.data_nascimento_mae|date('d/m/Y')}}{% endif %}" onkeyup="mascara( this, mdata );" maxlength="10" /> 
+					                                            </div>
+					                                            <div class="col-md-3">
+					                                                <label for="profissao_mae">Profissão</label>
+					                                                <input type="text" class="form-control" name="profissao_mae" id="profissao_mae" value="{{item.profissao_mae}}" /> 
+					                                            </div>
+				                                            </div>
+
+				                                            <div class="row form-group">
+				                                            	<div class="col-md-2">
+				                                                	<label>Pais separados?</label> <br />
+					                                                <div class="radio">
+							                                            <input type="radio" name="pais_separados" id="pais_separados1" value="1" {% if item.pais_separados == 1 %} checked {% endif %}>
+							                                            <label for="pais_separados1"> Sim </label> <br />
+
+							                                            <input type="radio" name="pais_separados" id="pais_separados2" value="0" {% if item.pais_separados == 0 %} checked {% endif %}>
+							                                            <label for="pais_separados2"> Não </label>
+							                                        </div>
+					                                            </div>
+				                                            </div>
+				                                        </div>
+
+				                                        <!-- <div class="wizard-pane" role="tabpanel">
+				                                        	<div class="row">
+				                                        		<div class="col-md-6 text-center">
+				                                        			<div id="camera_info"></div>
+                                            						<div id="camera"></div>
+				                                        			<font style="color: #fff;">Este texto é necessário para a exibição da imagem da webcam! Este texto é necessário para a exibição da imagem da webcam! Este texto é necessário para a exibição da imagem da webcam!</font> <br />
+				                                        			<button id="take_snapshots" class="btn btn-success btn-sm">Tirar Foto</button>
+                                            					</div>
+                                            					<div class="col-md-6">
+														            <table class="table table-bordered">
+														            <thead>
+														                <tr>
+														                    <th>Imagem</th>
+														                    <th>Ações</th>
+														                </tr>
+														            </thead>
+														            <tbody id="imagelist">
+														            	{% for s in snapshots %}
+														            	<tr id="snapshot-{{s.id}}">
+														            		<td><img src='{{base_url()}}/public/uploads/acolhidos/fotos/{{s.imagem}}' width='100px' height='100px'></td>
+														            		<td>
+														            			<a href="#" class="btn btn-success"><i class="fa fa-check"></i></a>
+														            			<a href="#" class="btn btn-danger remover-{{ s.id }}"><i class="fa fa-trash-o"></i></a>
+														            		</td>
+														            	</tr>
+														            	{% endfor %}
+														            </tbody>
+														        </table>
+														        </div>
+                                            				</div>
+                                            			</div> -->
+				                                    </div>
+
+				                                    <input type="hidden" name="unidade" value="{{item.unidade}}"/>
+				                  					<input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+				                  					<input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+				                                </form>
+				                            </div>
+                                        </section>
+
+                                        <section id="section-linemove-2">
+                                        	<div class="row">
+                                        		{% for c in contatos %}
+                                        		<div class="col-md-4 b-r" id="contato-{{c.id}}">
+		                                        	<div class="user-btm-box">
+						                                <!-- .row -->
+						                                <div class="row text-center">
+						                                    <div class="col-md-6 b-r"><strong>Nome</strong>
+						                                        <p>{{c.nome}}</p>
+						                                    </div>
+						                                    <div class="col-md-6"><strong>Parentesco</strong>
+						                                        <p>{{c.grau_parentesco}}</p>
+						                                    </div>
+						                                </div>
+						                                <!-- /.row -->
+						                                <hr>
+						                                <!-- .row -->
+						                                <div class="row text-center m-t-10">
+						                                    <div class="col-md-6 b-r"><strong>RG</strong>
+						                                        <p>{{c.rg}}</p>
+						                                    </div>
+						                                    <div class="col-md-6"><strong>CPF</strong>
+						                                        <p>{{c.cpf}}</p>
+						                                    </div>
+						                                </div>
+						                                <!-- /.row -->
+						                                <hr>
+						                                <!-- .row -->
+						                                <div class="row text-center m-t-10">
+						                                    <div class="col-md-6 b-r"><strong>Telefone</strong>
+						                                        <p>{{c.telefone}}</p>
+						                                    </div>
+						                                    <div class="col-md-6"><strong>Celular</strong>
+						                                        <p>{{c.celular}}</p>
+						                                    </div>
+						                                </div>
+						                                <!-- /.row -->
+						                                <hr>
+						                                <!-- /.row -->
+						                                <div class="col-md-4 col-sm-4 text-center">
+						                                    <span data-toggle="modal" data-target="#editar-contato-{{c.id}}">
+						                                    	<a href="#" class="btn btn-primary btn-outline" data-toggle="tooltip" title="Editar contato">
+				                                        			<i class="fa fa-edit"></i>
+				                                        		</a>
+				                                        	</span>
+				                                        </div>
+				                                        <div class="col-md-4 col-sm-4 text-center">
+                                                            {% if c.status == 1 %}
+                                                            <a href="#" class="btn btn-warning" data-toggle="tooltip" title="Contato principal">
+                                                                <i class="fa fa-asterisk"></i>
+                                                            </a>
+                                                            {% endif %}
+                                                        </div>
+				                                        <div class="col-md-4 col-sm-4 text-center">
+						                                    <a href="#" class="btn btn-danger btn-outline remover-{{ c.id }}" data-toggle="tooltip" title="Remover contato"><i class="fa fa-trash-o"></i></a>
+				                                        </div>
+						                            </div>
+				                            	</div>
+
+				                            	<!-- /.modal contatos -->
+					                            <div id="editar-contato-{{c.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+					                                <div class="modal-dialog modal-lg">
+					                                    <div class="modal-content">
+					                                        <div class="modal-header">
+					                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					                                            <h4 class="modal-title">Editar contato - {{c.nome}}</h4>
+					                                        </div>
+					                                        <form action="{{path_for('post_editar_contato_acolhido', {'id' : c.id})}}" method="POST">
+						                                        <div class="modal-body">
+						                                            <div class="row form-group">
+						                                            	<div class="col-md-6">
+						                                                    <label for="nome" class="control-label">Nome completo</label>
+						                                                    <input type="text" class="form-control" name="nome" id="nome" value="{{c.nome}}" required="">
+						                                                </div>
+						                                                <div class="col-md-6">
+						                                                    <label for="grau_parentesco" class="control-label">Grau de parentesco</label>
+						                                                    <input type="text" class="form-control" name="grau_parentesco" id="grau_parentesco" value="{{c.grau_parentesco}}" required="">
+						                                                </div>
+						                                            </div>
+						                                            <div class="row form-group">
+						                                            	<div class="col-md-4">
+						                                            		<label for="rg" class="control-label">RG</label>
+						                                            		<input type="text" class="form-control" name="rg" id="rg" value="{{c.rg}}">
+						                                            	</div>
+						                                            	<div class="col-md-4">
+						                                            		<label for="cpf" class="control-label">CPF</label>
+						                                            		<input type="text" class="form-control" name="cpf" id="cpf" value="{{c.cpf}}" onkeyup="mascara( this, mcpf );" maxlength="14">
+						                                            	</div>
+						                                            	<div class="col-md-4">
+						                                            		<label for="data_nascimento" class="control-label">Data de Nascimento</label>
+						                                            		<input type="text" class="form-control" name="data_nascimento" id="data_nascimento" value="{{c.data_nascimento|date('d/m/Y')}}" onkeyup="mascara( this, mdata );" maxlength="10">
+						                                            	</div>
+						                                            </div>
+						                                            <div class="row form-group">
+						                                            	<div class="col-md-4">
+						                                            		<label for="telefone" class="control-label">Telefone</label>
+						                                            		<input type="text" class="form-control" name="telefone" id="telefone" value="{{c.telefone}}">
+						                                            	</div>
+						                                            	<div class="col-md-4">
+						                                            		<label for="celular" class="control-label">Celular</label>
+						                                            		<input type="text" class="form-control" name="celular" id="celular" value="{{c.celular}}">
+						                                            	</div>
+						                                            	<div class="col-md-4">
+						                                            		<label for="email" class="control-label">E-mail</label>
+						                                            		<input type="email" class="form-control" name="email" id="email" value="{{c.email}}">
+						                                            	</div>
+						                                            </div>
+						                                            <div class="row form-group">
+																		<div class="col-md-2">
+																			<label for="cep">CEP</label>
+																			<input type="text" class="form-control cep" name="cep" id="cep" value="{{c.cep}}" onkeyup="mascara( this, mcep );" maxlength="9"/> 
+																		</div>
+																		<div class="col-md-8">
+																			<label for="endereco">Endereço</label>
+																			<input type="text" class="form-control endereco" name="endereco" id="endereco" value="{{c.endereco}}" /> 
+																		</div>
+																		<div class="col-md-2">
+																			<label for="num">Nº</label>
+																			<input type="text" class="form-control num" name="num" id="num" value="{{c.num}}" /> 
+																		</div>
+																	</div>
+
+																	<div class="row form-group">
+																		<div class="col-md-2">
+																			<label for="complemento">Complemento</label>
+																			<input type="text" class="form-control complemento" name="complemento" id="complemento" value="{{c.complemento}}" /> 
+																		</div>
+																		<div class="col-md-4">
+																			<label for="bairro">Bairro</label>
+																			<input type="text" class="form-control bairro" name="bairro" id="bairro" value="{{c.bairro}}" /> 
+																		</div>
+																		<div class="col-md-4">
+																			<label for="cidade">Cidade</label>
+																			<input type="text" class="form-control cidade" name="cidade" id="cidade" value="{{c.cidade}}" /> 
+																		</div>
+																		<div class="col-md-2">
+																			<label for="uf">UF</label>
+																			<input type="text" class="form-control uf" name="uf" id="uf" value="{{c.uf}}" /> 
+																		</div>
+																	</div>
+																	<div class="form-group">
+                                                                        <label for="status" class="control-label">Contato principal</label><br />
+                                                                        <input type="checkbox" name="status" id="status" {% if c.status == 1 %} checked {% endif %} class="js-switch" data-color="#99d683" />
+                                                                    </div>
+						                                        </div>
+						                                        <div class="modal-footer">
+						                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+						                                            <button type="submit" class="btn btn-primary" name="submit-editar-contato-{{c.id}}">Salvar alterações</button>
+						                                        </div>
+
+					                                        	<input type="hidden" name="acolhido" value="{{c.acolhido}}"/>
+					                                        	<input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+					                  							<input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+					                                        </form>
+					                                    </div>
+					                                </div>
+					                            </div>
+				                            	{% endfor %}
+				                            </div>                                        	
+
+	                                        <hr />
+
+	                                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#adicionar-contato">Novo contato</a>
+
+	                                        <!-- /.modal add contatos -->
+				                            <div id="adicionar-contato" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+				                                <div class="modal-dialog modal-lg">
+				                                    <div class="modal-content">
+				                                        <div class="modal-header">
+				                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				                                            <h4 class="modal-title">Novo contato</h4>
+				                                        </div>
+				                                        <form name="adicionar-contato" action="#">
+					                                        <div class="modal-body">
+																<div class="row form-group">
+																	<div class="col-md-6">
+																		<label for="nome">Nome completo</label>
+																		<input type="text" class="form-control" name="nome" id="nome" required="">
+																	</div>
+																	<div class="col-md-6">
+																		<label for="grau_parentesco">Grau de parentesco</label>
+																		<input type="text" class="form-control" name="grau_parentesco" id="grau_parentesco" required="">
+																	</div>
+																</div>
+																<div class="row form-group">
+																	<div class="col-md-4">
+																		<label for="rg">RG</label>
+																		<input type="text" class="form-control" name="rg" id="rg">
+																	</div>
+																	<div class="col-md-4">
+																		<label for="cpf">CPF</label>
+																		<input type="text" class="form-control" name="cpf" id="cpf" onkeyup="mascara( this, mcpf );" maxlength="14">
+																	</div>
+																	<div class="col-md-4">
+																		<label for="data_nascimento">Data de nascimento</label>
+																		<input type="date" class="form-control" name="data_nascimento" id="data_nascimento">
+																	</div>
+																</div>
+																<div class="row form-group">
+					                                                <div class="col-md-4">
+					                                                	<label for="telefone">Telefone</label>
+					                                                    <input type="text" class="form-control" name="telefone" id="telefone">
+					                                                </div>
+					                                                <div class="col-md-4">
+					                                                	<label for="celular">Celular</label>
+					                                                    <input type="text" class="form-control" name="celular" id="celular" onkeyup="mascara( this, mtel );">
+					                                                </div>
+					                                                <div class="col-md-4">
+																		<label for="email">E-mail</label>
+																		<input type="email" class="form-control" name="email" id="email">
+																	</div>
+																</div>
+																<div class="row form-group">
+																	<div class="col-md-2">
+																		<label for="cep">CEP</label>
+																		<input type="text" class="form-control cep" name="cep" id="cep" value="" onkeyup="mascara( this, mcep );" maxlength="9" /> 
+																	</div>
+																	<div class="col-md-8">
+																		<label for="endereco">Endereço</label>
+																		<input type="text" class="form-control endereco" name="endereco" id="endereco" value="" /> 
+																	</div>
+																	<div class="col-md-2">
+																		<label for="num">Nº</label>
+																		<input type="text" class="form-control num" name="num" id="num" value="" /> 
+																	</div>
+																</div>
+
+																<div class="row form-group">
+																	<div class="col-md-2">
+																		<label for="complemento">Complemento</label>
+																		<input type="text" class="form-control complemento" name="complemento" id="complemento" value="" /> 
+																	</div>
+																	<div class="col-md-4">
+																		<label for="bairro">Bairro</label>
+																		<input type="text" class="form-control bairro" name="bairro" id="bairro" value="" /> 
+																	</div>
+																	<div class="col-md-4">
+																		<label for="cidade">Cidade</label>
+																		<input type="text" class="form-control cidade" name="cidade" id="cidade" value="" /> 
+																	</div>
+																	<div class="col-md-2">
+																		<label for="uf">UF</label>
+																		<input type="text" class="form-control uf" name="uf" id="uf" value="" /> 
+																	</div>
+																</div>
+
+																{% if tem_contato_principal == false %}
+                                                                <div class="form-group">
+                                                                    <label for="status" class="control-label">Contato principal</label> <br />
+                                                                    <input type="checkbox" name="status" id="status" class="js-switch" data-color="#99d683" />
+                                                                </div>
+                                                                {% endif %}
+					                                        </div>
+					                                        <div class="modal-footer">
+					                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+					                                            <button type="button" class="btn btn-success" id="submit-adicionar-contato">Adicionar registro</button>
+					                                        </div>
+				                                        	<input type="hidden" name="acolhido" value="{{item.id}}"/>
+				                                        	<input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+				                  							<input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+				                                        </form>
+				                                    </div>
+				                                </div>
+				                            </div>
+                                        </section>
+
+                                        <section id="section-linemove-3">
+                                        	<form action="{{path_for('post_cadastrar_arquivo_acolhido', {'id' : item.id})}}" enctype="multipart/form-data" method="POST">
+                                        		<div class="row">
+                                        			<div class="col-md-12">
+                                            			<input type="file" name="arquivo" id="arquivo" class="dropify" data-height="500">
+                                            		</div>
+                                            		<div class="col-md-11 m-t-10">
+                                            			<input type="text" name="descricao" class="form-control" placeholder="Descrição do arquivo">
+                                            		</div>
+                                            		<div class="col-md-1">
+                                            			<input type="hidden" name="acolhido" value="{{item.id}}"/>
+                                            			<input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                  										<input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                            			<button type="submit" class="btn btn-success btn-block m-t-10"><i class="fa fa-upload"></i> Enviar</button>
+                                            		</div>
+                                            	</div>
+                                            </form>
+                                            <h2 class="m-t-20">Listagem dos arquivos</h2>
+
+                                            <table class="table table-bordered table-responsive">
+                                            	<thead>
+                                            		<tr>
+                                            			<th>Tipo</th>
+                                            			<th>Descrição</th>
+                                            			<th>Adicionado em</th>
+                                            		</tr>
+                                            	</thead>
+                                            	<tbody>
+                                            		{% for a in arquivos %}
+                                            		{% set tipo_arquivo = a.arquivo|split('.').1 %}
+                                            		<tr id="arquivo-{{a.id}}">
+                                            			<td>{{tipo_arquivo}}</td>
+                                            			<td>
+                                            				<a href="#" class="inline-editor" data-pk="{{a.id}}" data-url="{{path_for('post_editar_arquivo_acolhido', {'id' : a.id})}}" data-csrf-token-name-key="{{csrf.TokenNameKey}}" data-csrf-token-name="{{csrf.TokenName}}" data-csrf-token-value-key="{{csrf.TokenValueKey}}" data-csrf-token-value="{{csrf.TokenValue}}">
+                                            					{{a.descricao}}
+                                            				</a>
+                                            			</td>
+                                            			<td>{{a.created_at|date('d/m/Y H:i:s')}}</td>
+                                            			<td>
+                                            				{% if tipo_arquivo == 'pdf' or tipo_arquivo == 'jpg' or tipo_arquivo == 'jpeg' or tipo_arquivo == 'png' %}
+                                            				<a href="{{base_url()}}/public/uploads/acolhidos/arquivos/{{a.arquivo}}" target="_blank" class="btn btn-info" data-toggle="tooltip" title="Visualizar arquivo"><i class="fa fa-eye"></i></a>
+                                            				{% endif %}
+                                            				<a href="{{base_url()}}/public/uploads/acolhidos/arquivos/{{a.arquivo}}" download="{% if a.descricao != '' %}{{a.descricao}}{% else %}{{a.arquivo}}{% endif %}.{{tipo_arquivo}}" class="btn btn-primary" data-toggle="tooltip" title="Fazer download"><i class="fa fa-download"></i></a>
+                                            				<a href="#" class="btn btn-danger remover-{{ a.id }}" data-toggle="tooltip" title="Remover arquivo"><i class="fa fa-trash-o"></i></a>
+                                            			</td>
+                                            		</tr>
+                                            		{% endfor %}
+                                            	</tbody>
+                                            </table>
+                                        </section>                                        
+                                    </div>
+                                    <!-- /content -->
+                                </div>
+                                <!-- /tabs -->
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- Switchery -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet">
+
+	<!-- FormValidation -->
+    <link rel="stylesheet" href="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/libs/formvalidation/formValidation.min.css">
+
+    <!-- Dropify -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/dropify/dist/css/dropify.min.css" rel="stylesheet">
+
+    <!-- Toastr -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/toast-master/css/jquery.toast.css" rel="stylesheet">
+
+    <!-- Inline Edit -->
+	<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+
+	<style>
+		.form-group label 
+		{
+			margin-top: 10px;
+		}
+
+		#camera {
+			width: 100%;
+			height: 450px;
+		}
+	</style>
+{% endblock %}
+
+
+{% block include_js %}
+	<!-- Form Wizard -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/dist/jquery-wizard.min.js"></script>
+
+    <!-- Sweetchery  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/switchery/dist/switchery.min.js"></script>
+    
+    <!-- FormValidation plugin and the class supports validating Bootstrap form -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/libs/formvalidation/formValidation.min.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/libs/formvalidation/bootstrap.min.js"></script>
+
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/multiselect/js/jquery.multi-select.js" type="text/javascript"></script>
+
+	<script src="{{base_url()}}/public/assets/js/mascaras.js"></script>
+	<script src="{{base_url()}}/public/assets/js/mask.js"></script>
+	<script src="{{base_url()}}/public/assets/js/cpfcnpjmask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.mask.min.js"></script>
+
+	<script src="{{base_url()}}/public/assets/js/cbpFWTabs.js"></script>
+    <script type="text/javascript">
+    (function() {
+        [].slice.call(document.querySelectorAll('.sttabs')).forEach(function(el) {
+            new CBPFWTabs(el);
+        });
+    })();
+    </script>
+
+    <!-- jQuery file upload -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/dropify/dist/js/dropify.min.js"></script>
+
+    <!-- webcam -->
+    <script src="{{base_url()}}/public/assets/jpeg_camera/jpeg_camera_with_dependencies.min.js" type="text/javascript"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+    <!-- Toastr -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
+
+    <!-- Inline Edit -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
+    <!-- $response mensagens -->
+    <script>
+      $(document).ready(function(){        
+        {% if flash %}
+			{% if flash['success'] %}
+				swal("Sucesso!", "{{flash.success | first}}", "success");
+			{% endif %}
+
+			{% if flash['error'] %}
+				swal("Erro!", "{{flash.error | first}}", "error");
+			{% endif %}
+		{% endif %}
+        
+      //   $.fn.editable.defaults.mode = 'inline';
+        
+      //   $('.inline-editor').editable({
+      //   	url : $(this).data('url'),
+      //   	pk : $(this).data('pk'),
+      //   	params: function(params) {
+		    //     params.{{csrf.TokenNameKey}} = $('input[name="{{csrf.TokenNameKey}}"]').val();
+		    //     params.{{csrf.TokenValueKey}} = $('input[name="{{csrf.TokenValueKey}}"]').val();
+		    //     return params;
+		    // }
+      //   }); 
+      });
+    </script>
+
+    <script type="text/javascript">
+    	function goToStep(step){
+    		$('#exampleValidator').wizard('goTo', step);
+    	}
+
+	    (function() {
+	        $('#exampleValidator').wizard({
+	        	classes: {
+	        		step: {
+	        			disabled: '',
+	        		},
+	        	},
+	        	enableWhenVisited: true,
+	        	buttonLabels: {
+					next: 'Próximo',
+					back: 'Anterior',
+					finish: 'Finalizar'
+				},
+	            onInit: function() {
+	                $('#validation').formValidation({
+	                    framework: 'bootstrap',
+	                    fields: {
+	                        nome: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: 'Insira o nome do acolhido'
+	                                },
+	                                stringLength: {
+	                                    min: 5,
+	                                    max: 50,
+	                                    message: 'O nome do acolhido deve conter no mínimo 5 e no máximo 50 caracteres'
+	                                },
+	                                regexp: {
+	                                    regexp: /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
+	                                    message: 'O nome do acolhido não pode conter números, pontos ou underlines'
+	                                }
+	                            }
+	                        },
+	                        // rg: {
+	                        //     validators: {
+	                        //         notEmpty: {
+	                        //             message: 'Insira o RG do acolhido'
+	                        //         },
+	                        //     }
+	                        // },
+	                        // cpf: {
+	                        //     validators: {
+	                        //         notEmpty: {
+	                        //             message: 'Insira o CPF do acolhido'
+	                        //         },
+	                        //     }
+	                        // },
+	                        data_nascimento: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: 'Formato: dia/mês/ano'
+	                                },
+	                            }
+	                        },
+	                        // cor_raca: {
+	                        //     validators: {
+	                        //         notEmpty: {
+	                        //             message: 'Escolha uma das opções'
+	                        //         },
+	                        //     }
+	                        // },
+	                        possui_filhos: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: 'Escolha uma das opções'
+	                                },
+	                            }
+	                        },
+	                        quantidadeFilhos: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: 'Insira a quantidade e aperte em CONTINUAR'
+	                                },
+	                                regexp: {
+	                                    regexp: /^[1-9]+$/,
+	                                    message: 'Apenas números maiores que 0 são permitidos'
+	                                }
+	                            }
+	                        },
+	                    }
+	                });
+	            },
+	            validator: function() {
+	                var fv = $('#validation').data('formValidation');
+	                var $this = $(this);
+	                // Validate the container
+	                fv.validateContainer($this);
+	                var isValidStep = fv.isValidContainer($this);
+	                if (isValidStep === false || isValidStep === null) {
+	                    return false;
+	                }
+	                return true;
+	            },
+	            onFinish: function() {
+	                // $('#validation').submit(function (e) {
+
+	                	var csrf_name = $('input[name="csrf_name"]').val();
+	                	var csrf_value = $('input[name="csrf_value"]').val();
+	                	var nome = $('input[name="nome"]').val();
+	                	var rg = $('input[name="rg"]').val();
+	                	var cpf = $('input[name="cpf"]').val();
+	                	var data_nascimento = $('input[name="data_nascimento"]').val();
+	                	var naturalidade = $('input[name="naturalidade"]').val();
+	                	var uf_naturalidade = $('input[name="uf_naturalidade"]').val();
+	                	var cad_unico = $('input[name="cad_unico"]').val();
+	                	var cartao_sus = $('input[name="cartao_sus"]').val();
+	                	var pis = $('input[name="pis"]').val();
+	                	var cor_raca = $('input[name="cor_raca"]:checked').val();
+	                	var possui_filhos = $('input[name="possui_filhos"]:checked').val();
+	                	// var filhos = $('input[name^="filhos[nome]"]').each(function() { filhos.push($(this).val()); });
+	                	var cep = $('input[name="cep"]').val();
+	                	var endereco = $('input[name="endereco"]').val();
+	                	var num = $('input[name="num"]').val();
+	                	var complemento = $('input[name="complemento"]').val();
+	                	var bairro = $('input[name="bairro"]').val();
+	                	var cidade = $('input[name="cidade"]').val();
+	                	var uf = $('input[name="uf"]').val();
+	                	var nome_pai = $('input[name="nome_pai"]').val();
+	                	var data_nascimento_pai = $('input[name="data_nascimento_pai"]').val();
+	                	var profissao_pai = $('input[name="profissao_pai"]').val();
+	                	var nome_mae = $('input[name="nome_mae"]').val();
+	                	var data_nascimento_mae = $('input[name="data_nascimento_mae"]').val();
+	                	var profissao_mae = $('input[name="profissao_mae"]').val();
+	                	var pais_separados = $('input[name="pais_separados"]:checked').val();
+	                	var unidade = $('input[name="unidade"]').val();
+
+	                	// var dataString = 'nome=' + nome + '&rg=' + rg + '&cpf=' + cpf + '&data_nascimento=' + data_nascimento + '&naturalidade=' + naturalidade + '&uf_naturalidade=' + uf_naturalidade + '&cad_unico=' + cad_unico + '&cartao_sus=' + cartao_sus + '&pis=' + pis + '&cor_raca=' + cor_raca + '&possui_filhos=' + possui_filhos + '&filhos=' + filhos + '&cep=' + cep + '&endereco=' + endereco + '&num=' + num + '&complemento=' + complemento + '&bairro=' + bairro + '&cidade=' + cidade + '&uf=' + uf + '&nome_pai=' + nome_pai + '&data_nascimento_pai=' + data_nascimento_pai + '&profissao_pai=' + profissao_pai + '&nome_mae=' + nome_mae + '&data_nascimento_mae=' + data_nascimento_mae + '&profissao_mae=' + profissao_mae + '&pais_separados=' + pais_separados + '&unidade=' + unidade + '&csrf_name=' + csrf_name + '&csrf_value=' + csrf_value;
+
+	                	var dataString = $("#validation").serialize();
+
+	                	$.ajax({
+				            type: "POST",
+				            url: "{{path_for('post_editar_acolhido', { 'id' : item.id })}}",
+				            data: dataString,
+				            success: function() {
+				            	// swal("Good job!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.", "success");
+				            	swal({   
+						            title: "Dados gravados!",   
+						            text: "Informações do acolhido atualizadas com sucesso.",   
+						            type: "success",
+						            showCancelButton: true,   
+						            // confirmButtonColor: "#DD6B55",
+						            cancelButtonText: "Continuar",   
+						            confirmButtonText: "Listar acolhidos",   
+						            closeOnConfirm: false,   
+						        }, function(isConfirm){
+						        	if(isConfirm){
+						            	window.location.href='{{path_for('listar_acolhidos_status', {'status' : 'acolhimento'})}}'
+						            } else {
+						            	window.location.href='{{path_for('editar_acolhido', { 'id' : item.id })}}'
+						            }
+						        });
+				            	
+				            },
+				            error: function(e) {
+				            	console.log(e);
+				            	// swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+				            }
+				        });
+	                // });
+	                // swal("Good job!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.", "success")
+	            }
+	        });
+	    	
+	    	$('#submit-adicionar-contato').click( function(){
+				var dataString = $('form[name="adicionar-contato"]').serialize();
+
+	        	$.ajax({
+					type: "POST",
+					url: "{{path_for('post_cadastrar_contato_acolhido', { 'id' : item.id })}}",
+					data: dataString,
+					success: function() {
+						swal({   
+							title: "Dados gravados!",   
+							text: "Contato adicionado com sucesso para este acolhido.",   
+							type: "success",
+						}, function(isConfirm){
+							if(isConfirm){
+								window.location.href='{{path_for('editar_acolhido', { 'id' : item.id })}}'
+							}
+						});
+					},
+					error: function() {
+						swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+					}
+				});
+			});
+
+	    	{% for c in contatos %}
+			$('#submit-editar-contato-{{c.id}}').click( function(){
+				var dataString = $('form[name="editar-contato-{{c.id}}"]').serialize();
+
+	        	$.ajax({
+					type: "POST",
+					url: "{{path_for('post_editar_contato_acolhido', { 'id' : c.id })}}",
+					data: dataString,
+					success: function() {
+						swal({   
+							title: "Dados gravados!",   
+							text: "Contato editado com sucesso para este acolhido.",   
+							type: "success",
+							showCancelButton: true,   
+							// confirmButtonColor: "#DD6B55",
+							cancelButtonText: "Continuar",   
+							confirmButtonText: "Listar contatos",   
+							closeOnConfirm: false,   
+						}, function(isConfirm){
+							if(isConfirm){
+								window.location.href='{{path_for('listar_acolhidos')}}'
+							} else {
+								window.location.href='{{path_for('editar_acolhido', { 'id' : item.id })}}'
+							}
+						});
+					},
+					error: function() {
+						swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+					}
+				});
+			});
+			{% endfor %}
+		})();
+    </script>
+
+    <script type="text/javascript">
+		var quantidadeFilhos = document.getElementById("quantidadeFilhos");
+		var btnAdicionar = document.getElementById("btnAdicionar");
+		var divForm = document.getElementById("divForm");
+		var tmplLinha = document.getElementById("tmplLinha").content;
+
+		btnAdicionar.addEventListener("click", function () {
+			var quantidade = {};
+			quantidade.old = parseInt(divForm.dataset.qtd) || 0;
+			quantidade.new = parseInt(quantidadeFilhos.value) || 0;
+
+			//adicionar novas linhas
+			if (quantidade.new > quantidade.old) {
+				for (var indice = quantidade.old; indice < quantidade.new; indice++) {
+					var linha = document.importNode(tmplLinha, true);
+					var inputs = linha.querySelectorAll("input[id]");
+
+					[].forEach.call(inputs, function (input){    
+						input.id = input.id + indice;
+					});
+					divForm.appendChild(linha);
+				}
+			} 
+
+			//remover linhas excedentes
+			if (quantidade.new < quantidade.old) {
+				var linhas = [].slice.call(divForm.children, quantidade.new);
+				linhas.forEach(function (linha, indice) {
+					divForm.removeChild(linha);    
+				});
+			}
+
+			divForm.dataset.qtd = quantidade.new;
+		});
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#cad_unico').mask('000 0000 0000 0000');
+			$('#cartao_sus').mask('000 0000 0000 0000');
+			$('#pis').mask('000.00000.00-0');
+
+			$("input[type=radio]").bind("click", function(){
+				// Possui filhos? Sim/Não
+				if($("input[name='possui_filhos']:checked").val() == "1") {
+					$("#rowQuantidadeFilhos").css("display", "block");
+					$("#quantidadeFilhos").attr("disabled", false);
+					$("#btnAdicionar").attr("disabled", false);
+				}
+				if($("input[name='possui_filhos']:checked").val() == "0") {
+					$("#rowQuantidadeFilhos").css("display", "none");
+					$("#quantidadeFilhos").attr("disabled", true);
+					$("#btnAdicionar").attr("disabled", true);
+				}
+
+				// Situação de rua? Sim/Não
+				if($("input[name='situacao_rua']:checked").val() == "1") {
+					$(".rowEndereco").css("display", "none");
+					$("#rowCidade").css("display", "block");
+				}
+				if($("input[name='situacao_rua']:checked").val() == "0") {
+					$(".rowEndereco").css("display", "block");
+					$("#rowCidade").css("display", "none");
+				}
+			});
+
+		});
+	</script>
+
+    <script type="text/javascript">
+		// Registra o evento blur do campo "cep", ou seja, quando o usuário sair do campo "cep" faremos a consulta dos dados
+		$("#cep").blur(function(){
+			// Para fazer a consulta, removemos tudo o que não é número do valor informado pelo usuário
+			var cep = this.value.replace(/[^0-9]/, "");
+				
+			// Validação do CEP; caso o CEP não possua 8 números, então cancela a consulta
+			if(cep.length!=8){
+				return false;
+			}
+				
+			// Utilizamos o webservice "viacep.com.br" para buscar as informações do CEP fornecido pelo usuário.
+			// A url consiste no endereço do webservice ("http://viacep.com.br/ws/"), mais o cep que o usuário
+			// informou e também o tipo de retorno que desejamos, podendo ser "xml", "piped", "querty" ou o que
+			// iremos utilizar, que é "json"
+			var url = "https://viacep.com.br/ws/"+cep+"/json/";
+				
+			// Aqui fazemos uma requisição ajax ao webservice, tratando o retorno com try/catch para que caso ocorra algum
+			// erro (o cep pode não existir, por exemplo) o usuário não seja afetado, assim ele pode continuar preenchendo os campos
+			$.getJSON(url, function(dadosRetorno){
+				try{
+					// Insere os dados em cada campo
+					$("#endereco").val(dadosRetorno.logradouro);
+					$("#bairro").val(dadosRetorno.bairro);
+					$("#cidade").val(dadosRetorno.localidade);
+					$("#uf").val(dadosRetorno.uf);
+					$("#num").focus();
+				}catch(ex){}
+			});
+		});
+	</script>
+
+	<!-- BUSCA CEP [CONTATOS] -->
+	<script type="text/javascript">
+		// Registra o evento blur do campo "cep", ou seja, quando o usuário sair do campo "cep" faremos a consulta dos dados
+		$(".cep").blur(function(){
+			// Para fazer a consulta, removemos tudo o que não é número do valor informado pelo usuário
+			var cep = this.value.replace(/[^0-9]/, "");
+				
+			// Validação do CEP; caso o CEP não possua 8 números, então cancela a consulta
+			if(cep.length!=8){
+				return false;
+			}
+				
+			// Utilizamos o webservice "viacep.com.br" para buscar as informações do CEP fornecido pelo usuário.
+			// A url consiste no endereço do webservice ("http://viacep.com.br/ws/"), mais o cep que o usuário
+			// informou e também o tipo de retorno que desejamos, podendo ser "xml", "piped", "querty" ou o que
+			// iremos utilizar, que é "json"
+			var url = "https://viacep.com.br/ws/"+cep+"/json/";
+				
+			// Aqui fazemos uma requisição ajax ao webservice, tratando o retorno com try/catch para que caso ocorra algum
+			// erro (o cep pode não existir, por exemplo) o usuário não seja afetado, assim ele pode continuar preenchendo os campos
+			$.getJSON(url, function(dadosRetorno){
+				try{
+					// Insere os dados em cada campo
+					$(".endereco").val(dadosRetorno.logradouro);
+					$(".bairro").val(dadosRetorno.bairro);
+					$(".cidade").val(dadosRetorno.localidade);
+					$(".uf").val(dadosRetorno.uf);
+					$(".num").focus();
+				}catch(ex){}
+			});
+		});
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			// Switchery
+            var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            $('.js-switch').each(function() {
+                new Switchery($(this)[0], $(this).data());
+            });
+
+            // Basic
+        	$('.dropify').dropify();
+		});
+	</script>
+
+	<!-- webcam -->
+	<script>
+	    var options = {
+	    	shutter_ogg_url: "{{base_url()}}/public/assets/jpeg_camera/shutter.ogg",
+	    	shutter_mp3_url: "{{base_url()}}/public/assets/jpeg_camera/shutter.mp3",
+	    	swf_url: "{{base_url()}}/public/assets/jpeg_camera/jpeg_camera.swf",
+	    };
+	    var camera = new JpegCamera("#camera", options);
+	  
+	  $('#take_snapshots').click(function(){
+	    var snapshot = camera.capture();
+	    // snapshot.show();
+	    
+	    snapshot.upload({api_url: "{{base_url()}}/views/acolhidos/webcamAction.php?acolhido={{item.id}}"}).done(function(response) {
+	    	var string = response;
+	    	var retorno = string.split('-');
+	    	var img_url = retorno[1];
+	    	var img_id = retorno[0];
+	      	// $('#imagelist').prepend("<tr id='"+img_id+"'><td><img src='"+img_url+"' width='100px' height='100px'></td><td><a href='#"+img_id+"' class='btn btn-success'><i class='fa fa-check'></i></a> <a href='#' class='btn btn-danger remover-"+img_id+"'><i class='fa fa-trash-o'></i></a></td></tr>");
+	      	$('#imagelist').prepend("<tr id='snapshot-"+img_id+"'><td><img src='{{base_url()}}/public/uploads/acolhidos/fotos/"+img_url+"' width='100px' height='100px'></td><td><a href='' onclick='location.reload()'>atualizar</a></td></tr>");
+	    }).fail(function(response) {
+	    	alert("Upload failed with status " + response);
+	    });
+	  })
+
+	  function done(){
+	    $('#snapshots').html("uploaded");
+	  }
+	</script>
+
+	<!-- remover foto / contato / arquivo -->
+	<script type="text/javascript">
+        $(document).ready(function() {
+            {% for s in snapshots %}
+            $('.remover-{{ s.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e a foto deste acolhido será deletada do servidor!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_foto_acolhido', { 'id' : s.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "A foto deste acolhido foi excluída.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        $('#snapshot-{{s.id}}').remove();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar a foto do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Esta foto está a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+
+            {% for c in contatos %}
+            $('.remover-{{ c.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e o contato deste acolhido será deletado!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_contato_acolhido', { 'id' : c.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "O contato deste acolhido foi excluído.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        $('#contato-{{c.id}}').remove();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar o contato do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Este contato está a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+
+            {% for a in arquivos %}
+            $('.remover-{{ a.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e o arquivo deste acolhido será deletada do servidor!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_arquivo_acolhido', { 'id' : a.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "O arquivo deste acolhido foi excluído.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        $('#arquivo-{{a.id}}').remove();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar o arquivo do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Este arquivo está a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+        });
+    </script>
+{% endblock %}

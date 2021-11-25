@@ -1,0 +1,143 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+<div id="wrapper">
+
+  {% include 'layout/topbar.html' %}
+
+  {% include 'layout/navbar.html' %}
+
+  <div class="content-page">
+
+    <div class="content">
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card-box">
+            <div class="dropdown pull-right">
+              <a href="{{path_for('usuarios')}}" class="btn btn-primary btn-rounded waves-effect waves-light m-b-5">
+                <i class="fa fa-arrow-left m-r-5"></i> Voltar
+              </a>
+            </div>
+
+            <h4 class="header-title m-t-0 m-b-30">{{options.title}} {{usuario.name}}</h4>
+
+            <form method="POST" action="{{path_for(options.action, { 'id' : usuario.id })}}">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" id="name" name="name" class="form-control" value="{{usuario.name}}" minlength="3" required />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-5">
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" value="{{usuario.email}}" required />
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" class="form-control" value="" />
+                  </div>
+                </div>
+
+                <div class="col-lg-3">
+                  <div class="form-group">
+                    <label for="role">Nivel de Acesso</label>
+                    <select id="role" name="role" class="form-control m-b" required />
+                      <option></option>
+                      <option value="1" {% if usuario.role == "1" %} selected {% endif %}>Administrador</option>
+                      <option value="2" {% if usuario.role == "2" %} selected {% endif %}>Funcionário</option>
+                      <option value="3" {% if usuario.role == "3" %} selected {% endif %}>Caixa</option>
+                    </select>  
+                      </div>
+                </div>
+              </div>
+
+              <input type="hidden" name="{{csrf.TokenNameKey}}" value="{{csrf.TokenName}}"/>
+              <input type="hidden" name="{{csrf.TokenValueKey}}" value="{{csrf.TokenValue}}"/>
+
+              <button type="reset" class="btn btn-default">Limpar</button>
+              <button type="submit" class="btn btn-primary pull-right waves-effect waves-light">{{options.button}}</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  {% include 'layout/footer.html' %}
+
+</div>
+
+{% include 'layout/rightbar.html' %}
+
+</div>
+{% endblock %}
+
+
+{% block include_css %}
+<!-- DataTables -->
+<link href="{{base_url()}}/assets/css/dataTables/datatables.min.css" rel="stylesheet" type="text/css" />
+<!-- Toastr -->
+<link href="{{base_url()}}/assets/plugins/toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+
+{% block include_js %}
+<!-- DataTables -->
+<script src="{{base_url()}}/assets/js/dataTables/datatables.min.js"></script>
+<!-- Toastr -->
+<script src="{{base_url()}}/assets/plugins/toastr/toastr.min.js"></script>
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+  $(document).ready(function(){
+
+    {% if flash %}
+    setTimeout(function() {
+      toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        showMethod: 'slideDown',
+        timeOut: 4000
+      };
+      {% if flash['success'] %}
+      toastr.success('{{flash.success.0}}', 'Notificação');
+      {% elseif flash['error'] %}
+      toastr.error('{{flash.error.0}}', 'Notificação');
+      {% elseif flash['warning'] %}
+      toastr.warning('{{flash.warning.0}}', 'Notificação');
+      {% elseif flash['info'] %}
+      toastr.info('{{flash.info.0}}', 'Informação');
+      {% endif %}
+    }, 100);
+    {% endif %}
+
+    $('.dataTables-example').DataTable({
+      pageLength: 25,
+      responsive: true,
+      paging: true,
+      pagingType: 'full_numbers',
+      language: {
+        url: 'http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json',
+      }
+    });
+
+    document.getElementById("submit_buscar_cliente").onclick = function() {
+      document.getElementById("form_buscar_cliente").submit();
+    }
+  });
+</script>
+{% endblock %}

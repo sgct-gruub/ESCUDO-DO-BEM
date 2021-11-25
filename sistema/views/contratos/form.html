@@ -1,0 +1,467 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button class="btn btn-info btn-circle btn-lg pull-right" data-toggle="tooltip" title="Voltar para listagem" onClick="window.location.href='{{path_for('contratos')}}'">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <form method="POST" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="titulo" class="col-sm-2 control-label">Título</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="titulo" id="titulo" class="form-control" value="{{item.titulo}}" required="" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="tipo" class="col-sm-2 control-label">Tipo do contrato</label>
+                                    <div class="col-sm-10">
+                                        <select name="tipo" id="tipo" class="form-control" required="">
+                                            <option selected="" disabled="">-- SELECIONE</option>
+                                            <option value="0" {% if item.tipo == 0 %} selected="" {% endif %}>Convênio</option>
+                                            <option value="1" {% if item.tipo == 1 %} selected="" {% endif %}>Particular</option>
+                                            <option value="2" {% if item.tipo == 2 %} selected="" {% endif %}>Vaga Social</option>
+                                            <option value="3" {% if item.tipo == 3 %} selected="" {% endif %}>Morador Assistido</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row_outros">
+                                    <label for="voluntario" class="col-sm-2 control-label">Voluntário</label>
+                                    <div class="col-sm-10">
+                                        <select name="voluntario" id="voluntario" class="form-control" required="">
+                                            <option selected="" disabled="">-- SELECIONE</option>
+                                            <option value="1" {% if item.voluntario == 1 %} selected="" {% endif %}>Sim</option>
+                                            <option value="0" {% if item.voluntario == 0 %} selected="" {% endif %}>Não</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row_outros">
+                                    <label for="terceirizado" class="col-sm-2 control-label">Terceirizado</label>
+                                    <div class="col-sm-10">
+                                        <select name="terceirizado" id="terceirizado" class="form-control" required="">
+                                            <option selected="" disabled="">-- SELECIONE</option>
+                                            <option value="1" {% if item.terceirizado == 1 %} selected="" {% endif %}>Sim</option>
+                                            <option value="0" {% if item.terceirizado == 0 %} selected="" {% endif %}>Não</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="row_convenios">
+                                    <label for="convenio" class="col-sm-2 control-label">Convênio</label>
+                                    <div class="col-sm-10">
+                                        <select name="convenio" id="convenio" class="form-control" required="">
+                                            <option selected="" disabled="">-- SELECIONE</option>
+                                            {% for c in convenios %}
+                                            <option value="{{c.id}}" {% if item.convenio == c.id %} selected="" {% endif %}>{{c.nome}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <textarea class="summernote" name="conteudo">{{item.conteudo}}</textarea>
+
+                                <hr />
+
+                                <button type="submit" class="btn btn-success pull-right">Salvar</button>
+                                <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <h3 class="box-title m-b-0">Tags disponíveis</h3>
+                            <h5 class="text-muted m-b-40">Utilize as tags no seu contrato sempre no formato <code>[NOME_DA_TAG]</code></h5>
+                            <section class="m-t-40">
+                                <div class="sttabs tabs-style-linetriangle">
+                                    <nav>
+                                        <ul>
+                                            <li><a href="#section-1"><span>Acolhido</span></a></li>
+                                            <li><a href="#section-2"><span>Contato Principal</span></a></li>
+                                            <li><a href="#section-3"><span>Tratamento</span></a></li>
+                                            <li><a href="#section-4"><span>Instituição</span></a></li>
+                                        </ul>
+                                    </nav>
+                                    <div class="content-wrap">
+                                        <section id="section-1">
+                                            <h2 class="m-b-30">Tags para utilização relacionadas ao Acolhido</h2>
+                                            <table class="table table-striped table-responsive">
+                                                <tr>
+                                                    <td>Nome</td>
+                                                    <td>[ACO_NOME]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>RG</td>
+                                                    <td>[ACO_RG]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>CPF</td>
+                                                    <td>[ACO_CPF]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Data de nascimento</td>
+                                                    <td>[ACO_DATA_NASCIMENTO]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Naturalidade</td>
+                                                    <td>[ACO_NATURALIDADE]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>UF Naturalidade</td>
+                                                    <td>[ACO_UF_NATURALIDADE]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Cad. único</td>
+                                                    <td>[ACO_CAD_UNICO]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Cartão SUS</td>
+                                                    <td>[ACO_CARTAO_SUS]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>PIS</td>
+                                                    <td>[ACO_PIS]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Nome do pai</td>
+                                                    <td>[ACO_NOME_PAI]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Data de nascimento do pai</td>
+                                                    <td>[ACO_DATA_NASCIMENTO_PAI]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Profissão do pai</td>
+                                                    <td>[ACO_PROFISSAO_PAI]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Nome da mãe</td>
+                                                    <td>[ACO_NOME_MAE]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Data de nascimento da mãe</td>
+                                                    <td>[ACO_DATA_NASCIMENTO_MAE]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Profissão da mãe</td>
+                                                    <td>[ACO_PROFISSAO_MAE]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>CEP</td>
+                                                    <td>[ACO_CEP]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Endereço</td>
+                                                    <td>[ACO_ENDERECO]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Número</td>
+                                                    <td>[ACO_NUM]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Complemento</td>
+                                                    <td>[ACO_COMPLEMENTO]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Bairro</td>
+                                                    <td>[ACO_BAIRRO]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Cidade</td>
+                                                    <td>[ACO_CIDADE]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>UF</td>
+                                                    <td>[ACO_UF]</td>
+                                                </tr>
+                                            </table>
+                                        </section>
+                                        <section id="section-2">
+                                            <h2 class="m-b-30">Tags para utilização relacionadas ao Contato Principal</h2>
+                                            <table class="table table-striped table-responsive">
+                                                <tr>
+                                                    <td>Nome contato principal</td>
+                                                    <td>[ACO_NOME_CONTATO_PRINCIPAL]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>RG contato principal</td>
+                                                    <td>[ACO_RG_CONTATO_PRINCIPAL]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>CPF contato principal</td>
+                                                    <td>[ACO_CPF_CONTATO_PRINCIPAL]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Data de nascimento contato principal</td>
+                                                    <td>[ACO_DATA_NASCIMENTO_CONTATO_PRINCIPAL]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Telefone contato principal</td>
+                                                    <td>[ACO_TEL_CONTATO_PRINCIPAL]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Celular contato principal</td>
+                                                    <td>[ACO_CEL_CONTATO_PRINCIPAL]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Parentesco contato principal</td>
+                                                    <td>[ACO_PARENTESCO_CONTATO_PRINCIPAL]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>E-mail contato principal</td>
+                                                    <td>[ACO_EMAIL_CONTATO_PRINCIPAL]</td>
+                                                </tr>
+                                            </table>
+                                        </section>
+                                        <section id="section-3">
+                                            <h2 class="m-b-30">Tags para utilização relacionadas ao Tratamento</h2>
+                                            <table class="table table-striped table-responsive">
+                                                <tr>
+                                                    <td>Tipo de tratamento</td>
+                                                    <td>[TIPO_TRATAMENTO]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Nome do convênio &nbsp; <i class="fa fa-info-circle" data-toggle="tooltip" title="Apenas se o tipo de acolhimento for igual à Convênio"></i></td>
+                                                    <td>[CONVENIO_NOME]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Valor da matrícula (em reais)</td>
+                                                    <td>[VALOR_MATRICULA]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Valor da mensalidade (em reais)</td>
+                                                    <td>[VALOR_MENSALIDADE]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Previsão de saída</td>
+                                                    <td>[ACO_PREVISAO_SAIDA]</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Data de ínicio do acolhimento</td>
+                                                    <td>[ACO_DATA_INICIO_ACOLHIMENTO]</td>
+                                                </tr>
+                                            </table>
+                                        </section>
+                                        <section id="section-4">
+                                            <h2 class="m-b-30">Tags para utilização relacionadas à sua Instituição</h2>
+                                            <table class="table table-striped table-responsive">
+                                                <tr>
+                                                    <td>Razão Social</td>
+                                                    <td>[CT_RAZAO_SOCIAL]</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Nome Fantasia</td>
+                                                    <td>[CT_NOME_FANTASIA]</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>CNPJ</td>
+                                                    <td>[CT_CNPJ]</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tempo de tratamento (em meses)</td>
+                                                    <td>[CT_TEMPO_TRATAMENTO]</td>
+                                                </tr>
+                                            </table>
+                                        </section>
+                                    </div>
+                                    <!-- /content -->
+                                </div>
+                                <!-- /tabs -->
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+    <!-- Summernote  -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/summernote/dist/summernote.css" rel="stylesheet" />
+{% endblock %}
+
+
+{% block include_js %}
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Summernote  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/summernote/dist/summernote.min.js"></script>
+
+    <!-- Tabs -->
+    <script src="{{base_url()}}/public/assets/js/cbpFWTabs.js"></script>
+
+
+    <script type="text/javascript">
+        (function() {
+            [].slice.call(document.querySelectorAll('.sttabs')).forEach(function(el) {
+                new CBPFWTabs(el);
+            });
+        })();
+
+
+        $(document).ready(function() {
+            {% if flash %}
+                {% if flash['success'] %}
+                    swal("Sucesso!", "{{flash.success | first}}", "success");
+                {% endif %}
+
+                {% if flash['error'] %}
+                    swal("Erro!", "{{flash.error | first}}", "error");
+                {% endif %}
+            {% endif %}
+
+            $('.summernote').summernote({
+                height: 350, // set editor height
+                minHeight: null, // set minimum height of editor
+                maxHeight: null, // set maximum height of editor
+                focus: false // set focus to editable area after initializing summernote
+            });
+            $('.inline-editor').summernote({
+                airMode: true
+            });
+
+            $('#row_convenios').hide(); 
+            $('#tipo').change(function(){
+                if($('#tipo').val() == '0') {
+                    $('#row_convenios').show(); 
+                    $('.row_outros').hide(); 
+                } else {
+                    $('#row_convenios').hide(); 
+                    $('.row_outros').show(); 
+                }
+            });
+            if($('#tipo').val() == '0') {
+                $('#row_convenios').show(); 
+                $('.row_outros').hide(); 
+            }
+
+
+            {% for i in itens %}
+            $('.remover-{{ i.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e todos os dados deste contrato serão deletados!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_contrato', { 'id' : i.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "Todos os dados deste contrato foram excluídos.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        $('#{{i.id}}').remove();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar os dados do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Os dados deste contrato estão a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+        });
+    </script>    
+{% endblock %}

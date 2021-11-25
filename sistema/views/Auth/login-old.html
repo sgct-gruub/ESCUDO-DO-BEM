@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{base_url()}}/public/assets/images/favicon.png">
+    <title>Login - Painel de Administração</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="{{base_url()}}/public/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- animation CSS -->
+    <link href="{{base_url()}}/public/assets/css/animate.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{base_url()}}/public/assets/css/style.css" rel="stylesheet">
+    <!-- color CSS -->
+    <link href="{{base_url()}}/public/assets/css/colors/default.css" id="theme"  rel="stylesheet">
+    <!-- Toastr -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/toast-master/css/jquery.toast.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="fix-header">
+    <!-- ============================================================== -->
+    <!-- Preloader -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+        </svg>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- Wrapper -->
+    <!-- ============================================================== -->
+    <div id="wrapper">
+      <section id="wrapper" class="new-login-register">
+            <div class="lg-info-panel">
+              <div class="inner-panel">
+                  <a href="javascript:void(0)" class="p-20 di"><img src="{{base_url()}}/public/assets/images/admin-logo.png"></a>
+                  <div class="lg-content">
+                      <h2>O MELHOR & MAIS COMPLETO GERENCIADOR PARA COMUNIDADES TERAPÊUTICAS DO BRASIL</h2>
+                      <p class="text-muted">gerenciamento financeiro completo da sua instituição, controle de acolhidos & acolhimentos, unidades, convênios, documentos, dispensa e muito mais...</p>
+                      <a href="#" class="btn btn-rounded btn-danger p-l-20 p-r-20"> Saiba mais</a>
+                      <!-- <a href="#" class="btn btn-rounded btn-success p-l-20 p-r-20"> Comprar</a> -->
+                  </div>
+              </div>
+            </div>
+            <div class="new-login-box" style="margin-top: 5%;">
+              <div class="white-box">
+                <!-- <h3 class="box-title m-b-0">Painel de administração</h3>
+                <small>Digite seus dados abaixo</small> -->
+                <div class="text-center">
+                  <img src="{{base_url()}}/public/uploads/config/logo/{{config.logo}}" />
+                </div>
+
+                <form class="form-horizontal new-lg-form" id="loginform" action="{{path_for('login')}}" method="post">
+                  <div class="form-group m-t-20">
+                    <div class="col-xs-12">
+                      <label>Endereço de e-mail</label>
+                      <input class="form-control" type="email" required="" name="email" placeholder="email@exemplo.com">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      <label>Password</label>
+                      <input class="form-control" type="password" required="" name="password" placeholder="**********">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <!-- <div class="checkbox checkbox-info pull-left p-t-0">
+                        <input id="checkbox-signup" type="checkbox">
+                        <label for="checkbox-signup"> Lembrar meus dados </label>
+                      </div> -->
+                      <a href="javascript:void(0)" id="to-recover" class="text-dark pull-right"><i class="fa fa-lock m-r-5"></i> Perdeu sua senha?</a> </div>
+                  </div>
+                  <div class="form-group text-center m-t-20">
+                    <div class="col-xs-12">
+                      <button class="btn btn-info btn-lg btn-block btn-rounded text-uppercase waves-effect waves-light" type="submit">Log In</button>
+                    </div>
+                  </div>
+
+                  <!-- <div class="form-group m-b-0">
+                    <div class="col-sm-12 text-center">
+                      <p>Don't have an account? <a href="register.html" class="text-primary m-l-5"><b>Sign Up</b></a></p>
+                    </div>
+                  </div> -->
+
+                  <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                  <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                </form>
+
+                <form class="form-horizontal" id="recoverform" action="index.html">
+                          <div class="form-group ">
+                            <div class="col-xs-12">
+                              <h3>Recuperar Senha</h3>
+                              <p class="text-muted">Digite seu e-mail de acesso ao sistema e instruções serão enviadas para você!</p>
+                            </div>
+                          </div>
+                          <div class="form-group ">
+                            <div class="col-xs-12">
+                              <input class="form-control" type="text" required="" placeholder="E-mail">
+                            </div>
+                          </div>
+                          <div class="form-group text-center m-t-20">
+                            <div class="col-xs-12">
+                              <button class="btn btn-primary btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Continuar</button>
+                            </div>
+                          </div>
+
+                          <div class="form-group text-center m-t-20">
+                            Já tem uma conta? <a href="{{path_for('login')}}" class="text-primary m-l-5"><b>Entre agora</b></a>
+                          </div>
+                </form>
+              </div>
+            </div>
+      </section>
+</div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <!-- jQuery -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{{base_url()}}/public/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Menu Plugin JavaScript -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
+    <!--slimscroll JavaScript -->
+    <script src="{{base_url()}}/public/assets/js/jquery.slimscroll.js"></script>
+    <!--Wave Effects -->
+    <script src="{{base_url()}}/public/assets/js/waves.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="{{base_url()}}/public/assets/js/custom.min.js"></script>
+    <!-- Toastr -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/toast-master/js/jquery.toast.js"></script>
+    <!--Style Switcher -->
+    <!-- <script src="{{base_url()}}/public/assets/plugins/bower_components/styleswitcher/jQuery.style.switcher.js"></script> -->
+
+    <script>
+      $(document).ready(function(){
+        "use strict";
+        {% if flash %}
+        $.toast({
+          {% if flash['success'] %}
+          heading: 'SUCESSO',
+          text: '{{flash.success | first}}',
+          icon: 'success',
+          {% elseif flash['error'] %}
+          heading: 'ERRO',
+          text: '{{flash.error | first}}',
+          icon: 'error',
+          {% elseif flash['warning'] %}
+          heading: 'NOTIFICAÇÃO',
+          text: '{{flash.warning | first}}',
+          icon: 'warning',
+          {% elseif flash['info'] %}
+          heading: 'INFORMAÇÃO',
+          text: '{{flash.info | first}}',
+          icon: 'info',
+          {% endif %}
+          position: 'top-right',
+          loaderBg: '#fff',
+          hideAfter: 3500,
+          stack: 6
+        });
+        {% endif %}
+        
+      });
+    </script>
+</body>
+
+</html>

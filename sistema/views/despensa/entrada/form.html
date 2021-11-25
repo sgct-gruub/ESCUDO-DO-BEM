@@ -1,0 +1,455 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina_Mae}} {{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li><a href="#">Despensa</a></li>
+                            <li><a href="{{path_for('entradas')}}">Entrada de produtos</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button class="btn btn-info btn-circle btn-lg pull-right" data-toggle="tooltip" title="Voltar para listagem" onClick="window.location.href='{{path_for('entradas')}}'">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </button>
+
+                                	<!-- <a href="#" class="">
+                                		<div class="circle-md pull-right circle bg-info mytooltip">
+                                			<i class="ti-plus"></i>
+                                			<span class="tooltip-content99">Novo registro</span>
+                                		</div>
+                                	</a> -->
+                                </div>
+                            </div>
+
+                            <form action="{{path_for('post_cadastrar_compra')}}" method="POST">
+                                <div class="row form-group">
+                                    <div class="col-md-6">
+                                        <label for="fornecedor">Fornecedor</label>
+                                        <select name="fornecedor" id="fornecedor" class="form-control select2">
+                                            <option value="" selected="" disabled="">-- SELECIONE</option>
+                                            {% for f in fornecedores %}
+                                            <option value="{{f.id}}" {% if item.fornecedor == f.id %} selected="" {% endif %}>{{f.nome_fantasia}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="data_compra"><i class="fa fa-asterisk text-danger"></i> Data</label>
+                                        <input type="text" class="form-control" name="data_compra" id="data_compra" onkeyup="mascara(this, mdata);" required="" placeholder="{{now|date('d/m/Y')}}" value="{{item.data_compra|date('d/m/Y')}}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="numero_pedido">Nº pedido</label>
+                                        <input type="text" class="form-control" name="numero_pedido" id="numero_pedido" value="{{item.numero_pedido}}">
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-md-4">
+                                        <label for="vendedor">Vendedor</label>
+                                        <input type="text" class="form-control" name="vendedor" id="vendedor" value="{{item.vendedor}}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="tipo_frete">Tipo de frete</label>
+                                        <input type="text" class="form-control" name="tipo_frete" id="tipo_frete" value="{{item.tipo_frete}}">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="valor_frete">Valor do frete</label>
+                                        <input type="text" class="form-control dinheiro" name="valor_frete" id="valor_frete" placeholder="R$" value="{{item.valor_frete}}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="previsao_entrega">Previsão de entrega</label>
+                                        <input type="text" class="form-control" name="previsao_entrega" id="previsao_entrega" onkeyup="mascara(this, mdata);" placeholder="{{now|date('d/m/Y')}}" value="{{item.previsao_entrega|date('d/m/Y')}}">
+                                    </div>
+                                </div>
+
+                                <table class="table table-hover order-list">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="40%"><i class="fa fa-asterisk text-danger"></i> Produto</th>
+                                                                    <th><i class="fa fa-asterisk text-danger"></i> Qtd</th>
+                                                                    <th><i class="fa fa-asterisk text-danger"></i> Valor</th>
+                                                                    <th>Total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            
+                                                            <tbody>
+                                                                {% for ic in itens_compra %}
+                                                                <tr>
+                                                                    <td>
+                                                                        <select name="product[]" class="form-control select2" disabled="">
+                                                                            <option value="" selected="" disabled="">-- SELECIONE</option>
+                                                                            {% for p in produtos %}
+                                                                            <option value="{{p.id}}" {% if ic.produto == p.id %} selected="" {% endif %}>{{p.nome}}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </td>
+                                                                    <td><input type="text" name="qty[]" class="form-control qtd" placeholder="0.000" readonly="" value="{{ic.quantidade}}" /></td>
+                                                                    <td><input type="text" name="price[]" class="form-control dinheiro" placeholder="R$" readonly="" value="{{ic.valor_unitario}}" /></td>
+                                                                    <td><input type="text" name="linetotal" readonly="readonly" class="form-control" value="{{ic.quantidade*ic.valor_unitario}}" /></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                {% endfor %}
+
+                                                                {% if view == 'cadastrar' %}
+                                                                <tr>
+                                                                    <td>
+                                                                        <select name="product[]" class="form-control select2" required="" >
+                                                                            <option value="" selected="" disabled="">-- SELECIONE</option>
+                                                                            {% for p in produtos %}
+                                                                            <option value="{{p.id}}">{{p.nome}}</option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </td>
+                                                                    <td><input type="text" name="qty[]" class="form-control qtd" placeholder="0.000" required="" /></td>
+                                                                    <td><input type="text" name="price[]" class="form-control dinheiro" placeholder="R$" required="" /></td>
+                                                                    <td><input type="text" name="linetotal" readonly="readonly" class="form-control" /></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                {% endif %}
+                                                            </tbody>
+                                                            
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td>
+                                                                        <button type="button" class="btn btn-primary" id="addrow"><i class="mdi mdi-plus"></i> &nbsp; Adicionar Produto</button>
+                                                                    </td>
+
+                                                                    <td colspan="4" class="text-right">
+                                                                        <h5>Frete R$<span id="totalfrete">0.00</span></h5>
+                                                                        <h4><strong>Total R$<span id="grandtotal">0.00</span></strong></h4>
+                                                                    </td>
+                                                                </tr>
+                                                            </tfoot>
+                                </table>
+
+                                <div class="row form-group">
+                                                            <div class="col-md-6">
+                                                                <label for="conta_bancaria"><i class="fa fa-asterisk text-danger"></i> Conta Bancária</label>
+                                                                <select name="conta_bancaria" id="conta_bancaria" class="form-control select2" required="">
+                                                                    <option value="" selected="" disabled="">-- SELECIONE</option>
+                                                                    {% for cb in contas_bancarias %}
+                                                                    <option value="{{cb.id}}" {% if item.conta_bancaria == cb.id %} selected="" {% endif %}>{{cb.nome}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+
+                                                            <div id="formas_pagamento" class="col-md-6">
+                                                                <label for="forma_pagamento"><i class="fa fa-asterisk text-danger"></i> Forma de Pagamento</label>
+                                                                <select name="forma_pagamento" id="forma_pagamento" class="form-control select2">
+                                                                    <option value="" selected="" disabled="">-- SELECIONE</option>
+                                                                    <option value="dinheiro" {% if item.forma_pagamento == 'dinheiro' %} selected="" {% endif %}>Dinheiro</option>
+                                                                    <option value="cheque" {% if item.forma_pagamento == 'cheque' %} selected="" {% endif %}>Cheque</option>
+                                                                    <option value="transferencia" {% if item.forma_pagamento == 'transferencia' %} selected="" {% endif %}>Transferência/Depósito</option>
+                                                                    <option value="credito" {% if item.forma_pagamento == 'credito' %} selected="" {% endif %}>Cartão Crédito</option>
+                                                                    <option value="debito" {% if item.forma_pagamento == 'debito' %} selected="" {% endif %}>Cartão Débito</option>
+                                                                </select>
+                                                            </div>
+                                </div>
+
+                                <div id="dados_dinheiro" class="row form-group" style="{% if item.forma_pagamento == 'dinheiro' %}display: block;{% else %}display: none;{% endif %}">
+                                                            <div class="col-md-12">
+                                                                <label for="valor_efetuado" class="control-label">Valor efetuado</label>
+                                                                <input type="text" name="valor_efetuado" id="valor_efetuado" class="form-control dinheiro" value="{{item.valor_total}}" placeholder="R${{item.valor_total}}" />
+                                                            </div>
+                                </div>
+
+                                <div id="dados_transferencia" class="row form-group" style="display: none;">
+                                                            <div class="col-md-3">
+                                                                <label for="banco" class="control-label">Banco</label>
+                                                                <select name="dados_transferencia[banco]" id="banco" class="form-control select2">
+                                                                    <option value="" selected="" disabled="">-- SELECIONE</option>
+                                                                    <option value="bb" {% if dados_pagamento.banco == 'bb' %} selected="" {% endif %}>Banco do Brasil</option>
+                                                                    <option value="banrisul" {% if dados_pagamento.banco == 'banrisul' %} selected="" {% endif %}>Banrisul</option>
+                                                                    <option value="bradesco" {% if dados_pagamento.banco == 'bradesco' %} selected="" {% endif %}>Bradesco</option>
+                                                                    <option value="cef" {% if dados_pagamento.banco == 'cef' %} selected="" {% endif %}>Caixa Econômica Federal</option>
+                                                                    <option value="itau" {% if dados_pagamento.banco == 'itau' %} selected="" {% endif %}>Itaú</option>
+                                                                    <option value="santander" {% if dados_pagamento.banco == 'santander' %} selected="" {% endif %}>Santander</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label for="agencia" class="control-label">Agência</label>
+                                                                <input type="number" name="dados_transferencia[agencia]" id="agencia" class="form-control" value="{{dados_pagamento.agencia}}" />
+                                                            </div>
+                                                            <div class="col-md-1" id="row_dv_ag">
+                                                                <label for="dv_ag" class="control-label">Dígito</label>
+                                                                <input type="text" name="dados_transferencia[dv_ag]" id="dv_ag" class="form-control" value="{{dados_pagamento.dv_ag}}" />
+                                                            </div>
+                                                            <div class="col-md-1" id="row_op" style="display: none;">
+                                                                <label for="op" class="control-label">Op.</label>
+                                                                <input type="text" name="dados_transferencia[op]" id="op" class="form-control" value="{{dados_pagamento.op}}" />
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label for="conta" class="control-label">Conta</label>
+                                                                <input type="number" name="dados_transferencia[conta]" id="conta" class="form-control" value="{{dados_pagamento.conta}}" />
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <label for="dv_cc" class="control-label">Dígito</label>
+                                                                <input type="text" name="dados_transferencia[dv_cc]" id="num_nf" class="form-control" value="{{dados_pagamento.dv_cc}}" />
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label for="favorecido" class="control-label">Favorecido</label>
+                                                                <input type="text" name="dados_transferencia[favorecido]" id="favorecido" class="form-control" value="{{dados_pagamento.favorecido}}" />
+                                                            </div>
+                                </div>
+
+                                <div id="dados_cheque" class="row form-group" style="display: none;">
+                                                            <div class="col-md-3">
+                                                                <label for="banco" class="control-label">Banco</label>
+                                                                <select name="dados_cheque[banco]" id="banco_2" class="form-control select2">
+                                                                    <option value="" selected="" disabled="">-- SELECIONE</option>
+                                                                    <option value="bb" {% if dados_pagamento.banco == 'bb' %} selected="" {% endif %}>Banco do Brasil</option>
+                                                                    <option value="banrisul" {% if dados_pagamento.banco == 'banrisul' %} selected="" {% endif %}>Banrisul</option>
+                                                                    <option value="bradesco" {% if dados_pagamento.banco == 'bradesco' %} selected="" {% endif %}>Bradesco</option>
+                                                                    <option value="cef" {% if dados_pagamento.banco == 'cef' %} selected="" {% endif %}>Caixa Econômica Federal</option>
+                                                                    <option value="itau" {% if dados_pagamento.banco == 'itau' %} selected="" {% endif %}>Itaú</option>
+                                                                    <option value="santander" {% if dados_pagamento.banco == 'santander' %} selected="" {% endif %}>Santander</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label for="num_cheque" class="control-label">Nº do cheque</label>
+                                                                <input type="number" name="dados_cheque[numero]" id="num_cheque" class="form-control" value="{{dados_pagamento.numero}}" />
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <label for="agencia_cheque" class="control-label">Agência</label>
+                                                                <input type="number" name="dados_cheque[agencia]" id="agencia_cheque" class="form-control" value="{{dados_pagamento.agencia}}" />
+                                                            </div>
+                                                            <div class="col-md-1" id="row_dv_ag_2">
+                                                                <label for="dv_ag_cheque" class="control-label">Dígito</label>
+                                                                <input type="text" name="dados_cheque[dv_ag]" id="dv_ag_cheque" class="form-control" value="{{dados_pagamento.dv_ag}}" />
+                                                            </div>
+                                                            <div class="col-md-1" id="row_op_2" style="display: none;">
+                                                                <label for="op" class="control-label">Op.</label>
+                                                                <input type="text" name="dados_cheque[op]" id="op" class="form-control" value="{{dados_pagamento.op}}" />
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label for="bom_para" class="control-label">Bom para...</label>
+                                                                <input type="text" name="dados_cheque[bom_para]" id="bom_para" class="form-control" placeholder="{{now|date('d/m/Y')}}" value="{{dados_pagamento.bom_para}}" onkeyup="mascara(this, mdata)" />
+                                                            </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-md-12">
+                                        <button type="reset" class="btn btn-default">Recomeçar</button>
+                                        <button type="submit" class="btn btn-success pull-right">Adicionar registro</button>
+                                        <input type="hidden" name="valor_total" id="valor_total" />
+                                        <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                        <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- Switchery -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/switchery/dist/switchery.min.css" rel="stylesheet">
+
+    <style>
+        .form-group label 
+        {
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block include_js %}
+    <!--Data Tables -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <!-- start - This is for export functionality only -->
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- end - This is for export functionality only -->
+
+    <!-- Form Validator  -->
+    <script src="{{base_url()}}/public/assets/js/validator.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/mascaras.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('form').on('reset', () => {
+              $(".select2").select2('val', '');
+            });
+
+            {% if dados_pagamento.banco == 'cef' %}
+                $('#row_op').css('display', 'block');
+                $('#row_dv_ag').css('display', 'none');
+
+                $('#row_op_2').css('display', 'block');
+                $('#row_dv_ag_2').css('display', 'none');
+            {% else %}
+                $('#row_op').css('display', 'none');
+                $('#row_dv_ag').css('display', 'block');
+
+                $('#row_op_2').css('display', 'none');
+                $('#row_dv_ag_2').css('display', 'block');
+            {% endif %}
+
+            $('#banco').on("change" , function() {
+                if($(this).val() == 'cef'){
+                    $('#row_op').css('display', 'block');
+                    $('#row_dv_ag').css('display', 'none');
+                } else {
+                    $('#row_op').css('display', 'none');
+                    $('#row_dv_ag').css('display', 'block');
+                }
+            });
+
+            $('#banco_2').on("change" , function() {
+                if($(this).val() == 'cef'){
+                    $('#row_op_2').css('display', 'block');
+                    $('#row_dv_ag_2').css('display', 'none');
+                } else {
+                    $('#row_op_2').css('display', 'none');
+                    $('#row_dv_ag_2').css('display', 'block');
+                }
+            });
+
+            $('#forma_pagamento').on("change" , function() {
+                if($(this).val() == 'dinheiro'){
+                    $('#dados_dinheiro').css('display', 'block');
+                } else {
+                    $('#dados_dinheiro').css('display', 'none');
+                }
+
+                if($(this).val() == 'transferencia'){
+                    $('#dados_transferencia').css('display', 'block');
+                } else {
+                    $('#dados_transferencia').css('display', 'none');
+                }
+
+                if($(this).val() == 'cheque'){
+                    $('#dados_cheque').css('display', 'block');
+                } else {
+                    $('#dados_cheque').css('display', 'none');
+                }
+            });
+
+            var counter = 1;
+    
+            $("#addrow").on("click", function () {
+                counter++;
+                
+                var newRow = $("<tr>");
+                var cols = "";
+                cols += '<td><select name="product[]" class="form-control select_'+counter+'">\
+                                                                            <option value="" selected="" disabled="">-- SELECIONE</option>\
+                                                                            {% for p in produtos %}\
+                                                                            <option value="{{p.id}}">{{p.nome}}</option>\
+                                                                            {% endfor %}\
+                                                                        </select></td>';
+                cols += '<td><input type="text" name="qty[]" class="form-control qtd_'+counter+'" placeholder="0.000" /></td>';
+                cols += '<td><input type="text" name="price[]" class="form-control dinheiro_'+counter+'" placeholder="R$" /></td>';
+                cols += '<td><input type="text" name="linetotal" readonly="readonly" class="form-control" /></td>';
+                cols += '<td><a class="deleteRow btn btn-danger btn-circle"> x </a></td>';
+                newRow.append(cols);
+                
+                $("table.order-list").append(newRow);
+                $(".select_"+counter).select2();
+                $(".select_"+counter).select2('val', '');
+                $("input.qtd_"+counter).maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:"", precision: 3});
+                $("input.dinheiro_"+counter).maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:""});
+            });
+
+            $("table.order-list").on("change keyup keydown paste propertychange bind", 'input[name^="price"], input[name^="qty"]', function (event) {
+                calculateRow($(this).closest("tr"));
+                calculateGrandTotal();
+            });
+            
+            $('input[name^="valor_frete"]').on("change keyup keydown paste propertychange bind", function (event) {
+                $("#totalfrete").text($(this).val());
+                calculateGrandTotal();
+            });
+            
+            $("table.order-list").on("click", "a.deleteRow", function (event) {
+                $(this).closest("tr").remove();
+                calculateGrandTotal();
+            });
+        });
+
+        function calculateRow(row) {
+            var price = +row.find('input[name^="price"]').val();
+            var qty = +row.find('input[name^="qty"]').val();
+            row.find('input[name^="linetotal"]').val((price * qty).toFixed(2));
+        }
+            
+        function calculateGrandTotal() {
+            var grandTotal = 0;
+
+            $("table.order-list").find('input[name^="linetotal"]').each(function () {
+                grandTotal += +$(this).val();
+            });
+
+            if($('input[name^="valor_frete"]').val() != ''){
+                grandTotal += +$('input[name^="valor_frete"]').val();
+            }
+
+            $("#grandtotal").text(grandTotal.toFixed(2));
+            $("#valor_efetuado").val(grandTotal.toFixed(2));
+            $("#valor_total").val(grandTotal.toFixed(2));
+        }
+    </script>
+
+    <script>
+	    $(document).ready(function() {
+            $("input.qtd").maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:"", precision: 3});
+            $("input.dinheiro").maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:""});
+
+	        $('#myTable').DataTable();
+	    });
+	</script>
+
+    
+{% endblock %}

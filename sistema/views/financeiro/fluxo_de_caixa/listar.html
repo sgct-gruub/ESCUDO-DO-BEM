@@ -1,0 +1,622 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-2"><h4 class="page-title">Filtrar</h4></div>
+                            <form action="{{path_for('fluxo_de_caixa', {'mes' : mes, 'ano' : ano})}}" method="GET">
+                            <div class="col-sm-4">
+                                <select name="ano" class="select2 form-control" onchange="window.location.href='{{path_for('fluxo_de_caixa')}}/{{mes}}/'+this.value" data-toggle="tooltip" title="Trocar ano" data-placement="right">
+                                    <option value="{{now|date_modify('-1 year')|date('Y')}}" {% if ano == now|date_modify('-1 year')|date('Y') %} selected="" {% endif %}>{{now|date_modify('-1 year')|date('Y')}}</option>
+                                    <option value="{{now|date('Y')}}" {% if ano == now|date('Y') or not get %} selected="" {% endif %}>{{now|date('Y')}}</option>
+                                    <option value="{{now|date_modify('+1 year')|date('Y')}}" {% if ano == now|date_modify('+1 year')|date('Y') %} selected="" {% endif %}>{{now|date_modify('+1 year')|date('Y')}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <select name="mes" class="select2 form-control" onchange="window.location.href='{{path_for('fluxo_de_caixa')}}/'+this.value+'/{{ano}}'" data-toggle="tooltip" title="Trocar mês" data-placement="right">
+                                    <option value="todos" {% if mes == 'todos' %} selected="" {% endif %}>Todos os meses</option>
+                                    <option value="01" {% if mes == '01' %} selected="" {% endif %}>Janeiro</option>
+                                    <option value="02" {% if mes == '02' %} selected="" {% endif %}>Fevereiro</option>
+                                    <option value="03" {% if mes == '03' %} selected="" {% endif %}>Março</option>
+                                    <option value="04" {% if mes == '04' %} selected="" {% endif %}>Abril</option>
+                                    <option value="05" {% if mes == '05' %} selected="" {% endif %}>Maio</option>
+                                    <option value="06" {% if mes == '06' %} selected="" {% endif %}>Junho</option>
+                                    <option value="07" {% if mes == '07' %} selected="" {% endif %}>Julho</option>
+                                    <option value="08" {% if mes == '08' %} selected="" {% endif %}>Agosto</option>
+                                    <option value="09" {% if mes == '09' %} selected="" {% endif %}>Setembro</option>
+                                    <option value="10" {% if mes == '10' %} selected="" {% endif %}>Outubro</option>
+                                    <option value="11" {% if mes == '11' %} selected="" {% endif %}>Novembro</option>
+                                    <option value="12" {% if mes == '12' %} selected="" {% endif %}>Dezembro</option>
+                                </select>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li><a href="#">Financeiro</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+
+                {% if mes == '01' %}
+                    {% set nome_mes = 'Janeiro' %}
+                    {% set nome_mes_anterior = 'Dezembro' %}
+                {% endif %}
+                {% if mes == '02' %}
+                    {% set nome_mes = 'Fevereiro' %}
+                    {% set nome_mes_anterior = 'Janeiro' %}
+                {% endif %}
+                {% if mes == '03' %}
+                    {% set nome_mes = 'Março' %}
+                    {% set nome_mes_anterior = 'Fevereiro' %}
+                {% endif %}
+                {% if mes == '04' %}
+                    {% set nome_mes = 'Abril' %}
+                    {% set nome_mes_anterior = 'Março' %}
+                {% endif %}
+                {% if mes == '05' %}
+                    {% set nome_mes = 'Maio' %}
+                    {% set nome_mes_anterior = 'Abril' %}
+                {% endif %}
+                {% if mes == '06' %}
+                    {% set nome_mes = 'Junho' %}
+                    {% set nome_mes_anterior = 'Maio' %}
+                {% endif %}
+                {% if mes == '07' %}
+                    {% set nome_mes = 'Julho' %}
+                    {% set nome_mes_anterior = 'Junho' %}
+                {% endif %}
+                {% if mes == '08' %}
+                    {% set nome_mes = 'Agosto' %}
+                    {% set nome_mes_anterior = 'Julho' %}
+                {% endif %}
+                {% if mes == '09' %}
+                    {% set nome_mes = 'Setembro' %}
+                    {% set nome_mes_anterior = 'Agosto' %}
+                {% endif %}
+                {% if mes == '10' %}
+                    {% set nome_mes = 'Outubro' %}
+                    {% set nome_mes_anterior = 'Setembro' %}
+                {% endif %}
+                {% if mes == '11' %}
+                    {% set nome_mes = 'Novembro' %}
+                    {% set nome_mes_anterior = 'Outubro' %}
+                {% endif %}
+                {% if mes == '12' %}
+                    {% set nome_mes = 'Dezembro' %}
+                    {% set nome_mes_anterior = 'Novembro' %}
+                {% endif %}
+                {% if mes == 'todos' %}
+                    {% set mes_hoje = now|date('m') %}
+
+                    {% if mes_hoje == '01' %}
+                        {% set nome_mes = 'Janeiro' %}
+                        {% set nome_mes_anterior = 'Dezembro' %}
+                    {% endif %}
+                    {% if mes_hoje == '02' %}
+                        {% set nome_mes = 'Fevereiro' %}
+                        {% set nome_mes_anterior = 'Janeiro' %}
+                    {% endif %}
+                    {% if mes_hoje == '03' %}
+                        {% set nome_mes = 'Março' %}
+                        {% set nome_mes_anterior = 'Fevereiro' %}
+                    {% endif %}
+                    {% if mes_hoje == '04' %}
+                        {% set nome_mes = 'Abril' %}
+                        {% set nome_mes_anterior = 'Março' %}
+                    {% endif %}
+                    {% if mes_hoje == '05' %}
+                        {% set nome_mes = 'Maio' %}
+                        {% set nome_mes_anterior = 'Abril' %}
+                    {% endif %}
+                    {% if mes_hoje == '06' %}
+                        {% set nome_mes = 'Junho' %}
+                        {% set nome_mes_anterior = 'Maio' %}
+                    {% endif %}
+                    {% if mes_hoje == '07' %}
+                        {% set nome_mes = 'Julho' %}
+                        {% set nome_mes_anterior = 'Junho' %}
+                    {% endif %}
+                    {% if mes_hoje == '08' %}
+                        {% set nome_mes = 'Agosto' %}
+                        {% set nome_mes_anterior = 'Julho' %}
+                    {% endif %}
+                    {% if mes_hoje == '09' %}
+                        {% set nome_mes = 'Setembro' %}
+                        {% set nome_mes_anterior = 'Agosto' %}
+                    {% endif %}
+                    {% if mes_hoje == '10' %}
+                        {% set nome_mes = 'Outubro' %}
+                        {% set nome_mes_anterior = 'Setembro' %}
+                    {% endif %}
+                    {% if mes_hoje == '11' %}
+                        {% set nome_mes = 'Novembro' %}
+                        {% set nome_mes_anterior = 'Outubro' %}
+                    {% endif %}
+                    {% if mes_hoje == '12' %}
+                        {% set nome_mes = 'Dezembro' %}
+                        {% set nome_mes_anterior = 'Novembro' %}
+                    {% endif %}
+
+                {% endif %}
+
+                <!-- ! MENSAGEM DE ALERTA ! -->
+                <!-- <div class="row">
+                    <div class="col-lg-12">
+                        <div class="alert alert-warning alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> 
+                            <i class="fa fa-warning"></i> &nbsp; Esta página está em desenvolvimento e poderá sofrer alterações.
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Saldo em {{nome_mes}}<small>/{{ano}}</small></h3>
+                            <ul class="list-inline two-part">
+                                <li class="text-left">
+                                    <span id="saldo_inicial" class="{% if saldo_inicial > 0 %}text-success{% else %}text-danger{% endif %}"></span> <br>inicial
+                                </li>
+                                <li class="text-right">
+                                    <span id="saldo_final" class="{% if saldo_final > 0 %}text-success{% else %}text-danger{% endif %}"></span><br>atual
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Saldo em {{nome_mes_anterior}}<small>/{% if mes == '01' %}{{ano-1}}{% else %}{{ano}}{% endif %}</small></h3>
+                            <ul class="list-inline two-part">
+                                <li class="text-left">
+                                    <span id="saldo_inicial_mes_anterior" class="{% if saldo_inicial_mes_anterior > 0 %}text-success{% else %}text-danger{% endif %}"></span> <br>inicial
+                                </li>
+                                <li class="text-right">
+                                    <span id="saldo_final_mes_anterior" class="{% if saldo_final_mes_anterior > 0 %}text-success{% else %}text-danger{% endif %}"></span><br>final
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title text-danger"><i class="ti ti-arrow-down"></i> &nbsp; Contas a pagar <small class="m-t-10 pull-right">{{nome_mes}}</small></h3>
+                            <ul class="list-inline two-part">
+                                <li class="text-left">
+                                    <span id="total_pagar" class="text-danger"></span> <br>a pagar
+                                </li>
+                                <li class="text-right">
+                                    <span id="total_pago" class="text-danger"></span><br>pago
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-xs-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title text-success"><i class="ti ti-arrow-up"></i> &nbsp; Contas a receber <small class="m-t-10 pull-right">{{nome_mes}}</small></h3>
+                            <ul class="list-inline two-part">
+                                <li class="text-left">
+                                    <span id="total_receber" class="text-success"></span> <br>a receber
+                                </li>
+                                <li class="text-right">
+                                    <span id="total_recebido" class="text-success"></span><br>Recebido
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                <form action="" method="GET">
+                    <div class="col-lg-9 col-md-9 col-sm-8">
+                        <div class="white-box">
+                            <h3 class="box-title"> Entradas e saídas por mês
+                                <select name="ano" class="select2 pull-right" onchange="form.submit();" data-toggle="tooltip" title="Trocar ano" data-placement="right">
+                                    <option value="{{now|date_modify('-1 year')|date('Y')}}" {% if get.ano == now|date_modify('-1 year')|date('Y') %} selected="" {% endif %}>{{now|date_modify('-1 year')|date('Y')}}</option>
+                                    <option value="{{now|date('Y')}}" {% if get.ano == now|date('Y') or not get %} selected="" {% endif %}>{{now|date('Y')}}</option>
+                                    <option value="{{now|date_modify('+1 year')|date('Y')}}" {% if get.ano == now|date_modify('+1 year')|date('Y') %} selected="" {% endif %}>{{now|date_modify('+1 year')|date('Y')}}</option>
+                                </select>
+                            </h3>
+                            <div class="clearfix"></div>
+                            <div id="morris-bar-chart"></div>
+                        </div>
+                    </div>
+                </form>
+
+                <form action="" method="GET">
+                    <div class="col-lg-3 col-md-3 col-sm-4">
+                        <div class="white-box">
+                            <h3 class="box-title"> Entradas e saídas por ano
+                                <select name="ano" class="select2 pull-right" onchange="form.submit();" data-toggle="tooltip" title="Trocar ano" data-placement="right">
+                                    <option value="{{now|date_modify('-1 year')|date('Y')}}" {% if get.ano == now|date_modify('-1 year')|date('Y') %} selected="" {% endif %}>{{now|date_modify('-1 year')|date('Y')}}</option>
+                                    <option value="{{now|date('Y')}}" {% if get.ano == now|date('Y') or not get %} selected="" {% endif %}>{{now|date('Y')}}</option>
+                                    <option value="{{now|date_modify('+1 year')|date('Y')}}" {% if get.ano == now|date_modify('+1 year')|date('Y') %} selected="" {% endif %}>{{now|date_modify('+1 year')|date('Y')}}</option>
+                                </select>
+                            </h3>
+                            <div class="clearfix"></div>
+                            <div id="morris-donut-chart"></div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="white-box">
+                            <h3 class="box-title">Despesas por categorias</h3>
+                            <div class="flot-chart">
+                                <div class="flot-chart-content" id="flot-pie-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-9">
+                        <div class="white-box">
+                            <h3 class="box-title"> Saldo atual das contas bancárias
+                            </h3>
+                            <div class="clearfix"></div>
+                            <div id="morris-bar-chart-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- Data Tables -->
+	<link href="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+{% endblock %}
+
+
+{% block include_js %}
+    <!--Data Tables -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <!-- start - This is for export functionality only -->
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- end - This is for export functionality only -->
+
+    <!-- Form Validator  -->
+    <script src="{{base_url()}}/public/assets/js/validator.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+    <script src="{{base_url()}}/public/assets/js/cpfcnpjmask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.mask.min.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Gráficos  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/raphael/raphael-min.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/morrisjs/morris.js"></script>
+    <!-- Flot Charts JavaScript -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/excanvas.min.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/jquery.flot.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/jquery.flot.pie.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/jquery.flot.time.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/jquery.flot.stack.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/jquery.flot.crosshair.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+
+
+
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/waypoints/lib/jquery.waypoints.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/countup/countUp.min.js"></script>
+
+    <script type="text/javascript">
+
+        (function() {
+            {% for i in itens %}
+            $('#submit-pagamento-mensalidade-{{i.id}}').click( function(){
+                var dataString = $('form[name="pagamento-mensalidade-{{i.id}}"]').serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "{{path_for('post_pagamento_mensalidade', { 'id' : i.id })}}",
+                    data: dataString,
+                    success: function() {
+                        swal({   
+                            title: "Dados gravados!",   
+                            text: "Mensalidade recebida com sucesso.",   
+                            type: "success",
+                            // confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Continuar",   
+                            closeOnConfirm: true,   
+                        }, function(isConfirm){
+                            if(isConfirm){
+                                $('#pagamento-mensalidade-{{i.id}}').modal('hide');
+                                $('td#label-{{i.id}}').html('<div class="label label-success">Recebido</div>');
+                                $('td#button-{{i.id}}').html('<span data-toggle="tooltip" title="Recibo de pagamento"><a href="#" data-toggle="modal" data-target="#recibo-mensalidade-{{i.id}}" class="btn btn-primary"><i class="fa fa-print"></i></a></span>');
+                            }
+                        });
+                    },
+                    error: function() {
+                        swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+                    }
+                });
+
+            });
+            {% endfor %}
+        })();
+
+        $(document).ready(function() {
+            var options = {
+              useEasing: true, 
+              useGrouping: true, 
+              separator: '.', 
+              decimal: ',', 
+              prefix: 'R$', 
+            };
+
+            var saldo_inicial = new CountUp('saldo_inicial', 0, {{saldo_inicial}}, 2, 1.5, options);
+            if (!saldo_inicial.error) {
+                saldo_inicial.start();
+            } else {
+                console.error(saldo_inicial.error);
+            }
+
+            var saldo_final = new CountUp('saldo_final', 0, {{saldo_final}}, 2, 1.5, options);
+            if (!saldo_final.error) {
+                saldo_final.start();
+            } else {
+                console.error(saldo_final.error);
+            }
+
+            var saldo_inicial_mes_anterior = new CountUp('saldo_inicial_mes_anterior', 0, {{saldo_inicial_mes_anterior}}, 2, 1.5, options);
+            if (!saldo_inicial_mes_anterior.error) {
+                saldo_inicial_mes_anterior.start();
+            } else {
+                console.error(saldo_inicial_mes_anterior.error);
+            }
+
+            var saldo_final_mes_anterior = new CountUp('saldo_final_mes_anterior', 0, {{saldo_final_mes_anterior}}, 2, 1.5, options);
+            if (!saldo_final_mes_anterior.error) {
+                saldo_final_mes_anterior.start();
+            } else {
+                console.error(saldo_final_mes_anterior.error);
+            }
+
+            var total_pagar = new CountUp('total_pagar', 0, {{total_pagar}}, 2, 1.5, options);
+            if (!total_pagar.error) {
+                total_pagar.start();
+            } else {
+                console.error(total_pagar.error);
+            }
+
+            var total_pago = new CountUp('total_pago', 0, {{total_pago}}, 2, 1.5, options);
+            if (!total_pago.error) {
+                total_pago.start();
+            } else {
+                console.error(total_pago.error);
+            }
+
+            var total_receber = new CountUp('total_receber', 0, {{total_receber}}, 2, 1.5, options);
+            if (!total_receber.error) {
+                total_receber.start();
+            } else {
+                console.error(total_receber.error);
+            }
+
+            var total_recebido = new CountUp('total_recebido', 0, {{total_recebido}}, 2, 1.5, options);
+            if (!total_recebido.error) {
+                total_recebido.start();
+            } else {
+                console.error(total_recebido.error);
+            }
+        });
+    </script>
+
+    <script>
+	    $(document).ready(function() {
+            $("input.dinheiro").maskMoney({showSymbol:true, symbol:"R$", decimal:".", thousands:""});
+
+	        $('.myTable').DataTable();
+
+            // Morris bar chart
+            Morris.Bar({
+                element: 'morris-bar-chart',
+                data: [{
+                    y: 'JAN',
+                    a: {{sum_entradas_jan}},
+                    b: {{sum_saidas_jan}},
+                }, {
+                    y: 'FEV',
+                    a: {{sum_entradas_fev}},
+                    b: {{sum_saidas_fev}},
+                }, {
+                    y: 'MAR',
+                    a: {{sum_entradas_mar}},
+                    b: {{sum_saidas_mar}},
+                }, {
+                    y: 'ABR',
+                    a: {{sum_entradas_abr}},
+                    b: {{sum_saidas_abr}},
+                }, {
+                    y: 'MAI',
+                    a: {{sum_entradas_mai}},
+                    b: {{sum_saidas_mai}},
+                }, {
+                    y: 'JUN',
+                    a: {{sum_entradas_jun}},
+                    b: {{sum_saidas_jun}},
+                }, {
+                    y: 'JUL',
+                    a: {{sum_entradas_jul}},
+                    b: {{sum_saidas_jul}},
+                }, {
+                    y: 'AGO',
+                    a: {{sum_entradas_ago}},
+                    b: {{sum_saidas_ago}},
+                }, {
+                    y: 'SET',
+                    a: {{sum_entradas_set}},
+                    b: {{sum_saidas_set}},
+                }, {
+                    y: 'OUT',
+                    a: {{sum_entradas_out}},
+                    b: {{sum_saidas_out}},
+                }, {
+                    y: 'NOV',
+                    a: {{sum_entradas_nov}},
+                    b: {{sum_saidas_nov}},
+                }, {
+                    y: 'DEZ',
+                    a: {{sum_entradas_dez}},
+                    b: {{sum_saidas_dez}},
+                }],
+                xkey: 'y',
+                ykeys: ['a', 'b'],
+                labels: ['ENTRADAS', 'SAÍDAS'],
+                barColors:['#79d358', '#F54E6D'],
+                hideHover: 'auto',
+                gridLineColor: '#eef0f2',
+                resize: true,
+            });
+
+            // Morris donut chart
+            Morris.Donut({
+                element: 'morris-donut-chart',
+                data: [{
+                    label: "Recebido",
+                    value: {{sum_entradas_ano_1}},
+                }, {
+                    label: "A receber",
+                    value: {{sum_entradas_ano_0}}
+                }, {
+                    label: "Pago",
+                    value: {{sum_saidas_ano_1}}
+                }, {
+                    label: "A Pagar",
+                    value: {{sum_saidas_ano_0}}
+                }],
+                resize: true,
+                colors:['#79d358', '#99d683', '#F54E6D', '#f47f94'],
+                formatter: function (y, data) { return 'R$' + y } 
+            });
+
+            // Saldo contas bancárias
+            Morris.Bar({
+                element: 'morris-bar-chart-2',
+                data: {{saldo_contas_bancarias|raw}},
+                xkey: 'y',
+                ykeys: ['a'],
+                labels: ['SALDO FINAL'],
+                hideHover: 'auto',
+                gridLineColor: '#eef0f2',
+                resize: true,
+                barColors: function(row,series,type){
+                    if(row!=undefined && row.y<0){
+                        return "#F54E6D";
+                    } else {
+                        return "#79d358";
+                    }
+                }
+            });
+	    });
+
+        //Flot Pie Chart
+        $(function() {
+
+            // var data = [{
+            //     label: "Series 0",
+            //     data: 10,
+            //     color: "#4f5467",
+                
+            // }, {
+            //     label: "Series 1",
+            //     data: 1,
+            //     color: "#00c292",
+            // }, {
+            //     label: "Series 2",
+            //     data: 3,
+            //     color:"#01c0c8",
+            // }, {
+            //     label: "Series 3",
+            //     data: 1,
+            //     color:"#fb9678",
+            // }];
+
+            {% if arr_json %}
+            var data = {{arr_json|raw}};
+            {% else %}
+            var data = '';
+            {% endif %}
+
+            {% for cd in categorias_despesa %}
+
+            {% endfor %}
+
+            var plotObj = $.plot($("#flot-pie-chart"), data, {
+                series: {
+                    pie: {
+                        innerRadius: 0.5,
+                        show: true
+                    }
+                },
+                grid: {
+                    hoverable: true
+                },
+                color: null,
+                tooltip: true,
+                tooltipOpts: {
+                    content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+                    shifts: {
+                        x: 20,
+                        y: 0
+                    },
+                    defaultTheme: false
+                }
+            });
+
+        });
+	</script>
+
+    
+{% endblock %}

@@ -1,0 +1,810 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-9 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina_Mae}} {{Titulo_Pagina}}</h4>
+                    </div>
+                    <div class="col-lg-3 col-sm-8 col-md-8 col-xs-12">
+                        <a id="btn_novo_lancamento" class="btn btn-success pull-right btn-block m-l-20 waves-effect waves-light">Novo Lançamento</a>
+                        <a id="cancelar_lancamento" class="btn btn-danger pull-right btn-block m-l-20 waves-effect waves-light" style="display: none;">Cancelar</a>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+
+                <div class="row" id="novo_lancamento" style="display: none;">
+                    <form action="{{path_for('post_cadastrar_lancamento')}}" method="POST">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="acolhido">Acolhido</label>
+                                    <select name="acolhido" id="acolhido" class="form-control select2" required="">
+                                        <option value="" selected="" disabled="">-- SELECIONE</option>
+                                        {% for a in acolhidos %}
+                                        <option value="{{a.id}}">{{a.nome}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="data">Data do lançamento</label>
+                                    <input type="date" name="data" id="data" class="form-control" value="{{now|date('Y-m-d')}}">
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="valor_total">Valor</label>
+                                    <input type="text" name="valor_total" id="valor_total" class="dinheiro form-control" placeholder="R$0.00">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="status">Pago?</label>
+                                    <select name="status" id="status" class="form-control select2">
+                                        <option value="0">Não</option>
+                                        <option value="1">Sim</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr />
+                            <table class="table table-hover order-list">
+                                <thead>
+                                    <tr>
+                                        <th width="40%">Produto</th>
+                                        <th>Quantidade</th>
+                                        <!-- <th>Valor unitário</th> -->
+                                        <!-- <th>Subtotal</th> -->
+                                    </tr>
+                                </thead>
+                                                            
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <select name="product[]" class="form-control select2">
+                                                <option value="" selected="" disabled="">-- SELECIONE</option>
+                                                {% for p in produtos %}
+                                                <option value="{{p.id}}">{{p.nome}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td><input type="number" name="qty[]" class="form-control qtd" placeholder="0" /></td>
+                                        <!-- <td><input type="text" name="price[]" class="form-control dinheiro" placeholder="R$" required="" /></td> -->
+                                        <!-- <td><input type="text" name="linetotal" readonly="readonly" class="form-control" /></td> -->
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                                                            
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3">
+                                            <button type="button" class="btn btn-primary" id="addrow"><i class="mdi mdi-plus"></i> &nbsp; Adicionar Produto</button>
+                                        </td>
+
+                                        <!-- <td colspan="4" class="text-right">
+                                            <h4><strong>Total R$<span id="grandtotal">0.00</span></strong></h4>
+                                        </td> -->
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="observacoes">Observações</label>
+                                    <textarea class="form-control" name="observacoes" id="observacoes" rows="5"></textarea>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="reset" class="btn btn-default">Recomeçar</button>
+                                    <button type="submit" class="btn btn-success pull-right">Adicionar lançamento</button>
+                                    <!-- <input type="hidden" name="valor_total" id="valor_total" /> -->
+                                    <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                    <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+                <div class="row conteudo">
+                    <span data-toggle="modal" data-target="#editar-limite"><div class="col-md-4">
+                        <div class="white-box">
+                            <h4>Limite de consumo na cantina</h4>
+                            <h3>R${{acolhido.limite_cantina|number_format(2, ',', '.')}}</h3>
+                        </div>
+                    </div></span>
+
+                    <!-- /.modal editar limite -->
+                        <div id="editar-limite" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h4 class="modal-title">{{acolhido.nome}}</h4>
+                                    </div>
+
+                                    <form action="{{path_for('post_limite_cantina', {'id' : acolhido.id})}}" method="POST">
+                                        <div class="modal-body">
+                                            <div class="row form-group">
+                                                <div class="col-md-12">
+                                                    <label for="limite_cantina">Limite de consumo na cantina</label>
+                                                    <input type="text" class="form-control dinheiro" name="limite_cantina" id="limite_cantina" value="{{acolhido.limite_cantina}}" placeholder="R$0.00">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                            <button type="submit" class="btn btn-success">Salvar</button>
+                                        </div>
+                                        <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                        <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="col-md-4">
+                        <div class="white-box">
+                            <h4>Lançamentos em aberto</h4>
+                            <h3>R${{lancamentos_em_aberto|number_format(2, ',', '.')}}</h3>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="white-box">
+                            <h4>Saldo restante</h4>
+                            {% set saldo = acolhido.limite_cantina - (lancamentos_em_aberto - lancamentos_baixados) %}
+                            <h3>R${{saldo|number_format(2, ',', '.')}}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row conteudo">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <form action="{{path_for('lancamentos_acolhido_periodo', {'id' : acolhido.id})}}" method="GET">
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <a href="{{path_for('lancamentos_acolhido', {'id' : acolhido.id})}}" class="btn btn-primary btn-block">Todos</a>  
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <a href="{{path_for('lancamentos_acolhido_dia', {'id' : acolhido.id})}}" class="btn btn-primary btn-block">Hoje</a>  
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <a href="{{path_for('lancamentos_acolhido_7dias', {'id' : acolhido.id})}}" class="btn btn-primary btn-block">Últimos 7 dias</a>  
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <a href="{{path_for('lancamentos_acolhido_mes', {'id' : acolhido.id})}}" class="btn btn-primary btn-block">Neste mês</a>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="input-daterange input-group" id="datepicker">
+                                            <input type="text" class="form-control" name="de" autocomplete="off" required="">
+                                            <span class="input-group-addon">até</span>
+                                            <input type="text" class="form-control" name="ate" autocomplete="off" required="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <button type="submit" class="btn btn-success btn-block">OK</button>
+                                    </div>
+                                </div>
+                            
+                                <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row conteudo">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <form name="frm-example" id="frm-example" action="" method="POST">
+                                <table id="myTable" class="table table-responsive table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th align="left" width="1%"></th>
+                                            <th>Data</th>
+                                            <th>Acolhido</th>
+                                            <th>Valor total</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in itens %}
+                                        <tr id="{{i.id}}" data-id="{{i.id}}">
+                                            <td align="left" width="1%"></td>
+                                            <td data-order="{{i.date}}">{{ i.data|date('d/m/Y') }}</td>
+                                            <td><a href="{{path_for('editar_lancamento', {'id' : i.id})}}">{{ acolhido[i.id].nome }}</a></td>
+                                            <td data-order="{{ i.valor_total }}">R${{ i.valor_total|number_format(2) }}</td>
+                                            <td>
+                                                {% if session.Role == 1 and i.status == 0 %}
+                                                <span data-toggle="tooltip" title="Baixar lançamento"><a href="#" data-toggle="modal" data-target="#baixar-lancamento-{{i.id}}" class="btn btn-success btn-sm"><i class="fa fa-check"></i></a></span>
+                                                {% endif %}
+
+                                                <span data-toggle="tooltip" title="Ver itens"><a href="#" data-toggle="modal" data-target="#itens-lancamento-{{i.id}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a></span>
+
+                                                {% if acesso_usuario.cantina.lancamentos.u == 'on' and i.status == 0 %}
+                                                <a href="{{path_for('editar_lancamento', {'id' : i.id})}}" data-toggle="tooltip" title="Editar" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                                                {% endif %}
+
+                                                {% if acesso_usuario.cantina.lancamentos.d == 'on' %}
+                                                <span data-toggle="tooltip" title="Remover"><a href="#" class="btn btn-danger btn-sm remover-{{ i.id }}"><i class="fa fa-trash-o"></i></a></span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+
+                                        <!-- /.modal itens lançamento -->
+                                        <div id="itens-lancamento-{{i.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        <h4 class="modal-title">{{ acolhido[i.id].nome }} - {{ i.data|date('d/m/Y') }}</h4>
+                                                    </div>
+                                                    <form action="{{path_for('post_editar_produto', {'id' : i.id})}}" method="POST">
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-md-8">
+                                                                    <label for="nome">Produto</label>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label for="qtd">Quantidade</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                            {% for il in itens_lancamento %}
+                                                                {% if il.lancamento == i.id %}
+                                                                    {% for p in produtos %}
+                                                                        {% if il.produto == p.id %}
+                                                                        <div class="col-md-8">
+                                                                            {{p.nome}}
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            {{il.quantidade}}
+                                                                        </div>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            {% endfor %}
+
+                                                                {% if i.observacoes != '' %}
+                                                                <div class="col-md-12">
+                                                                    <strong>Observações</strong> <br /> {{i.observacoes}}
+                                                                </div>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                                            <a href="{{path_for('editar_lancamento', {'id' : i.id})}}" class="btn btn-primary">Editar</a>
+                                                        </div>
+                                                        <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                        <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {% if i.status == 0 %}
+                                        <!-- /.modal baixar lançamento -->
+                                        <!-- /.modal baixar lançamento -->
+                                        <div id="baixar-lancamento-{{i.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                                    <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                    <h4 class="modal-title">Baixa de lançamento</h4>
+                                                                </div>
+                                                                <form action="{{path_for('baixar_lancamento', {'id' : i.id})}}" method="POST">
+                                                                    <div class="modal-body">
+                                                                        <div class="form-group">
+                                                                            <label for="descricao">Descrição</label>
+                                                                            <input type="text" class="form-control" name="" id="descricao" readonly="" value="Lançamento #{{i.id}} - {{ acolhido[i.id].nome }}">
+                                                                            <input type="hidden" name="descricao" value="Lançamento #{{i.id}} - {{ acolhido[i.id].nome }}" />
+                                                                        </div>
+                                                                        <div class="row form-group">
+                                                                            <div class="col-md-6">
+                                                                                <label for="data_pagamento">Data do pagamento</label>
+                                                                                <input type="text" class="form-control inputDate" name="data_pagamento" id="data_pagamento" required="" value="{{now|date('d/m/Y')}}">
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label for="valor">Valor do pagamento</label>
+                                                                                <input type="text" class="form-control dinheiro" name="valor" id="valor" required="" value="{{i.valor_total|number_format(2, '.', '')}}">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row form-group">
+                                                                            <div class="col-md-6">
+                                                                                <label for="nome">Categoria</label>
+                                                                                <select class="form-control select2" name="categoria" id="categoria" required="">
+                                                                                    <option value="9">Cantina</option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div class="col-md-6">
+                                                                                <label for="conta_bancaria">Conta bancária</label>
+                                                                                <select class="form-control select2" name="conta_bancaria" id="conta_bancaria" required="">
+                                                                                    <option selected="" disabled="">-- SELECIONE</option>
+                                                                                    {% for cb in contas_bancarias %}
+                                                                                    <option value="{{cb.id}}">{{cb.nome}}</option>
+                                                                                    {% endfor %}
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row form-group">
+                                                                            <div class="col-md-12">
+                                                                                <label>Forma de pagamento</label> <br />
+                                                                                <select name="forma_pagamento" id="forma_pagamento" class="form-control select2">
+                                                                                    <option value="" selected="" disabled="">-- SELECIONE</option>
+                                                                                    <option value="pix" {% if item.forma_pagamento == 'pix' %} selected="" {% endif %}>PIX</option>
+                                                                                    <option value="dinheiro" {% if item.forma_pagamento == 'dinheiro' %} selected="" {% endif %}>Dinheiro</option>
+                                                                                    <option value="cheque" {% if item.forma_pagamento == 'cheque' %} selected="" {% endif %}>Cheque</option>
+                                                                                    <option value="transferencia" {% if item.forma_pagamento == 'transferencia' %} selected="" {% endif %}>Transferência/Depósito</option>
+                                                                                    <option value="credito" {% if item.forma_pagamento == 'credito' %} selected="" {% endif %}>Cartão Crédito</option>
+                                                                                    <option value="debito" {% if item.forma_pagamento == 'debito' %} selected="" {% endif %}>Cartão Débito</option>
+                                                                                    <option value="boleto" {% if item.forma_pagamento == 'boleto' %} selected="" {% endif %}>Boleto</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row form-group">
+                                                                            <div class="col-md-12">
+                                                                                <label for="observacoes">Observações</label>
+                                                                                <textarea name="observacoes" class="form-control" rows="5"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                                                        <button type="submit" class="btn btn-success">Confirmar pagamento</button>
+                                                                    </div>
+                                                                    <input type="hidden" name="acolhimento" value="{{i.acolhimento}}"/>
+                                                                    <input type="hidden" name="data_vencimento" value="{{i.data_vencimento}}"/>
+                                                                    <input type="hidden" name="valor_previsto" value="{{i.valor}}"/>
+
+                                                                    <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                                    <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                                                </form>
+                                                            </div>
+                                                    </div>
+                                        </div>
+                                        {% endif %}
+
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>
+                                                {% if session.Role == 1 %}
+                                                {% if itens %}
+                                                <button class="btn btn-success btn-sm" id="submit-baixa"><i class="fa fa-check"></i></button>
+                                                {% endif %}
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if acesso_usuario.cantina.lancamentos.d == 'on' %}
+                                                {% if itens %}
+                                                <button class="btn btn-danger btn-sm" id="submit-remove"><i class="fa fa-trash-o"></i></button>
+                                                {% endif %}
+                                                {% endif %}
+                                            </td>
+                                            <td></td>
+                                            <td><strong>R${{total_lancamentos|number_format(2)}}</strong></td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+    <!-- Data Tables -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Datepicker + Daterangepicker  -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+
+    <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+    <link href="{{base_url()}}/public/assets/css/dataTables.checkboxes.css" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+
+{% block include_js %}
+    <!--Data Tables -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="{{base_url()}}/public/assets/js/dataTables.checkboxes.min.js"></script>
+
+    <!-- Datepicker + Daterangepicker  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!-- start - This is for export functionality only -->
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- end - This is for export functionality only -->
+
+    <!-- Form Validator  -->
+    <script src="{{base_url()}}/public/assets/js/validator.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/mascaras.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+        function goBack() {
+            window.history.back();
+        }
+
+        $('.input-daterange').datepicker({
+          format: 'dd/mm/yyyy',
+          language: 'pt-BR',
+          orientation: 'bottom-left',
+          autoclose: true,
+          todayHighlight: true,
+        });
+
+        $(document).ready(function() {
+            {% for i in itens %}
+            $('.remover-{{ i.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e todos os dados deste lançamento serão deletados!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_lancamento', { 'id' : i.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "Todos os dados deste lançamento foram excluídos.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        location.reload();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar os dados do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Os dados deste lançamento estão a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#myTable').DataTable({
+                'columnDefs': [
+                    {
+                        'targets': 0,
+                        'checkboxes': {
+                           'selectRow': true
+                        }
+                    }
+                ],
+                'select': {
+                    'style': 'multi'
+                },
+                'fnCreatedRow': function(nRow, aData, iDataIndex) {
+                    $(nRow).attr('data-id', aData.DT_RowId); // or whatever you choose to set as the id
+                    $(nRow).attr('id', 'id_' + aData.DT_RowId); // or whatever you choose to set as the id
+                },
+                'order': [[1, 'asc']]
+            });
+
+            // Handle form submission event 
+            $('#frm-example').on('submit', function(e){
+                var form = this;
+              
+                var rows = $(table.rows({
+                    selected: true
+                }).$('input[type="checkbox"]').map(function() {
+                    return $(this).prop("checked") ? $(this).closest('tr').attr('data-id') : null;
+                }));
+                // console.log(table.column(0).checkboxes.selected())
+                // Iterate over all selected checkboxes
+                rows_selected = [];
+
+                $.each(rows, function(index, rowId) {
+                // console.log(rowId)
+                // Create a hidden element 
+                    rows_selected.push(rowId);
+                    $(form).append(
+                        $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'id[]')
+                        .val(rowId)
+                    );
+                });
+
+                $('#submit-baixa').on('click', function(e){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e todos os dados deste(s) lançamento(s) serão atualizados!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, confirmar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('baixar_lancamentos')}}",
+                            data: "id="+rows_selected.join(","),
+                            success: function() {
+                                swal({
+                                    title: "Atualizado!", 
+                                    text: "Todos os dados do(s) lançamento(s) selecionado(s) foram atualizados.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        // $.each(rows_selected, function(index, rowId) {
+                                        //     $('tr#id_'+rowId).remove();
+                                        // });
+                                        location.reload();
+                                    }
+                                );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui atualizar os dados do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Os dados deste(s) lançamento(s) estão a salvo :)", "error");   
+                    } 
+                });
+                });
+
+                $('#submit-remove').on('click', function(e){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e todos os dados deste(s) lançamento(s) serão deletados!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_lancamentos')}}",
+                            data: "id="+rows_selected.join(","),
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "Todos os dados do(s) lançamento(s) selecionado(s) foram excluídos.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        // $.each(rows_selected, function(index, rowId) {
+                                        //     $('tr#id_'+rowId).remove();
+                                        // });
+                                        location.reload();
+                                    }
+                                );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar os dados do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Os dados deste(s) lançamento(s) estão a salvo :)", "error");   
+                    } 
+                });
+                });
+               
+                // Prevent actual form submission
+                e.preventDefault();
+            });
+
+            $("#btn_novo_lancamento").click(function(){
+                $("#novo_lancamento").fadeIn();
+                $("#btn_novo_lancamento").fadeOut();
+                $("#cancelar_lancamento").fadeIn();
+                $(".conteudo").fadeOut();
+            });
+
+            $("#cancelar_lancamento").click(function(){
+                $("#novo_lancamento").fadeOut();
+                $("#btn_novo_lancamento").fadeIn();
+                $("#cancelar_lancamento").fadeOut();
+                $(".conteudo").fadeIn();
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('form').on('reset', () => {
+              $(".select2").select2('val', '');
+            });
+
+            {% if dados_pagamento.banco == 'cef' %}
+                $('#row_op').css('display', 'block');
+                $('#row_dv_ag').css('display', 'none');
+
+                $('#row_op_2').css('display', 'block');
+                $('#row_dv_ag_2').css('display', 'none');
+            {% else %}
+                $('#row_op').css('display', 'none');
+                $('#row_dv_ag').css('display', 'block');
+
+                $('#row_op_2').css('display', 'none');
+                $('#row_dv_ag_2').css('display', 'block');
+            {% endif %}
+
+            $('#banco').on("change" , function() {
+                if($(this).val() == 'cef'){
+                    $('#row_op').css('display', 'block');
+                    $('#row_dv_ag').css('display', 'none');
+                } else {
+                    $('#row_op').css('display', 'none');
+                    $('#row_dv_ag').css('display', 'block');
+                }
+            });
+
+            $('#banco_2').on("change" , function() {
+                if($(this).val() == 'cef'){
+                    $('#row_op_2').css('display', 'block');
+                    $('#row_dv_ag_2').css('display', 'none');
+                } else {
+                    $('#row_op_2').css('display', 'none');
+                    $('#row_dv_ag_2').css('display', 'block');
+                }
+            });
+
+            $('#forma_pagamento').on("change" , function() {
+                if($(this).val() == 'dinheiro'){
+                    $('#dados_dinheiro').css('display', 'block');
+                } else {
+                    $('#dados_dinheiro').css('display', 'none');
+                }
+
+                if($(this).val() == 'transferencia'){
+                    $('#dados_transferencia').css('display', 'block');
+                } else {
+                    $('#dados_transferencia').css('display', 'none');
+                }
+
+                if($(this).val() == 'cheque'){
+                    $('#dados_cheque').css('display', 'block');
+                } else {
+                    $('#dados_cheque').css('display', 'none');
+                }
+            });
+
+            var counter = 1;
+    
+            $("#addrow").on("click", function () {
+                counter++;
+                
+                var newRow = $("<tr>");
+                var cols = "";
+                cols += '<td><select name="product[]" class="form-control select_'+counter+'">\
+                                                                            <option value="" selected="" disabled="">-- SELECIONE</option>\
+                                                                            {% for p in produtos %}\
+                                                                            <option value="{{p.id}}">{{p.nome}}</option>\
+                                                                            {% endfor %}\
+                                                                        </select></td>';
+                cols += '<td><input type="number" name="qty[]" class="form-control qtd_'+counter+'" placeholder="0" /></td>';
+                // cols += '<td><input type="text" name="price[]" class="form-control dinheiro_'+counter+'" placeholder="R$" /></td>';
+                // cols += '<td><input type="text" name="linetotal" readonly="readonly" class="form-control" /></td>';
+                cols += '<td><a class="deleteRow btn btn-danger btn-circle"> x </a></td>';
+                newRow.append(cols);
+                
+                $("table.order-list").append(newRow);
+                $(".select_"+counter).select2();
+                $(".select_"+counter).select2('val', '');
+                // $("input.qtd_"+counter).maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:"", precision: 2});
+                $("input.dinheiro_"+counter).maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:""});
+            });
+
+            // $("table.order-list").on("change keyup keydown paste propertychange bind", 'input[name^="price"], input[name^="qty"]', function (event) {
+            //     calculateRow($(this).closest("tr"));
+            //     calculateGrandTotal();
+            // });
+            
+            // $("table.order-list").on("click", "a.deleteRow", function (event) {
+            //     $(this).closest("tr").remove();
+            //     calculateGrandTotal();
+            // });
+        });
+
+        // function calculateRow(row) {
+        //     var price = +row.find('input[name^="price"]').val();
+        //     var qty = +row.find('input[name^="qty"]').val();
+        //     row.find('input[name^="linetotal"]').val((price * qty).toFixed(2));
+        // }
+            
+        // function calculateGrandTotal() {
+        //     var grandTotal = 0;
+
+        //     $("table.order-list").find('input[name^="linetotal"]').each(function () {
+        //         grandTotal += +$(this).val();
+        //     });
+
+        //     $("#grandtotal").text(grandTotal.toFixed(2));
+        //     $("#valor_efetuado").val(grandTotal.toFixed(2));
+        //     $("#valor_total").val(grandTotal.toFixed(2));
+        // }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // $("input.qtd").maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:"", precision: 2});
+            $("input.dinheiro").maskMoney({showSymbol:false, symbol:"R$", decimal:".", thousands:""});
+        });
+    </script>
+    
+{% endblock %}

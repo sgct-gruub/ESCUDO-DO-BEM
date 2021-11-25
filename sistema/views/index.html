@@ -1,0 +1,462 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+        
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>                
+
+                {% if mensalidades_a_receber_hoje %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-warning alert-rounded">
+                            <i class="mdi mdi-currency-usd"></i> Você tem <strong>{{mensalidades_a_receber_hoje}} mensalidades</strong> a receber no dia de hoje! 
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if acolhimentos_previsao_saida %}
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for aps in acolhimentos_previsao_saida %}
+                        <div class="alert alert-success alert-rounded">
+                            <i class="ti-user"></i> O acolhimento de <strong>{{acolhido[aps.id].nome}}</strong> tem previsão de saída para o dia de hoje! 
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if acolhimentos_previsao_saida_amanha %}
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for apsa in acolhimentos_previsao_saida_amanha %}
+                        <div class="alert alert-info alert-rounded">
+                            <i class="ti-user"></i> O acolhimento de <strong>{{acolhido_amanha[apsa.id].nome}}</strong> tem previsão de saída para amanhã! 
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if aniversariantes_dia %}
+                <div class="row">
+                    <div class="col-md-12">
+                        {% for ad in aniversariantes_dia %}
+                        {% if verifica_acolhimento[ad.id] == 1 %} <!-- pega somente os acolhidos que estão em acolhimento -->
+                        <div class="alert alert-primary alert-rounded">
+                            <i class="fa fa-birthday-cake"></i> Hoje é aniversário do acolhido <strong>{{ad.nome}}</strong>! 
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="row">
+                        <!-- <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Total de acolhidos</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="icon-people text-info"></i></li>
+                                        <li class="text-right"><span class="counter">{{total_acolhidos}}</span></li>
+                                        </ul>
+                                </div>
+                        </div> -->
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Total de acolhimentos</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="mdi mdi-hotel text-info"></i></li>
+                                        <li class="text-right"><span class="counter">{{total_acolhimentos}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Total de vagas</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="mdi mdi-hotel text-primary"></i></li>
+                                        <li class="text-right"><span class="counter">{{total_vagas}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Vagas ocupadas</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="mdi mdi-hotel text-danger"></i></li>
+                                        <li class="text-right"><span class="counter">{{vagas_ocupadas}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                        <!-- <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Vagas ocupadas</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="icon-people text-info"></i></li>
+                                        <li class="text-right"><span class="counter">{{em_acolhimento}}</span></li>
+                                        </ul>
+                                </div>
+                        </div> -->
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Vagas disponíveis</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="mdi mdi-hotel text-success"></i></li>
+                                        <li class="text-right"><span class="counter">{{vagas_disponiveis}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                </div>
+
+                <!-- TIPOS DE ALTA -->
+                <!-- <div class="row">
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Total de altas terapêuticas</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="icon-people text-info"></i></li>
+                                        <li class="text-right"><span class="counter">{{alta_terapeutica}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Total de altas solicitadas</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="icon-people text-info"></i></li>
+                                        <li class="text-right"><span class="counter">{{alta_solicitada}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Total de altas administrativas</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="icon-people text-info"></i></li>
+                                        <li class="text-right"><span class="counter">{{alta_administrativa}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Total de altas por evasão</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="icon-people text-info"></i></li>
+                                        <li class="text-right"><span class="counter">{{alta_evasao}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                </div> -->
+
+                <div class="row">
+                    <!-- <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <a href="{{path_for('convenios')}}">
+                        <div class="white-box">
+                            <h3 class="box-title">Total de convênios</h3>
+                            <ul class="list-inline m-t-30 p-t-10 two-part">
+                                <li><i class="mdi mdi-hospital text-info"></i></li>
+                                <li class="text-right"><span class="counter">{{total_convenios}}</span></li>
+                            </ul>
+                        </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-3 col-sm-6 col-xs-12">
+                        <a href="{{path_for('convenio_acolhimento', {'convenio' : 'todos'})}}">
+                        <div class="white-box">
+                            <h3 class="box-title">Acolhimentos convênio</h3>
+                            <ul class="list-inline m-t-30 p-t-10 two-part">
+                                <li><i class="mdi mdi-hospital text-info"></i></li>
+                                <li class="text-right"><span class="counter">{{acolhimentos_convenio}}</span></li>
+                            </ul>
+                        </div>
+                        </a>
+                    </div> -->
+
+                    <div class="col-lg-4 col-sm-4 col-xs-12">
+                        <a href="{{path_for('tipo_acolhimento', {'tipo' : 'morador-assistido'})}}">
+                        <div class="white-box">
+                            <h3 class="box-title">Moradores Assistidos</h3>
+                            <ul class="list-inline m-t-30 p-t-10 two-part">
+                                <li><i class="mdi mdi-hotel text-info"></i></li>
+                                <li class="text-right"><span class="counter">{{moradores_assistidos}}</span></li>
+                            </ul>
+                        </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-4 col-xs-12">
+                        <a href="{{path_for('tipo_acolhimento', {'tipo' : 'particular'})}}">
+                        <div class="white-box">
+                            <h3 class="box-title">Acolhimentos particular</h3>
+                            <ul class="list-inline m-t-30 p-t-10 two-part">
+                                <li><i class="mdi mdi-hotel text-info"></i></li>
+                                <li class="text-right"><span class="counter">{{acolhimentos_particular}}</span></li>
+                            </ul>
+                        </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-4 col-sm-4 col-xs-12">
+                        <a href="{{path_for('tipo_acolhimento', {'tipo' : 'vaga-social'})}}">
+                        <div class="white-box">
+                            <h3 class="box-title">Acolhimentos vaga social</h3>
+                            <ul class="list-inline m-t-30 p-t-10 two-part">
+                                <li><i class="mdi mdi-hotel text-info"></i></li>
+                                <li class="text-right"><span class="counter">{{acolhimentos_social}}</span></li>
+                            </ul>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-xs-12">
+                        <div class="white-box">
+                            <h3 class="box-title">Tipos de alta</h3>
+                            <div class="flot-chart">
+                                <div class="flot-chart-content" id="flot-pie-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="white-box">
+                            <h2 class="font-medium m-t-0">Aniversariantes do mês ({{'now'|date('m')}})</h2>
+                            <h5 class="text-muted m-b-40">Acolhidos que fazem aniversário no mês {{'now'|date('m')}}</h5>
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-responsive table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Dia</th>
+                                            <th>Acolhido</th>
+                                            <th>Idade</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for am in aniversariantes_mes %}
+                                        {% if verifica_acolhimento[am.id] == 1 %} <!-- pega somente os acolhidos que estão em acolhimento -->
+                                        <tr>
+                                            <td>{{am.data_nascimento|date('d')}}</td>
+                                            <td>{{am.nome}}</td>
+                                            <td>{{am.now|date('Y') - am.data_nascimento|date('Y')}} anos</td>
+                                        </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <h2 class="font-medium m-t-0">Aniversariantes do mês ({{'now'|date('m')}})</h2>
+                            <h5 class="text-muted m-b-40">Funcionários que fazem aniversário no mês {{'now'|date('m')}}</h5>
+                            <div class="table-responsive">
+                                <table id="" class="table table-responsive table-hover myTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome do funcionário</th>
+                                            <th>Data de nascimento</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for fam in funcionarios_aniversariantes_mes %}
+                                        <tr>
+                                            <td>{{fam.nome}}</td>
+                                            <td>{{fam.data_nascimento|date('d/m/Y')}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="row">
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Total de convênios</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="mdi mdi-hospital text-info"></i></li>
+                                        <li class="text-right"><span class="counter">{{total_convenios}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                            <div class="white-box">
+                                <h3 class="box-title">Acolhimentos por convênio</h3>
+                                <ul class="list-inline m-t-30 p-t-10 two-part">
+                                    <li><i class="mdi mdi-hospital text-info"></i></li>
+                                    <li class="text-right"><span class="counter">{{acolhimentos_convenio}}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Acolhimentos particular</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="mdi mdi-hotel text-info"></i></li>
+                                        <li class="text-right"><span class="counter">{{acolhimentos_particular}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-12">
+                                <div class="white-box">
+                                        <h3 class="box-title">Acolhimentos vaga social</h3>
+                                        <ul class="list-inline m-t-30 p-t-10 two-part">
+                                        <li><i class="mdi mdi-hotel text-info"></i></li>
+                                        <li class="text-right"><span class="counter">{{acolhimentos_social}}</span></li>
+                                        </ul>
+                                </div>
+                        </div>
+                </div> -->
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+    <!-- Data Tables -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+
+{% block include_js %}
+<!-- <script src="{{base_url()}}/assets/js/dashboard1.js"></script> -->
+    <!--Data Tables -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+
+    <!-- Gráficos  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/raphael/raphael-min.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/morrisjs/morris.js"></script>
+
+    <!-- Flot Charts JavaScript -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/excanvas.min.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/jquery.flot.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/jquery.flot.pie.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/jquery.flot.time.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/jquery.flot.stack.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot/jquery.flot.crosshair.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Morris donut chart
+            // Morris.Donut({
+            //     element: 'morris-donut-chart',
+            //     data: [{
+            //         label: "Alta Terapêutica",
+            //         value: {{alta_terapeutica}},
+            //     }, {
+            //         label: "Alta Solicitada",
+            //         value: {{alta_solicitada}}
+            //     }, {
+            //         label: "Alta Administrativa",
+            //         value: {{alta_administrativa}}
+            //     }, {
+            //         label: "Evasão",
+            //         value: {{alta_evasao}}
+            //     }],
+            //     resize: true,
+            //     colors:['#79d358', '#99d683', '#F54E6D', '#f47f94'],
+            //     formatter: function (y, data) { return 'R$' + y } 
+            // });
+        });
+
+        //Tipos de alta
+        $(function() {
+
+            var data = [{
+                label: "Alta Terapêutica - {{alta_terapeutica}}",
+                data: {{alta_terapeutica}},
+                color: "#00c292",
+                
+            }, {
+                label: "Alta Solicitada - {{alta_solicitada}}",
+                data: {{alta_solicitada}},
+                color: "#4f5467",
+            }, {
+                label: "Alta Administrativa - {{alta_administrativa}}",
+                data: {{alta_administrativa}},
+                color:"#01c0c8",
+            }, {
+                label: "Evasão - {{alta_evasao}}",
+                data: {{alta_evasao}},
+                color:"#fb9678",
+            }];
+
+            var plotObj = $.plot($("#flot-pie-chart"), data, {
+                series: {
+                    pie: {
+                        innerRadius: 0.5,
+                        show: true
+                    }
+                },
+                grid: {
+                    hoverable: true
+                },
+                color: null,
+                tooltip: true,
+                tooltipOpts: {
+                    content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+                    shifts: {
+                        x: 20,
+                        y: 0
+                    },
+                    defaultTheme: false
+                }
+            });
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+            $('.myTable').DataTable();
+        });
+    </script>
+{% endblock %}

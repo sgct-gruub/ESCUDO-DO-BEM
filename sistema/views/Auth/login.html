@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<title>Login | Escudo do Bem</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<!-- <link rel="icon" type="image/png" href="{{base_url()}}/public/assets/login/images/icons/favicon.png"/> -->
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{base_url()}}/public/assets/login/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{base_url()}}/public/assets/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{base_url()}}/public/assets/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{base_url()}}/public/assets/login/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{{base_url()}}/public/assets/login/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{base_url()}}/public/assets/login/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{base_url()}}/public/assets/login/vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{{base_url()}}/public/assets/login/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{base_url()}}/public/assets/login/css/util.css">
+	<link rel="stylesheet" type="text/css" href="{{base_url()}}/public/assets/login/css/main.css">
+<!--===============================================================================================-->
+
+<!-- Alerts CSS -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
+
+    <style type="text/css">
+      .container-login100 {
+        background-color: #0D4290 !important;
+      }
+
+      .focus-input100-1::before,
+    .focus-input100-2::before {
+      background-color: #0D4290 !important;
+    }
+
+    .focus-input100-1::after,
+    .focus-input100-2::after {
+      background-color: #0D4290 !important;
+    }
+
+    .login100-form-btn:hover {
+      background-color: #0D4290 !important;
+    }
+    </style>
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+				<form class="login100-form validate-form" action="{{path_for('login')}}" method="post">
+					<span class="login100-form-title p-b-33" style="margin-top: -50px;">
+						<a href="{{path_for('login')}}"><img src="{{base_url()}}/public/uploads/config/logo/{{config.logo}}" width="75%" /></a>
+					</span>
+
+					<div class="wrap-input100 validate-input" data-validate = "É necessário um e-mail válido">
+						<input class="input100" type="text" name="email" placeholder="E-mail">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+					</div>
+
+					<div class="wrap-input100 rs1 validate-input" data-validate="Digite sua senha">
+						<input class="input100" type="password" name="password" placeholder="Senha">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+					</div>
+
+					<div class="container-login100-form-btn m-t-20">
+						<button class="login100-form-btn">
+							Entrar
+						</button>
+					</div>
+
+					<div class="text-center p-t-45 p-b-4">
+						<a href="{{base_url()}}/public/assets/login/#" class="txt2 hov1">
+							Esqueceu a senha?
+						</a>
+					</div>
+
+					<input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                    <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	
+<!--===============================================================================================-->
+	<script src="{{base_url()}}/public/assets/login/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="{{base_url()}}/public/assets/login/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="{{base_url()}}/public/assets/login/vendor/bootstrap/js/popper.js"></script>
+	<script src="{{base_url()}}/public/assets/login/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="{{base_url()}}/public/assets/login/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="{{base_url()}}/public/assets/login/vendor/daterangepicker/moment.min.js"></script>
+	<script src="{{base_url()}}/public/assets/login/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="{{base_url()}}/public/assets/login/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+
+	<!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+	<script src="{{base_url()}}/public/assets/login/js/main.js"></script>
+
+	<script type="text/javascript">
+		{% if flash %}
+			{% if flash['error'] %}
+				swal("Ooopssss!", "{{flash.error | first}}", "error");
+			{% endif %}
+		{% endif %}
+	</script>
+
+</body>
+</html>

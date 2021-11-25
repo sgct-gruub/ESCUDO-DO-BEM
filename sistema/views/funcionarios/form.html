@@ -1,0 +1,1091 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li><a href="{{path_for('funcionarios')}}">Funcionários</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                                <div class="col-xs-2">
+                                	<button class="btn btn-info btn-circle btn-lg pull-right" data-toggle="tooltip" title="Voltar para listagem" onClick="window.history.back();">
+                                		<i class="fa fa-chevron-left"></i>
+                                	</button>
+
+                                	<!-- <a href="#" class="">
+                                		<div class="circle-md pull-right circle bg-info mytooltip">
+                                			<i class="ti-plus"></i>
+                                			<span class="tooltip-content99">Novo registro</span>
+                                		</div>
+                                	</a> -->
+                                </div>
+                            </div>
+                            <div class="sttabs tabs-style-line">
+                                <nav>
+                                	<ul>
+                                		<li><a href="#section-linemove-1" class="sticon ti-check-box"><span>Cadastro</span></a></li>
+                                		{% if view == 'editar' %}
+                                		<li><a href="#section-linemove-2" class="sticon ti-panel"><span>Timeline</span></a></li>
+                                		<li><a href="#section-linemove-3" class="sticon ti-files"><span>Arquivos</span></a></li>
+                                		<li><a href="#section-linemove-4" class="sticon fa fa-warning"><span>Advertências</span></a></li>
+                                		{% endif %}
+                                	</ul>
+								</nav>
+								<div class="content-wrap">
+									<section id="section-linemove-1">
+			                            <div id="exampleValidator" class="wizard">
+			                                <ul class="wizard-steps" role="tablist">
+			                                    <li class="active" role="tab" onClick="goToStep(0)">
+			                                        <h4><span><i class="mdi mdi-account-box"></i></span>Dados pessoais</h4> </li>
+			                                    <li role="tab" onClick="goToStep(1)">
+			                                        <h4><span><i class="mdi mdi-human-child"></i></span>Dependentes</h4> </li>
+			                                    <li role="tab" onClick="goToStep(2)">
+			                                        <h4><span><i class="mdi mdi-account-card-details"></i></span>Dados de registro</h4> </li>
+			                                </ul>
+			                                <form id="validation" class="form-horizontal">
+			                                    <div class="wizard-content">
+			                                        <div class="wizard-pane" role="tabpanel">
+			                                            <div class="row form-group">
+			                                            	<div class="col-md-8 col-sm-8">
+				                                                <label for="nome"><i class="fa fa-asterisk text-danger"></i> Nome completo</label>
+				                                                <input type="text" class="form-control" name="nome" id="nome" value="{{item.nome}}" /> 
+				                                            </div>
+				                                            <div class="col-md-4 col-sm-4">
+				                                                <label for="data_nascimento"><i class="fa fa-asterisk text-danger"></i> Data de nascimento</label>
+				                                                <input type="text" class="form-control inputDate" name="data_nascimento" id="data_nascimento" value="{{item.data_nascimento|date('d/m/Y')}}" />
+				                                            </div>
+			                                            </div>
+
+			                                            <div class="row form-group">
+			                                            	<div class="col-md-4 col-sm-12">
+				                                                <label for="naturalidade">Naturalidade</label>
+				                                                <input type="text" class="form-control" name="naturalidade" id="naturalidade" value="{{item.naturalidade}}" /> 
+				                                            </div>
+				                                            <div class="col-md-1 col-sm-2">
+				                                                <label for="uf_naturalidade">UF</label>
+				                                                <input type="text" class="form-control" name="uf_naturalidade" id="uf_naturalidade" value="{{item.uf_naturalidade}}" /> 
+				                                            </div>
+				                                            <div class="col-md-2 col-sm-3">
+				                                                <label for="pais">País</label>
+				                                                <input type="text" class="form-control" name="pais" id="pais" value="{{item.pais}}" /> 
+				                                            </div>
+				                                            <div class="col-md-2 col-sm-3">
+				                                                <label for="telefone">Telefone</label>
+				                                                <input type="text" class="form-control" name="telefone" id="telefone" value="{{item.telefone}}" /> 
+				                                            </div>
+				                                            <div class="col-md-3 col-sm-4">
+				                                                <label for="celular">Celular</label>
+				                                                <input type="text" class="form-control" name="celular" id="celular" value="{{item.celular}}" /> 
+				                                            </div>
+			                                            </div>
+
+			                                            <div class="row form-group">
+			                                            	<div class="col-md-2">
+				                                                <label for="cep">CEP</label>
+				                                                <input type="text" class="form-control" name="cep" id="cep" value="{{item.cep}}" /> 
+				                                            </div>
+				                                            <div class="col-md-9">
+				                                                <label for="endereco">Endereço</label>
+				                                                <input type="text" class="form-control" name="endereco" id="endereco" value="{{item.endereco}}" /> 
+				                                            </div>
+				                                            <div class="col-md-1">
+				                                                <label for="num">Nº</label>
+				                                                <input type="text" class="form-control" name="num" id="num" value="{{item.num}}" /> 
+				                                            </div>
+			                                            </div>
+
+			                                            <div class="row form-group">
+			                                            	<div class="col-md-2">
+				                                                <label for="complemento">Complemento</label>
+				                                                <input type="text" class="form-control" name="complemento" id="complemento" value="{{item.complemento}}" /> 
+				                                            </div>
+				                                            <div class="col-md-5">
+				                                                <label for="bairro">Bairro</label>
+				                                                <input type="text" class="form-control" name="bairro" id="bairro" value="{{item.bairro}}" /> 
+				                                            </div>
+				                                            <div class="col-md-4">
+				                                                <label for="cidade">Cidade</label>
+				                                                <input type="text" class="form-control" name="cidade" id="cidade" value="{{item.cidade}}" /> 
+				                                            </div>
+				                                            <div class="col-md-1">
+				                                                <label for="uf">UF</label>
+				                                                <input type="text" class="form-control" name="uf" id="uf" value="{{item.uf}}" /> 
+				                                            </div>
+			                                            </div>
+
+			                                            <div class="row form-group">
+			                                            	<div class="col-md-3">
+				                                                <label for="cabelos">Cabelos</label>
+				                                                <input type="text" class="form-control" name="cabelos" id="cabelos" value="{{item.cabelos}}" /> 
+				                                            </div>
+				                                            <div class="col-md-3">
+				                                                <label for="olhos">Olhos</label>
+				                                                <input type="text" class="form-control" name="olhos" id="olhos" value="{{item.olhos}}" /> 
+				                                            </div>
+				                                            <div class="col-md-3">
+				                                                <label for="altura">Altura</label>
+				                                                <input type="text" class="form-control" name="altura" id="altura" value="{{item.altura}}" /> 
+				                                            </div>
+				                                            <div class="col-md-3">
+				                                                <label for="peso">Peso</label>
+				                                                <input type="text" class="form-control" name="peso" id="peso" value="{{item.peso}}" /> 
+				                                            </div>
+			                                            </div>
+
+			                                            <div class="row form-group">
+			                                            	<div class="col-md-6">
+				                                                <label>Cor / Raça</label> <br />
+				                                                <div class="col-md-6">
+					                                                <div class="radio">
+							                                            <input type="radio" name="cor_raca" id="cor_raca1" value="1" {% if item.cor_raca == 1 %} checked {% endif %}>
+							                                            <label for="cor_raca1"> Branca </label> <br />
+
+							                                            <input type="radio" name="cor_raca" id="cor_raca2" value="2" {% if item.cor_raca == 2 %} checked {% endif %}>
+							                                            <label for="cor_raca2"> Preta </label> <br />
+							                                       	
+							                                            <input type="radio" name="cor_raca" id="cor_raca3" value="3" {% if item.cor_raca == 3 %} checked {% endif %}>
+							                                            <label for="cor_raca3"> Parda </label> <br />
+							                                        </div>
+							                                    </div>
+							                                    <div class="col-md-6">
+							                                    	<div class="radio">
+							                                            <input type="radio" name="cor_raca" id="cor_raca4" value="4" {% if item.cor_raca == 4 %} checked {% endif %}>
+							                                            <label for="cor_raca4"> Amarela (Asiático, Japonês) </label> <br />
+
+							                                            <input type="radio" name="cor_raca" id="cor_raca5" value="5" {% if item.cor_raca == 5 %} checked {% endif %}>
+							                                            <label for="cor_raca5"> Indígena </label> <br />
+
+							                                            <input type="radio" name="cor_raca" id="cor_raca6" value="6" {% if item.cor_raca == 6 %} checked {% endif %}>
+							                                            <label for="cor_raca6"> Outros </label> <br />
+							                                        </div>
+				                                            	</div>
+				                                            </div>
+
+				                                            <div class="col-md-6">
+			                                                    <label>Estado civil</label> <br />
+			                                                    <div class="row">
+			                                                        <div class="col-md-6">
+			                                                            <div class="radio">
+			                                                                <input type="radio" name="estado_civil" id="estado_civil1" value="1" {% if item.estado_civil == 1 %} checked {% endif %}>
+			                                                                <label for="estado_civil1"> Solteiro </label> <br />
+
+			                                                                <input type="radio" name="estado_civil" id="estado_civil2" value="2" {% if item.estado_civil == 2 %} checked {% endif %}>
+			                                                                <label for="estado_civil2"> Casado/União Estável </label> <br />
+
+			                                                                <input type="radio" name="estado_civil" id="estado_civil3" value="3" {% if item.estado_civil == 3 %} checked {% endif %}>
+			                                                                <label for="estado_civil3"> Separado/Divorciado </label> <br />
+			                                                            </div>
+			                                                        </div>
+
+			                                                        <div class="col-md-6">
+			                                                            <div class="radio">
+			                                                                <input type="radio" name="estado_civil" id="estado_civil4" value="4" {% if item.estado_civil == 4 %} checked {% endif %}>
+			                                                                <label for="estado_civil4"> Amasiado </label> <br />
+
+			                                                                <input type="radio" name="estado_civil" id="estado_civil5" value="5" {% if item.estado_civil == 5 %} checked {% endif %}>
+			                                                                <label for="estado_civil5"> Viúvo </label> <br />
+
+			                                                                <input type="radio" name="estado_civil" id="estado_civil6" value="6" {% if item.estado_civil == 6 %} checked {% endif %}>
+			                                                                <label for="estado_civil6"> Outros </label> <br />
+			                                                            </div>
+			                                                        </div>
+			                                                    </div>
+			                                                </div>
+			                                            </div>
+
+			                                            <div class="row form-group" style="{% if item.estado_civil == 2 or item.estado_civil == 4 %} display: block; {% else %} display: none; {% endif %}" id="infos-conjuge">
+					                                        <div class="col-md-12">
+					                                        	<label for="nome_conjuge">Nome conjugê</label>
+					                                        	<input type="text" class="form-control" name="nome_conjuge" id="nome_conjuge" value="{{item.nome_conjuge}}" /> 
+					                                        </div>
+					                                    </div>
+
+			                                            <div class="row form-group">
+			                                                <div class="col-md-9">
+			                                                    <label>Escolaridade</label> <br />
+			                                                    <div class="row">
+			                                                        <div class="col-md-6">
+			                                                            <div class="radio">
+			                                                                <input type="radio" name="escolaridade" id="escolaridade1" value="1" {% if item.escolaridade == 1 %} checked {% endif %}>
+			                                                                <label for="escolaridade1"> Analfabeto </label> <br />
+
+			                                                                <input type="radio" name="escolaridade" id="escolaridade2" value="2" {% if item.escolaridade == 2 %} checked {% endif %}>
+			                                                                <label for="escolaridade2"> Ensino fundamental incompleto </label> <br />
+
+			                                                                <input type="radio" name="escolaridade" id="escolaridade3" value="3" {% if item.escolaridade == 3 %} checked {% endif %}>
+			                                                                <label for="escolaridade3"> Ensino fundamental completo </label> <br />
+
+			                                                                <input type="radio" name="escolaridade" id="escolaridade4" value="4" {% if item.escolaridade == 4 %} checked {% endif %}>
+			                                                                <label for="escolaridade4"> Ensino médio incompleto </label>
+			                                                            </div>
+			                                                        </div>
+
+			                                                        <div class="col-md-6">
+			                                                            <div class="radio">
+			                                                                <input type="radio" name="escolaridade" id="escolaridade5" value="5" {% if item.escolaridade == 5 %} checked {% endif %}>
+			                                                                <label for="escolaridade5"> Ensino médio completo </label> <br />
+
+			                                                                <input type="radio" name="escolaridade" id="escolaridade6" value="6" {% if item.escolaridade == 6 %} checked {% endif %}>
+			                                                                <label for="escolaridade6"> Ensino superior incompleto </label> <br />
+
+			                                                                <input type="radio" name="escolaridade" id="escolaridade7" value="7" {% if item.escolaridade == 7 %} checked {% endif %}>
+			                                                                <label for="escolaridade7"> Ensino superior completo </label> <br />
+			                                                            </div>
+			                                                        </div>
+			                                                    </div>
+			                                                </div>
+
+			                                                <div class="col-md-3">
+			                                                    <label>Deficiente Físico</label> <br />
+																<div class="radio">
+																	<input type="radio" name="deficiente_fisico" id="deficiente_fisico1" value="0" {% if item.deficiente_fisico == 0 %} checked {% endif %}>
+																	<label for="deficiente_fisico1"> Não </label> <br />
+
+																	<input type="radio" name="deficiente_fisico" id="deficiente_fisico2" value="1" {% if item.deficiente_fisico == 1 %} checked {% endif %}>
+																	<label for="deficiente_fisico2"> Sim </label> <br />
+																</div>
+
+																<div class="row form-group" style="{% if item.deficiente_fisico == 1 %} display: block; {% else %} display: none; {% endif %}" id="infos-deficiente-fisico">
+							                                        <div class="col-md-12">
+							                                        	<label for="tipo_deficiencia">Tipo</label>
+							                                        	<input type="text" class="form-control" name="tipo_deficiencia" id="tipo_deficiencia" value="{{item.tipo_deficiencia}}" /> 
+							                                        </div>
+						                                    	</div>
+			                                                </div>
+			                                            </div>
+
+			                                            <div class="row form-group">
+			                                            	<div class="col-md-2">
+				                                                <label for="rg">RG</label>
+				                                                <input type="text" class="form-control" name="rg" id="rg" value="{{item.rg}}" /> 
+				                                            </div>
+				                                            <div class="col-md-2">
+				                                                <label for="rg_dt_expedicao">Data de Expedição</label>
+				                                                <input type="text" class="form-control" name="rg_dt_expedicao" id="rg_dt_expedicao" value="{{item.rg_dt_expedicao|date('d/m/Y')}}" onkeyup="mascara( this, mdata );" maxlength="10" /> 
+				                                            </div>
+				                                            <div class="col-md-2">
+				                                                <label for="cpf">CPF</label>
+				                                                <input type="text" class="form-control cpfCnpjMask" name="cpf" id="cpf" value="{{item.cpf}}" maxlength="14" /> 
+				                                            </div>
+				                                            <div class="col-md-2">
+				                                                <label for="pis">PIS</label>
+				                                                <input type="text" class="form-control" name="pis" id="pis" value="{{item.pis}}" /> 
+				                                            </div>
+				                                            <div class="col-md-2">
+				                                                <label for="reservista">Reservista</label>
+				                                                <input type="text" class="form-control" name="reservista" id="reservista" value="{{item.reservista}}" /> 
+				                                            </div>
+				                                            <div class="col-md-2">
+				                                                <label for="cnh">CNH</label>
+				                                                <input type="text" class="form-control" name="cnh" id="cnh" value="{{item.cnh}}" /> 
+				                                            </div>
+			                                            </div>
+
+			                                            <div class="row form-group">
+			                                            	<div class="col-md-3">
+				                                                <label for="titulo_eleitor">Título de Eleitor</label>
+				                                                <input type="text" class="form-control" name="titulo_eleitor" id="titulo_eleitor" value="{{item.titulo_eleitor}}" /> 
+				                                            </div>
+			                                            	<div class="col-md-2">
+				                                                <label for="titulo_eleitor_zona">Zona</label>
+				                                                <input type="text" class="form-control" name="titulo_eleitor_zona" id="titulo_eleitor_zona" value="{{item.titulo_eleitor_zona}}" /> 
+				                                            </div>
+			                                            	<div class="col-md-2">
+				                                                <label for="titulo_eleitor_sessao">Sessão</label>
+				                                                <input type="text" class="form-control" name="titulo_eleitor_sessao" id="titulo_eleitor_sessao" value="{{item.titulo_eleitor_sessao}}" /> 
+				                                            </div>
+				                                            <div class="col-md-3">
+				                                                <label for="ctps">CTPS</label>
+				                                                <input type="text" class="form-control" name="ctps" id="ctps" value="{{item.ctps}}" /> 
+				                                            </div>
+			                                            	<div class="col-md-2">
+				                                                <label for="ctps_serie">Série</label>
+				                                                <input type="text" class="form-control" name="ctps_serie" id="ctps_serie" value="{{item.ctps_serie}}" /> 
+				                                            </div>
+			                                            </div>
+			                                        </div>
+
+			                                        <div class="wizard-pane" role="tabpanel">
+			                                            <div class="row form-group">
+			                                                <div class="col-md-2">
+			                                                	<label><i class="fa fa-asterisk text-danger"></i> Possui filhos?</label> <br />
+				                                                <div class="radio">
+						                                            <input type="radio" name="possui_filhos" id="sim" value="1" {% if item.possui_filhos == 1 %} checked {% endif %}>
+						                                            <label for="sim"> Sim </label> <br />
+
+						                                            <input type="radio" name="possui_filhos" id="nao" value="0" {% if item.possui_filhos == 0 %} checked {% endif %}>
+						                                            <label for="nao"> Não </label>
+						                                        </div>
+				                                            </div>
+
+				                                            {% if item.possui_filhos == 0 %}
+				                                            <div id="rowQuantidadeFilhos" style="display: none;">
+				                                            	<div class="col-md-3">
+				                                            		<label for="quantidadeFilhos"><i class="fa fa-asterisk text-danger"></i> Quantos?</label> <br />
+				                                            		<div class="input-group">
+				                                            			<input type="text" class="form-control" name="quantidadeFilhos" id="quantidadeFilhos" disabled="disabled">
+				                                            			<span class="input-group-btn">
+				                                            				<button type="button" class="btn btn-primary" id="btnAdicionar" disabled="disabled" />Continuar</button>
+				                                            			</span>
+				                                            		</div>
+				                                            	</div>
+
+				                                            	<div class="col-md-7"></div>
+
+				                                            	<div id="divForm" data-qtd="0">
+																</div>
+
+																<template id="tmplLinha">
+																	<div class="col-lg-12">
+																		<hr />
+																	</div>
+																	
+																	<div class="col-md-4">
+																		<label for="nome_filho">Nome</label>
+																		<input type="text" class="form-control" id="nome_filho" name="filhos[nome][]">
+																	</div>
+																	<div class="col-md-4">
+																		<label for="data_nascimento_filho">Data de nascimento</label>
+																		<input type="text" class="form-control" id="data_nascimento_filho" name="filhos[data_nascimento][]" onkeyup="mascara( this, mdata );" maxlength="10">
+																	</div>
+																	<div class="col-md-4">
+																		<label for="cpf_filho">CPF</label>
+																		<input type="text" class="form-control" id="cpf_filho" name="filhos[cpf][]" onkeyup="mascara( this, mcpf );" maxlength="14">
+																	</div>
+																</template>
+				                                            </div>
+				                                            {% endif %}
+
+				                                            {% if item.possui_filhos == 1 %}
+				                                            <div id="rowQuantidadeFilhos">
+				                                            	<div class="col-md-3">
+				                                            		<label for="quantidadeFilhos"><i class="fa fa-asterisk text-danger"></i> Quantos?</label> <br />
+				                                            		<div class="input-group">
+				                                            			<input type="text" class="form-control" name="quantidadeFilhos" id="quantidadeFilhos" value="{{quantidadeFilhos}}">
+				                                            			<span class="input-group-btn">
+				                                            				<button type="button" class="btn btn-primary" id="btnAdicionar" />Continuar</button>
+				                                            			</span>
+				                                            		</div>
+				                                            	</div>
+
+				                                            	<div class="col-md-7"></div>
+
+																{% for i in range(0, filhos) %}
+																	<div class="col-lg-12">
+																		<hr />
+																	</div>
+																	
+																	<div class="col-md-4">
+																		<label for="nome_filho">Nome</label>
+																		<input type="text" class="form-control" id="nome_filho" name="filhos[nome][]" value="{{nome_filho[i]}}">
+																	</div>
+																	<div class="col-md-4">
+																		<label for="data_nascimento_filho">Data de nascimento</label>
+																		<input type="text" class="form-control" id="data_nascimento_filho" name="filhos[data_nascimento][]" onkeyup="mascara( this, mdata );" maxlength="10" value="{{data_nascimento_filho[i]}}">
+																	</div>
+																	<div class="col-md-4">
+																		<label for="genero_filho">CPF</label>
+																		<input type="text" class="form-control" id="data_nascimento_filho" name="filhos[data_nascimento][]" onkeyup="mascara( this, mcpf );" maxlength="14" value="{{cpf_filho[i]}}">
+
+																	</div>
+																{% endfor %}
+
+																<div id="divForm" data-qtd="{{quantidadeFilhos}}">
+																</div>
+
+																<template id="tmplLinha">
+																	<div class="col-lg-12">
+																		<hr />
+																	</div>
+																	
+																	<div class="col-md-4">
+																		<label for="nome_filho">Nome</label>
+																		<input type="text" class="form-control" id="nome_filho" name="filhos[nome][]">
+																	</div>
+																	<div class="col-md-4">
+																		<label for="data_nascimento_filho">Data de nascimento</label>
+																		<input type="text" class="form-control" id="data_nascimento_filho" name="filhos[data_nascimento][]" onkeyup="mascara( this, mdata );" maxlength="10">
+																	</div>
+																	<div class="col-md-4">
+																		<label for="cpf_filho">Gênero</label>
+																		<input type="text" class="form-control" id="cpf_filho" name="filhos[cpf][]" onkeyup="mascara( this, mcpf );" maxlength="14">
+																	</div>
+																</template>
+				                                            </div>
+				                                            {% endif %}
+			                                            </div>
+			                                        </div>
+
+			                                        <div class="wizard-pane" role="tabpanel">
+			                                            <div class="row form-group">
+				                                            <div class="col-md-6">
+				                                                <label for="unidade">Unidade</label>
+				                                                <input type="text" class="form-control" name="unidade" id="unidade" value="{{dados_registro.unidade}}" /> 
+				                                            </div>
+				                                            <div class="col-md-6">
+				                                                <label for="cnpj">CNPJ</label>
+				                                                <input type="text" class="form-control" name="cnpj" id="cnpj" value="{{dados_registro.cnpj}}" onkeyup="mascara( this, mcnpj );" maxlength="18" /> 
+				                                            </div>
+			                                            </div>
+			                                            <div class="row form-group">
+				                                            <div class="col-md-6">
+				                                                <label for="data_admissao">Data de Admissão</label>
+				                                                <input type="text" class="form-control" name="data_admissao" id="data_admissao" value="{{dados_registro.data_admissao|date('d/m/Y')}}" onkeyup="mascara( this, mdata );" maxlength="10" placeholder="{{'now'|date('d/m/Y')}}" /> 
+				                                            </div>
+				                                            <div class="col-md-6">
+				                                                <label for="exame_admissional">Exame Admissional</label>
+				                                                <input type="text" class="form-control" name="exame_admissional" id="exame_admissional" value="{{dados_registro.exame_admissional|date('d/m/Y')}}" onkeyup="mascara( this, mdata );" maxlength="10" placeholder="{{'now'|date('d/m/Y')}}" /> 
+				                                            </div>
+			                                            </div>
+			                                            <div class="row form-group">
+				                                            <div class="col-md-6">
+				                                                <label for="tipo_contrato">Tipo de Contrato</label>
+				                                                <select class="form-control select2" name="tipo_contrato" id="tipo_contrato">
+				                                                	<option disabled="" selected="">-- SELECIONE</option>
+				                                                	<option value="1" {% if dados_registro.tipo_contrato == 1 %} selected {% endif %}>CLT</option>
+				                                                	<option value="2" {% if dados_registro.tipo_contrato == 2 %} selected {% endif %}>Contrato</option>
+				                                                	<option value="3" {% if dados_registro.tipo_contrato == 3 %} selected {% endif %}>Voluntário</option>
+				                                                </select> 
+				                                            </div>
+				                                            <div class="col-md-6">
+				                                                <label for="vale_transporte">Vale Transporte</label>
+				                                                <select class="form-control select2" name="vale_transporte" id="vale_transporte">
+				                                                	<option disabled="" selected="">-- SELECIONE</option>
+				                                                	<option value="1" {% if dados_registro.vale_transporte == 1 %} selected {% endif %}>Sim</option>
+				                                                	<option value="0" {% if dados_registro.vale_transporte == 0 %} selected {% endif %}>Não</option>
+				                                                </select> 
+				                                            </div>
+				                                        </div>
+				                                        <div class="row form-group">
+				                                            <div class="col-md-6">
+				                                                <label for="salario">Salário</label>
+				                                                <input type="text" class="form-control dinheiro" name="salario" id="salario" value="{{dados_registro.salario}}" placeholder="R$0.00" /> 
+				                                            </div>
+				                                            <div class="col-md-6">
+				                                                <label for="horario_trabalho">Horário de Trabalho</label>
+				                                                <input type="text" class="form-control" name="horario_trabalho" id="horario_trabalho" value="{{dados_registro.horario_trabalho}}" /> 
+				                                            </div>
+				                                        </div>
+				                                        <div class="row form-group">
+				                                            <div class="col-md-6">
+				                                                <label for="funcao">Função</label>
+				                                                <input type="text" class="form-control" name="funcao" id="funcao" value="{{dados_registro.funcao}}" /> 
+				                                            </div>
+				                                            <div class="col-md-6">
+				                                                <label for="descricao_funcao">Descrição da Função</label>
+				                                                <input type="text" class="form-control" name="descricao_funcao" id="descricao_funcao" value="{{dados_registro.descricao_funcao}}" /> 
+				                                            </div>
+				                                        </div>
+				                                        <div class="row form-group">
+				                                            <div class="col-md-12">
+				                                                <label for="status">Status</label>
+				                                                <select class="form-control select2" name="status" id="status">
+				                                                	<option disabled="" selected="">-- SELECIONE</option>
+				                                                	<option value="1" {% if dados_registro.status == 1 %} selected {% endif %}>Ativo</option>
+				                                                	<option value="0" {% if dados_registro.status == 0 %} selected {% endif %}>Inativo</option>
+				                                                </select> 
+				                                            </div>
+				                                        </div>
+			                                        </div>
+			                                    </div>
+			                                    <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+			                  					<input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+			                                </form>
+			                            </div>
+									</section>
+
+									<!-- TIMELINE -->
+									<section id="section-linemove-2">
+										{% if not timeline %} 
+											<h3 class="text-muted">Nada a ser exibido!</h3> 
+										{% else %}
+										<center><a href="{{base_url()}}/pdfs/timeline.php?acolhimento={{item.id}}" target="_blank" class="btn btn-primary btn-lg">Imprimir</a></center>
+										<ul class="timeline">
+											{% set count = 0 %}
+											{% for t in timeline %}
+											{% set count = count + 1 %}
+											<li {% if count == 2 %} class="timeline-inverted" {% endif %} id="timeline-{{t.id}}">
+												<div class="timeline-badge {{t.color}}"><i class="{{t.icon}}"></i></div>
+												<div class="timeline-panel">
+													<div class="timeline-heading">
+														<h4 class="timeline-title">{{t.titulo}} {% if session.Role == 1 %}<a class="btn btn-danger btn-xs btn-rounded pull-right remover_timeline_{{t.id}}" data-toggle="tooltip" title="Remover"><i class="fa fa-trash-o"></i></a>{% endif %}</h4>
+														<p><small class="text-muted"><i class="fa fa-clock-o"></i> {{t.updated_at|date('d/m/Y H:i:s')}}</small> </p>
+													</div>
+													<div class="timeline-body">
+														<p>{{t.descricao|nl2br}}</p>
+													</div>
+												</div>
+											</li>
+											{% if count == 2 %} {% set count = 0 %} {% endif %}
+											{% endfor %}
+										</ul>
+										{% endif %}
+									</section>
+
+									<!-- ARQUIVOS -->                                        
+									<section id="section-linemove-3">
+                                            <form action="{{path_for('post_cadastrar_arquivo_funcionario', {'id' : item.id})}}" enctype="multipart/form-data" method="POST">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <input type="file" name="arquivo" id="arquivo" class="dropify" data-height="500">
+                                                    </div>
+                                                    <div class="col-md-10 m-t-10">
+                                                        <input type="text" name="descricao" class="form-control" placeholder="Descrição do arquivo" required="">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <input type="hidden" name="funcionario" value="{{item.id}}"/>
+                                                        <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                        <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                                        <button type="submit" class="btn btn-success btn-block m-t-10"><i class="fa fa-upload"></i> Enviar</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <h2 class="m-t-20">Listagem dos arquivos</h2>
+
+                                            <table class="table table-bordered table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tipo</th>
+                                                        <th>Descrição</th>
+                                                        <th>Adicionado em</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for a in arquivos %}
+                                                    {% set tipo_arquivo = a.arquivo|split('.').1 %}
+                                                    <tr id="arquivo-{{a.id}}">
+                                                        <td>{{tipo_arquivo}}</td>
+                                                        <td>
+                                                            <a href="#" class="inline-editor" data-pk="{{a.id}}" data-url="{{path_for('post_editar_arquivo_acolhido', {'id' : a.id})}}" data-csrf-token-name-key="{{csrf.TokenNameKey}}" data-csrf-token-name="{{csrf.TokenName}}" data-csrf-token-value-key="{{csrf.TokenValueKey}}" data-csrf-token-value="{{csrf.TokenValue}}">
+                                                                {{a.descricao}}
+                                                            </a>
+                                                        </td>
+                                                        <td>{{a.created_at|date('d/m/Y H:i:s')}}</td>
+                                                        <td>
+                                                            {% if tipo_arquivo == 'pdf' or tipo_arquivo == 'jpg' or tipo_arquivo == 'jpeg' or tipo_arquivo == 'png' %}
+                                                            <a href="{{base_url()}}/public/uploads/funcionarios/arquivos/{{a.arquivo}}" target="_blank" class="btn btn-info" data-toggle="tooltip" title="Visualizar arquivo"><i class="fa fa-eye"></i></a>
+                                                            {% endif %}
+                                                            <a href="{{base_url()}}/public/uploads/funcionarios/arquivos/{{a.arquivo}}" download="{% if a.descricao != '' %}{{a.descricao}}{% else %}{{a.arquivo}}{% endif %}.{{tipo_arquivo}}" class="btn btn-primary" data-toggle="tooltip" title="Fazer download"><i class="fa fa-download"></i></a>
+                                                            <a href="#" class="btn btn-danger remover-{{ a.id }}" data-toggle="tooltip" title="Remover arquivo"><i class="fa fa-trash-o"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+									</section>
+
+									<!-- ADVERTÊNCIAS -->                                        
+									<section id="section-linemove-4">
+										<h2 class="m-t-20">Listagem das advertências</h2>
+
+                                            <table class="table table-bordered table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Data</th>
+                                                        <th>Quem aplicou</th>
+                                                        <th>Motivo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for ad in advertencias %}
+                                                    <tr id="advertencia-{{ad.id}}">
+                                                        <td>{{ad.data|date('d/m/Y')}}</td>
+                                                        <td>{{ad.quem_aplicou}} ({{ad.condicao_quem_aplicou}})</td>
+                                                        <td>{{ad.motivo|nl2br}}</td>
+                                                        <td>
+                                                            <a href="{{base_url()}}/pdfs/advertencias.php?imprimir={{ad.id}}" target="_blank" class="btn btn-info" data-toggle="tooltip" title="Imprimir"><i class="fa fa-file-pdf-o"></i></a>
+                                                            <a href="#" class="btn btn-danger remover-advertencia-{{ ad.id }}" data-toggle="tooltip" title="Remover"><i class="fa fa-trash-o"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+									</section>
+								</div>
+				            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- FormValidation -->
+    <link rel="stylesheet" href="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/libs/formvalidation/formValidation.min.css">
+
+    <!-- Dropify -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/dropify/dist/css/dropify.min.css" rel="stylesheet">
+
+	<style>
+		.form-group label 
+		{
+			margin-top: 10px;
+		}
+	</style>
+{% endblock %}
+
+
+{% block include_js %}
+	<!-- Form Wizard -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/dist/jquery-wizard.min.js"></script>
+    
+    <!-- jQuery file upload -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/dropify/dist/js/dropify.min.js"></script>
+
+    <!-- FormValidation plugin and the class supports validating Bootstrap form -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/libs/formvalidation/formValidation.min.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/libs/formvalidation/bootstrap.min.js"></script>
+
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/multiselect/js/jquery.multi-select.js" type="text/javascript"></script>
+
+	<script src="{{base_url()}}/public/assets/js/mask.js"></script>
+	<script src="{{base_url()}}/public/assets/js/mascaras.js"></script>
+	<script src="{{base_url()}}/public/assets/js/cpfcnpjmask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.mask.min.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/cbpFWTabs.js"></script>
+
+    <script type="text/javascript">
+    	(function() {
+	        [].slice.call(document.querySelectorAll('.sttabs')).forEach(function(el) {
+	            new CBPFWTabs(el);
+	        });
+	    })();
+
+	    (function() {
+	        $('#exampleValidator').wizard({
+	        	classes: {
+                    step: {
+                        disabled: '',
+                    },
+                },
+                enableWhenVisited: true,
+                buttonLabels: {
+                    next: 'Próximo',
+                    back: 'Anterior',
+                    finish: 'Finalizar'
+                },
+	            // onInit: function() {
+	            //     $('#validation').formValidation({
+	            //         framework: 'bootstrap',
+	            //         fields: {
+	            //             nome: {
+	            //                 validators: {
+	            //                     notEmpty: {
+	            //                         message: 'Insira o nome do funcionário'
+	            //                     },
+	            //                     stringLength: {
+	            //                         min: 5,
+	            //                         max: 50,
+	            //                         message: 'O nome do funcionário deve conter no mínimo 5 e no máximo 50 caracteres'
+	            //                     },
+	            //                     regexp: {
+	            //                         regexp: /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
+	            //                         message: 'O nome do funcionário não pode conter números, pontos ou underlines'
+	            //                     }
+	            //                 }
+	            //             },
+	            //             rg: {
+	            //                 validators: {
+	            //                     notEmpty: {
+	            //                         message: 'Insira o RG do funcionário'
+	            //                     },
+	            //                 }
+	            //             },
+	            //             cpf: {
+	            //                 validators: {
+	            //                     notEmpty: {
+	            //                         message: 'Insira o CPF do funcionário'
+	            //                     },
+	            //                 }
+	            //             },
+	            //             data_nascimento: {
+	            //                 validators: {
+	            //                     notEmpty: {
+	            //                         message: 'Formato: dia/mês/ano'
+	            //                     },
+	            //                 }
+	            //             },
+	            //             cor_raca: {
+	            //                 validators: {
+	            //                     notEmpty: {
+	            //                         message: 'Escolha uma das opções'
+	            //                     },
+	            //                 }
+	            //             },
+	            //             possui_filhos: {
+	            //                 validators: {
+	            //                     notEmpty: {
+	            //                         message: 'Escolha uma das opções'
+	            //                     },
+	            //                 }
+	            //             },
+	            //             quantidadeFilhos: {
+	            //                 validators: {
+	            //                     notEmpty: {
+	            //                         message: 'Insira a quantidade e aperte em CONTINUAR'
+	            //                     },
+	            //                     regexp: {
+	            //                         regexp: /^([1-9][0-9]{0,1}|99)$/,
+	            //                         message: 'Apenas números entre 1 e 99 são permitidos'
+	            //                     }
+	            //                 }
+	            //             },
+	            //         }
+	            //     });
+	            // },
+	            // validator: function() {
+	            //     var fv = $('#validation').data('formValidation');
+	            //     var $this = $(this);
+	            //     // Validate the container
+	            //     fv.validateContainer($this);
+	            //     var isValidStep = fv.isValidContainer($this);
+	            //     if (isValidStep === false || isValidStep === null) {
+	            //         return false;
+	            //     }
+	            //     return true;
+	            // },
+	            onFinish: function() {
+	                // $('#validation').submit(function (e) {
+
+	                	var csrf_name = $('input[name="csrf_name"]').val();
+	                	var csrf_value = $('input[name="csrf_value"]').val();
+	                	var nome = $('input[name="nome"]').val();
+	                	var rg = $('input[name="rg"]').val();
+	                	var cpf = $('input[name="cpf"]').val();
+	                	var data_nascimento = $('input[name="data_nascimento"]').val();
+	                	var naturalidade = $('input[name="naturalidade"]').val();
+	                	var uf_naturalidade = $('input[name="uf_naturalidade"]').val();
+	                	var cad_unico = $('input[name="cad_unico"]').val();
+	                	var cartao_sus = $('input[name="cartao_sus"]').val();
+	                	var pis = $('input[name="pis"]').val();
+	                	var cor_raca = $('input[name="cor_raca"]:checked').val();
+	                	var possui_filhos = $('input[name="possui_filhos"]:checked').val();
+	                	var filhos = $('input[name="possui_filhos"]:checked').val();
+
+	                	// var dataString = 'nome=' + nome + '&rg=' + rg + '&cpf=' + cpf + '&data_nascimento=' + data_nascimento + '&naturalidade=' + naturalidade + '&uf_naturalidade=' + uf_naturalidade + '&cad_unico=' + cad_unico + '&cartao_sus=' + cartao_sus + '&pis=' + pis + '&cor_raca=' + cor_raca + '&possui_filhos=' + possui_filhos + '&csrf_name=' + csrf_name + '&csrf_value=' + csrf_value;
+
+	                	var dataString = $("#validation").serialize();
+
+	                	// alert(dataString);
+
+	                	$.ajax({
+				            type: "POST",
+				            url: "{{path_for('post_cadastrar_funcionario')}}",
+				            data: dataString,
+				            success: function(data) {
+				            	// swal("Good job!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.", "success");
+				            	swal({   
+						            title: "Dados gravados!",   
+						            text: "Funcionário adicionado com sucesso.",   
+						            type: "success",
+						            // showCancelButton: true,   
+						            // confirmButtonColor: "#DD6B55",
+						            confirmButtonText: "Continuar",   
+						            // cancelButtonText: "Acolhidos",   
+						            closeOnConfirm: false,   
+						            // closeOnCancel: false 
+						        }, function(isConfirm){   
+						            if (isConfirm) {     
+						                window.location.href='{{path_for('funcionarios')}}'
+						                // window.location.href='{{path_for('acolhimentos')}}?openmodal='+data  
+						            } else {     
+						                window.location.href='{{path_for('funcionarios')}}'  
+						            } 
+						        });
+				            	
+				            },
+				            error: function() {
+				            	swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+				            }
+				        });
+	                // });
+	                // swal("Good job!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.", "success")
+	            }
+	        });
+	    })();
+    </script>
+
+    <script type="text/javascript">
+		var quantidadeFilhos = document.getElementById("quantidadeFilhos");
+		var btnAdicionar = document.getElementById("btnAdicionar");
+		var divForm = document.getElementById("divForm");
+		var tmplLinha = document.getElementById("tmplLinha").content;
+
+		btnAdicionar.addEventListener("click", function () {
+			var quantidade = {};
+			quantidade.old = parseInt(divForm.dataset.qtd) || 0;
+			quantidade.new = parseInt(quantidadeFilhos.value) || 0;
+
+			//adicionar novas linhas
+			if (quantidade.new > quantidade.old) {
+				for (var indice = quantidade.old; indice < quantidade.new; indice++) {
+					var linha = document.importNode(tmplLinha, true);
+					var inputs = linha.querySelectorAll("input[id]");
+
+					[].forEach.call(inputs, function (input){    
+						input.id = input.id + indice;
+					});
+					divForm.appendChild(linha);
+				}
+			} 
+
+			//remover linhas excedentes
+			if (quantidade.new < quantidade.old) {
+				var linhas = [].slice.call(divForm.children, quantidade.new);
+				linhas.forEach(function (linha, indice) {
+					divForm.removeChild(linha);    
+				});
+			}
+
+			divForm.dataset.qtd = quantidade.new;
+		});
+	</script>
+
+	<script type="text/javascript">
+		function goToStep(step){
+            $('#exampleValidator').wizard('goTo', step);
+        }
+
+		$(document).ready(function() {
+			// Basic
+            $('.dropify').dropify();
+
+			$('#cad_unico').mask('000 0000 0000 0000');
+			$('#cartao_sus').mask('000 0000 0000 0000');
+			$('#pis').mask('000.00000.00-0');
+
+            $("input.dinheiro").maskMoney({showSymbol:true, symbol:"R$", decimal:".", thousands:""});
+
+			$("input[type=radio]").bind("click", function(){
+				// Possui filhos? Sim/Não
+				if($("input[name='possui_filhos']:checked").val() == "1") {
+					$("#rowQuantidadeFilhos").css("display", "block");
+					$("#quantidadeFilhos").attr("disabled", false);
+					$("#btnAdicionar").attr("disabled", false);
+				}
+				if($("input[name='possui_filhos']:checked").val() == "0") {
+					$("#rowQuantidadeFilhos").css("display", "none");
+					$("#quantidadeFilhos").attr("disabled", true);
+					$("#btnAdicionar").attr("disabled", true);
+				}
+
+				// Situação de rua? Sim/Não
+				if($("input[name='situacao_rua']:checked").val() == "1") {
+					$(".rowEndereco").css("display", "none");
+					$("#rowCidade").css("display", "block");
+				}
+				if($("input[name='situacao_rua']:checked").val() == "0") {
+					$(".rowEndereco").css("display", "block");
+					$("#rowCidade").css("display", "none");
+				}
+			});
+
+			$("input[type=radio]").bind("click", function(){
+                if($("#estado_civil2:checked").val() == "2" || $("#estado_civil4:checked").val() == "4") {
+                    $("#infos-conjuge").css("display", "block");
+                } else {
+                    $("#infos-conjuge").css("display", "none");
+                }
+                if($("#deficiente_fisico2:checked").val() == "1") {
+                    $("#infos-deficiente-fisico").css("display", "block");
+                } else {
+                    $("#infos-deficiente-fisico").css("display", "none");
+                }
+            });
+
+			{% for t in timeline %}
+            $('.remover_timeline_{{ t.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e este registro será deletado da timeline deste funcionário!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: true 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_timeline_funcionario', { 'id' : t.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "Este registro foi excluído da timeline deste funcionário.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        $('#timeline-{{t.id}}').remove();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar o registro do sistema ;'(", "error")
+                            }
+                        });
+                    }
+                });
+            });
+            {% endfor %}
+
+            {% for a in arquivos %}
+            $('.remover-{{ a.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e o arquivo deste funcionário será deletado do servidor!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: true 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_arquivo_funcionario', { 'id' : a.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "O arquivo deste funcionário foi excluído.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        $('#arquivo-{{a.id}}').remove();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar o arquivo do sistema ;'(", "error")
+                            }
+                        });
+                    }
+                });
+            });
+            {% endfor %}
+
+            {% for ad in advertencias %}
+            $('.remover-advertencia-{{ ad.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e a advertência deste funcionário será deletada do servidor!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: true 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_advertencia_funcionario', { 'id' : ad.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "A advertência deste funcionário foi excluída.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        $('#advertencia-{{ad.id}}').remove();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar a advertência do sistema ;'(", "error")
+                            }
+                        });
+                    }
+                });
+            });
+            {% endfor %}
+		});
+	</script>
+
+    <script type="text/javascript">
+		// Registra o evento blur do campo "cep", ou seja, quando o usuário sair do campo "cep" faremos a consulta dos dados
+		$("#cep").blur(function(){
+			// Para fazer a consulta, removemos tudo o que não é número do valor informado pelo usuário
+			var cep = this.value.replace(/[^0-9]/, "");
+				
+			// Validação do CEP; caso o CEP não possua 8 números, então cancela a consulta
+			if(cep.length!=8){
+				return false;
+			}
+				
+			// Utilizamos o webservice "viacep.com.br" para buscar as informações do CEP fornecido pelo usuário.
+			// A url consiste no endereço do webservice ("http://viacep.com.br/ws/"), mais o cep que o usuário
+			// informou e também o tipo de retorno que desejamos, podendo ser "xml", "piped", "querty" ou o que
+			// iremos utilizar, que é "json"
+			var url = "https://viacep.com.br/ws/"+cep+"/json/";
+				
+			// Aqui fazemos uma requisição ajax ao webservice, tratando o retorno com try/catch para que caso ocorra algum
+			// erro (o cep pode não existir, por exemplo) o usuário não seja afetado, assim ele pode continuar preenchendo os campos
+			$.getJSON(url, function(dadosRetorno){
+				try{
+					// Insere os dados em cada campo
+					$("#endereco").val(dadosRetorno.logradouro);
+					$("#bairro").val(dadosRetorno.bairro);
+					$("#cidade").val(dadosRetorno.localidade);
+					$("#uf").val(dadosRetorno.uf);
+					$("#num").focus();
+				}catch(ex){}
+			});
+		});
+	</script>
+{% endblock %}

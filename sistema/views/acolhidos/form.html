@@ -1,0 +1,806 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li><a href="{{path_for('listar_acolhidos')}}">Acolhidos</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                                <div class="col-xs-2">
+                                	<button class="btn btn-info btn-circle btn-lg pull-right" data-toggle="tooltip" title="Voltar para listagem" onClick="window.history.back();">
+                                		<i class="fa fa-chevron-left"></i>
+                                	</button>
+
+                                	<!-- <a href="#" class="">
+                                		<div class="circle-md pull-right circle bg-info mytooltip">
+                                			<i class="ti-plus"></i>
+                                			<span class="tooltip-content99">Novo registro</span>
+                                		</div>
+                                	</a> -->
+                                </div>
+                            </div>
+                            <div id="exampleValidator" class="wizard">
+                                <ul class="wizard-steps" role="tablist">
+                                    <li class="active" role="tab">
+                                        <h4><span><i class="mdi mdi-account-card-details"></i></span>Informações sobre o acolhido</h4> </li>
+                                    <li role="tab">
+                                        <h4><span><i class="mdi mdi-human-child"></i></span>Possui filhos</h4> </li>
+                                    <li role="tab">
+                                        <h4><span><i class="mdi mdi-map-marker"></i></span>Sua localização atual</h4> </li>
+                                    <li role="tab">
+                                        <h4><span><i class="mdi mdi-human-male-female"></i></span>Informações sobre pai e mãe</h4> </li>
+                                    <li role="tab">
+                                        <h4><span><i class="mdi mdi-account-multiple"></i></span>Contato principal</h4> </li>
+                                </ul>
+                                <form id="validation" class="form-horizontal">
+                                    <div class="wizard-content">
+                                        <div class="wizard-pane" role="tabpanel">
+                                            <div class="row form-group">
+                                            	<div class="col-md-4 col-sm-12">
+	                                                <label for="nome"><i class="fa fa-asterisk text-danger"></i> Nome completo</label>
+	                                                <input type="text" class="form-control" name="nome" id="nome" value="{{item.nome}}" /> 
+	                                            </div>
+	                                            <div class="col-md-2 col-sm-4">
+	                                                <label for="rg">RG</label>
+	                                                <input type="text" class="form-control" name="rg" id="rg" value="{{item.rg}}" /> 
+	                                            </div>
+	                                            <div class="col-md-3 col-sm-4">
+	                                                <label for="cpf">CPF</label>
+	                                                <input type="text" class="form-control cpfCnpjMask" name="cpf" id="cpf" value="{{item.cpf}}" maxlength="14" /> 
+	                                            </div>
+	                                            <div class="col-md-3 col-sm-4">
+	                                                <label for="data_nascimento"><i class="fa fa-asterisk text-danger"></i> Data de nascimento</label>
+	                                                <input type="date" class="form-control" name="data_nascimento" id="data_nascimento" /> 
+	                                            </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                            	<div class="col-md-4 col-sm-12">
+	                                                <label for="naturalidade">Naturalidade</label>
+	                                                <input type="text" class="form-control" name="naturalidade" id="naturalidade" value="{{item.naturalidade}}" /> 
+	                                            </div>
+	                                            <div class="col-md-1 col-sm-2">
+	                                                <label for="uf_naturalidade">UF</label>
+	                                                <input type="text" class="form-control" name="uf_naturalidade" id="uf_naturalidade" value="{{item.uf_naturalidade}}" /> 
+	                                            </div>
+	                                            <div class="col-md-2 col-sm-3">
+	                                                <label for="cad_unico">Cad. Único</label>
+	                                                <input type="text" class="form-control" name="cad_unico" id="cad_unico" value="{{item.cad_unico}}" /> 
+	                                            </div>
+	                                            <div class="col-md-2 col-sm-3">
+	                                                <label for="cartao_sus">Cartão SUS</label>
+	                                                <input type="text" class="form-control" name="cartao_sus" id="cartao_sus" value="{{item.cartao_sus}}" /> 
+	                                            </div>
+	                                            <div class="col-md-3 col-sm-4">
+	                                                <label for="pis">PIS</label>
+	                                                <input type="text" class="form-control" name="pis" id="pis" value="{{item.pis}}" /> 
+	                                            </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                            	<div class="col-md-12">
+	                                                <label>Cor / Raça</label> <br />
+	                                                <div class="radio">
+			                                            <input type="radio" name="cor_raca" id="cor_raca1" value="1" {% if item.cor_raca == 1 %} checked {% endif %}>
+			                                            <label for="cor_raca1"> Branca </label> <br />
+
+			                                            <input type="radio" name="cor_raca" id="cor_raca2" value="2" {% if item.cor_raca == 2 %} checked {% endif %}>
+			                                            <label for="cor_raca2"> Preta </label> <br />
+
+			                                            <input type="radio" name="cor_raca" id="cor_raca3" value="3" {% if item.cor_raca == 3 %} checked {% endif %}>
+			                                            <label for="cor_raca3"> Parda </label> <br />
+
+			                                            <input type="radio" name="cor_raca" id="cor_raca4" value="4" {% if item.cor_raca == 4 %} checked {% endif %}>
+			                                            <label for="cor_raca4"> Amarela (Asiático, Japonês) </label> <br />
+
+			                                            <input type="radio" name="cor_raca" id="cor_raca5" value="5" {% if item.cor_raca == 5 %} checked {% endif %}>
+			                                            <label for="cor_raca5"> Indígena </label> <br />
+
+			                                            <input type="radio" name="cor_raca" id="cor_raca6" value="6" {% if item.cor_raca == 6 %} checked {% endif %}>
+			                                            <label for="cor_raca6"> Outros </label> <br />
+			                                        </div>
+	                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="wizard-pane" role="tabpanel">
+                                            <div class="row form-group">
+                                                <div class="col-md-2">
+                                                	<label><i class="fa fa-asterisk text-danger"></i> Possui filhos?</label> <br />
+	                                                <div class="radio">
+			                                            <input type="radio" name="possui_filhos" id="sim" value="1" {% if item.possui_filhos == 1 %} checked {% endif %}>
+			                                            <label for="sim"> Sim </label> <br />
+
+			                                            <input type="radio" name="possui_filhos" id="nao" value="0" {% if item.possui_filhos == 0 %} checked {% endif %}>
+			                                            <label for="nao"> Não </label>
+			                                        </div>
+	                                            </div>
+
+	                                            {% if item.possui_filhos == 0 %}
+	                                            <div id="rowQuantidadeFilhos" style="display: none;">
+	                                            	<div class="col-md-3">
+	                                            		<label for="quantidadeFilhos"><i class="fa fa-asterisk text-danger"></i> Quantos?</label> <br />
+	                                            		<div class="input-group">
+	                                            			<input type="text" class="form-control" name="quantidadeFilhos" id="quantidadeFilhos" disabled="disabled">
+	                                            			<span class="input-group-btn">
+	                                            				<button type="button" class="btn btn-primary" id="btnAdicionar" disabled="disabled" />Continuar</button>
+	                                            			</span>
+	                                            		</div>
+	                                            	</div>
+
+	                                            	<div class="col-md-7"></div>
+
+	                                            	<div id="divForm" data-qtd="0">
+													</div>
+
+													<template id="tmplLinha">
+														<div class="col-lg-12">
+															<hr />
+														</div>
+														
+														<div class="col-md-4">
+															<label for="nome_filho">Nome</label>
+															<input type="text" class="form-control" id="nome_filho" name="filhos[nome][]">
+														</div>
+														<div class="col-md-4">
+															<label for="data_nascimento_filho">Data de nascimento</label>
+															<input type="text" class="form-control" id="data_nascimento_filho" name="filhos[data_nascimento][]" onkeyup="mascara( this, mdata );" maxlength="10">
+														</div>
+														<div class="col-md-4">
+															<label for="genero_filho">Gênero</label>
+															<select id="genero_filho" name="filhos[genero][]" class="form-control">
+																<option value="">SELECIONE</option>
+																<option value="masculino">Masculino</option>
+																<option value="feminino">Feminino</option>
+															</select>
+														</div>
+													</template>
+	                                            </div>
+	                                            {% endif %}
+
+	                                            {% if item.possui_filhos == 1 %}
+	                                            <div id="rowQuantidadeFilhos">
+	                                            	<div class="col-md-3">
+	                                            		<label for="quantidadeFilhos"><i class="fa fa-asterisk text-danger"></i> Quantos?</label> <br />
+	                                            		<div class="input-group">
+	                                            			<input type="text" class="form-control" name="quantidadeFilhos" id="quantidadeFilhos" value="{{quantidadeFilhos}}">
+	                                            			<span class="input-group-btn">
+	                                            				<button type="button" class="btn btn-primary" id="btnAdicionar" />Continuar</button>
+	                                            			</span>
+	                                            		</div>
+	                                            	</div>
+
+	                                            	<div class="col-md-7"></div>
+
+													{% for i in range(0, filhos) %}
+														<div class="col-lg-12">
+															<hr />
+														</div>
+														
+														<div class="col-md-4">
+															<label for="nome_filho">Nome</label>
+															<input type="text" class="form-control" id="nome_filho" name="filhos[nome][]" value="{{nome_filho[i]}}">
+														</div>
+														<div class="col-md-4">
+															<label for="data_nascimento_filho">Data de nascimento</label>
+															<input type="text" class="form-control" id="data_nascimento_filho" name="filhos[data_nascimento][]" onkeyup="mascara( this, mdata );" maxlength="10" value="{{data_nascimento_filho[i]}}">
+														</div>
+														<div class="col-md-4">
+															<label for="genero_filho">Gênero</label>
+															<select id="genero_filho" name="filhos[genero][]" class="form-control">
+																<option value="">SELECIONE</option>
+																<option value="masculino" {% if genero_filho[i] == 'masculino' %} selected {% endif %}>Masculino</option>
+																<option value="feminino" {% if genero_filho[i] == 'feminino' %} selected {% endif %}>Feminino</option>
+															</select>
+														</div>
+													{% endfor %}
+
+													<div id="divForm" data-qtd="{{quantidadeFilhos}}">
+													</div>
+
+													<template id="tmplLinha">
+														<div class="col-lg-12">
+															<hr />
+														</div>
+														
+														<div class="col-md-4">
+															<label for="nome_filho">Nome</label>
+															<input type="text" class="form-control" id="nome_filho" name="filhos[nome][]">
+														</div>
+														<div class="col-md-4">
+															<label for="data_nascimento_filho">Data de nascimento</label>
+															<input type="text" class="form-control" id="data_nascimento_filho" name="filhos[data_nascimento][]" onkeyup="mascara( this, mdata );" maxlength="10">
+														</div>
+														<div class="col-md-4">
+															<label for="genero_filho">Gênero</label>
+															<select id="genero_filho" name="filhos[genero][]" class="form-control">
+																<option value="">SELECIONE</option>
+																<option value="masculino">Masculino</option>
+																<option value="feminino">Feminino</option>
+															</select>
+														</div>
+													</template>
+	                                            </div>
+	                                            {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="wizard-pane" role="tabpanel">
+                                            <div class="row form-group">
+                                            	<div class="col-md-12">
+	                                            	<label for="situacao_rua">Situação de rua?</label> <br />
+	                                            	<div class="radio">
+				                                        <input type="radio" name="situacao_rua" id="situacao_rua_sim" value="1">
+				                                        <label for="situacao_rua_sim"> Sim </label> <br />
+
+				                                        <input type="radio" name="situacao_rua" id="situacao_rua_nao" value="0">
+				                                        <label for="situacao_rua_nao"> Não </label>
+				                                    </div>
+			                                	</div>
+                                            </div>
+
+                                            <div class="row form-group rowEndereco" style="display: none;">
+                                            	<div class="col-md-2">
+	                                                <label for="cep">CEP</label>
+	                                                <input type="text" class="form-control" name="cep" id="cep" value="{{item.cep}}" /> 
+	                                            </div>
+	                                            <div class="col-md-8">
+	                                                <label for="endereco">Endereço</label>
+	                                                <input type="text" class="form-control" name="endereco" id="endereco" value="{{item.endereco}}" /> 
+	                                            </div>
+	                                            <div class="col-md-2">
+	                                                <label for="num">Nº</label>
+	                                                <input type="text" class="form-control" name="num" id="num" value="{{item.num}}" /> 
+	                                            </div>
+                                            </div>
+
+                                            <div class="row form-group rowEndereco" style="display: none;">
+                                            	<div class="col-md-2">
+	                                                <label for="complemento">Complemento</label>
+	                                                <input type="text" class="form-control" name="complemento" id="complemento" value="{{item.complemento}}" /> 
+	                                            </div>
+	                                            <div class="col-md-4">
+	                                                <label for="bairro">Bairro</label>
+	                                                <input type="text" class="form-control" name="bairro" id="bairro" value="{{item.bairro}}" /> 
+	                                            </div>
+	                                            <div class="col-md-4">
+	                                                <label for="cidade">Cidade</label>
+	                                                <input type="text" class="form-control" name="cidade" id="cidade" value="{{item.cidade}}" /> 
+	                                            </div>
+	                                            <div class="col-md-2">
+	                                                <label for="uf">UF</label>
+	                                                <input type="text" class="form-control" name="uf" id="uf" value="{{item.uf}}" /> 
+	                                            </div>
+                                            </div>
+
+                                            <div class="row form-group" id="rowCidade" style="display: none;">
+	                                            <div class="col-md-4">
+	                                                <label for="cidade2">Cidade</label>
+	                                                <input type="text" class="form-control" name="cidade2" id="cidade2" value="{{item.cidade}}" /> 
+	                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="wizard-pane" role="tabpanel">
+                                            <div class="row form-group">
+                                            	<div class="col-md-6">
+	                                                <label for="nome_pai">Nome do Pai</label>
+	                                                <input type="text" class="form-control" name="nome_pai" id="nome_pai" value="{{item.nome_pai}}" /> 
+	                                            </div>
+	                                            <div class="col-md-3">
+	                                                <label for="data_nascimento_pai">Data de Nascimento</label>
+	                                                <input type="text" class="form-control" name="data_nascimento_pai" id="data_nascimento_pai" value="{{item.data_nascimento_pai}}" /> 
+	                                            </div>
+	                                            <div class="col-md-3">
+	                                                <label for="profissao_pai">Profissão</label>
+	                                                <input type="text" class="form-control" name="profissao_pai" id="profissao_pai" value="{{item.profissao_pai}}" /> 
+	                                            </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                            	<div class="col-md-6">
+	                                                <label for="nome_mae">Nome da Mãe</label>
+	                                                <input type="text" class="form-control" name="nome_mae" id="nome_mae" value="{{item.nome_mae}}" /> 
+	                                            </div>
+	                                            <div class="col-md-3">
+	                                                <label for="data_nascimento_mae">Data de Nascimento</label>
+	                                                <input type="text" class="form-control" name="data_nascimento_mae" id="data_nascimento_mae" value="{{item.data_nascimento_mae}}" /> 
+	                                            </div>
+	                                            <div class="col-md-3">
+	                                                <label for="profissao_mae">Profissão</label>
+	                                                <input type="text" class="form-control" name="profissao_mae" id="profissao_mae" value="{{item.profissao_mae}}" /> 
+	                                            </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                            	<div class="col-md-2">
+                                                	<label>Pais separados?</label> <br />
+	                                                <div class="radio">
+			                                            <input type="radio" name="pais_separados" id="pais_separados1" value="1" {% if item.pais_separados == 1 %} checked {% endif %}>
+			                                            <label for="pais_separados1"> Sim </label> <br />
+
+			                                            <input type="radio" name="pais_separados" id="pais_separados2" value="0" {% if item.pais_separados == 0 %} checked {% endif %}>
+			                                            <label for="pais_separados2"> Não </label>
+			                                        </div>
+	                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="wizard-pane" role="tabpanel">
+                                            <div class="row form-group">
+                                            	<div class="col-md-4 col-sm-8">
+	                                                <label for="nome_contato"><i class="fa fa-asterisk text-danger"></i> Nome completo</label>
+	                                                <input type="text" class="form-control" name="nome_contato" id="nome_contato" /> 
+	                                            </div>
+                                            	<div class="col-md-3 col-sm-4">
+	                                                <label for="grau_parentesco"><i class="fa fa-asterisk text-danger"></i> Grau de parentesco </label>
+	                                                <input type="text" class="form-control" name="grau_parentesco" id="grau_parentesco" /> 
+	                                            </div>
+	                                            <div class="col-md-2 col-sm-4">
+	                                                <label for="rg_contato">RG</label>
+	                                                <input type="text" class="form-control" name="rg_contato" id="rg_contato" /> 
+	                                            </div>
+	                                            <div class="col-md-3 col-sm-4">
+	                                                <label for="cpf_contato">CPF</label>
+	                                                <input type="text" class="form-control cpfCnpjMask" name="cpf_contato" id="cpf_contato" maxlength="14" /> 
+	                                            </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                            	<div class="col-md-3 col-sm-4">
+	                                                <label for="data_nascimento_contato">Data de nascimento</label>
+	                                                <input type="date" class="form-control" name="data_nascimento_contato" id="data_nascimento_contato" /> 
+	                                            </div>
+                                            	<div class="col-md-3 col-sm-3">
+	                                                <label for="telefone_contato">Telefone</label>
+	                                                <input type="text" class="form-control" name="telefone_contato" id="telefone_contato" onkeyup="mascara( this, mtel );" maxlength="14" /> 
+	                                            </div>
+                                            	<div class="col-md-3 col-sm-3">
+	                                                <label for="celular_contato">Celular</label>
+	                                                <input type="text" class="form-control" name="celular_contato" id="celular_contato" onkeyup="mascara( this, mtel );" maxlength="15" /> 
+	                                            </div>
+	                                            <div class="col-md-3 col-sm-6">
+	                                                <label for="email_contato">E-mail</label>
+	                                                <input type="email" class="form-control" name="email_contato" id="email_contato" /> 
+	                                            </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                            	<div class="col-md-2">
+	                                                <label for="cep_contato">CEP</label>
+	                                                <input type="text" class="form-control" name="cep_contato" id="cep_contato" value="{{item.cep}}" onkeyup="mascara( this, mcep );" maxlength="9" /> 
+	                                            </div>
+	                                            <div class="col-md-8">
+	                                                <label for="endereco_contato">Endereço</label>
+	                                                <input type="text" class="form-control" name="endereco_contato" id="endereco_contato" value="{{item.endereco}}" /> 
+	                                            </div>
+	                                            <div class="col-md-2">
+	                                                <label for="num_contato">Nº</label>
+	                                                <input type="text" class="form-control" name="num_contato" id="num_contato" value="{{item.num}}" /> 
+	                                            </div>
+                                            </div>
+
+                                            <div class="row form-group">
+                                            	<div class="col-md-2">
+	                                                <label for="complemento_contato">Complemento</label>
+	                                                <input type="text" class="form-control" name="complemento_contato" id="complemento_contato" value="{{item.complemento}}" /> 
+	                                            </div>
+	                                            <div class="col-md-4">
+	                                                <label for="bairro_contato">Bairro</label>
+	                                                <input type="text" class="form-control" name="bairro_contato" id="bairro_contato" value="{{item.bairro}}" /> 
+	                                            </div>
+	                                            <div class="col-md-4">
+	                                                <label for="cidade_contato">Cidade</label>
+	                                                <input type="text" class="form-control" name="cidade_contato" id="cidade_contato" value="{{item.cidade}}" /> 
+	                                            </div>
+	                                            <div class="col-md-2">
+	                                                <label for="uf_contato">UF</label>
+	                                                <input type="text" class="form-control" name="uf_contato" id="uf_contato" value="{{item.uf}}" /> 
+	                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- <input type="hidden" name="unidade" value="{{ session.Unidade }}"/> -->
+                                    <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                  					<input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- FormValidation -->
+    <link rel="stylesheet" href="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/libs/formvalidation/formValidation.min.css">
+
+	<style>
+		.form-group label 
+		{
+			margin-top: 10px;
+		}
+	</style>
+{% endblock %}
+
+
+{% block include_js %}
+	<!-- Form Wizard -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/dist/jquery-wizard.min.js"></script>
+    
+
+    <!-- FormValidation plugin and the class supports validating Bootstrap form -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/libs/formvalidation/formValidation.min.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-wizard-master/libs/formvalidation/bootstrap.min.js"></script>
+
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/custom-select/custom-select.min.js" type="text/javascript"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-select/bootstrap-select.min.js" type="text/javascript"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js" type="text/javascript"></script>
+	<script src="{{base_url()}}/public/assets/plugins/bower_components/multiselect/js/jquery.multi-select.js" type="text/javascript"></script>
+
+	<script src="{{base_url()}}/public/assets/js/mask.js"></script>
+	<script src="{{base_url()}}/public/assets/js/mascaras.js"></script>
+	<script src="{{base_url()}}/public/assets/js/cpfcnpjmask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.mask.min.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+	    (function() {
+	        $('#exampleValidator').wizard({
+	            onInit: function() {
+	                $('#validation').formValidation({
+	                    framework: 'bootstrap',
+	                    fields: {
+	                        nome: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: 'Insira o nome do acolhido'
+	                                },
+	                                stringLength: {
+	                                    min: 5,
+	                                    max: 50,
+	                                    message: 'O nome do acolhido deve conter no mínimo 5 e no máximo 50 caracteres'
+	                                },
+	                                regexp: {
+	                                    regexp: /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
+	                                    message: 'O nome do acolhido não pode conter números, pontos ou underlines'
+	                                }
+	                            }
+	                        },
+	                        nome_contato: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: 'Insira o nome do contato principal'
+	                                },
+	                                stringLength: {
+	                                    min: 5,
+	                                    max: 50,
+	                                    message: 'O nome do contato principal deve conter no mínimo 5 e no máximo 50 caracteres'
+	                                },
+	                                regexp: {
+	                                    regexp: /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
+	                                    message: 'O nome do contato principal não pode conter números, pontos ou underlines'
+	                                }
+	                            }
+	                        },
+	                        grau_parentesco: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: 'Insira o grau de parentesco com o acolhido'
+	                                },
+	                                stringLength: {
+	                                    min: 3,
+	                                    max: 50,
+	                                    message: 'O grau de parentesco deve conter no mínimo 3 e no máximo 50 caracteres'
+	                                },
+	                                regexp: {
+	                                    regexp: /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
+	                                    message: 'O grau de parentesco não pode conter números, pontos ou underlines'
+	                                }
+	                            }
+	                        },
+	                        // rg: {
+	                        //     validators: {
+	                        //         notEmpty: {
+	                        //             message: 'Insira o RG do acolhido'
+	                        //         },
+	                        //     }
+	                        // },
+	                        // cpf: {
+	                        //     validators: {
+	                        //         notEmpty: {
+	                        //             message: 'Insira o CPF do acolhido'
+	                        //         },
+	                        //     }
+	                        // },
+	                        data_nascimento: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: 'Formato: dia/mês/ano'
+	                                },
+	                            }
+	                        },
+	                        // data_nascimento_contato: {
+	                        //     validators: {
+	                        //         notEmpty: {
+	                        //             message: 'Formato: dia/mês/ano'
+	                        //         },
+	                        //     }
+	                        // },
+	                        // cor_raca: {
+	                        //     validators: {
+	                        //         notEmpty: {
+	                        //             message: 'Escolha uma das opções'
+	                        //         },
+	                        //     }
+	                        // },
+	                        possui_filhos: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: 'Escolha uma das opções'
+	                                },
+	                            }
+	                        },
+	                        quantidadeFilhos: {
+	                            validators: {
+	                                notEmpty: {
+	                                    message: 'Insira a quantidade e aperte em CONTINUAR'
+	                                },
+	                                regexp: {
+	                                    regexp: /^([1-9][0-9]{0,1}|99)$/,
+	                                    message: 'Apenas números entre 1 e 99 são permitidos'
+	                                }
+	                            }
+	                        },
+	                    }
+	                });
+	            },
+	            validator: function() {
+	                var fv = $('#validation').data('formValidation');
+	                var $this = $(this);
+	                // Validate the container
+	                fv.validateContainer($this);
+	                var isValidStep = fv.isValidContainer($this);
+	                if (isValidStep === false || isValidStep === null) {
+	                    return false;
+	                }
+	                return true;
+	            },
+	            onFinish: function() {
+	                // $('#validation').submit(function (e) {
+
+	                	var csrf_name = $('input[name="csrf_name"]').val();
+	                	var csrf_value = $('input[name="csrf_value"]').val();
+	                	var nome = $('input[name="nome"]').val();
+	                	var rg = $('input[name="rg"]').val();
+	                	var cpf = $('input[name="cpf"]').val();
+	                	var data_nascimento = $('input[name="data_nascimento"]').val();
+	                	var naturalidade = $('input[name="naturalidade"]').val();
+	                	var uf_naturalidade = $('input[name="uf_naturalidade"]').val();
+	                	var cad_unico = $('input[name="cad_unico"]').val();
+	                	var cartao_sus = $('input[name="cartao_sus"]').val();
+	                	var pis = $('input[name="pis"]').val();
+	                	var cor_raca = $('input[name="cor_raca"]:checked').val();
+	                	var possui_filhos = $('input[name="possui_filhos"]:checked').val();
+	                	var filhos = $('input[name="possui_filhos"]:checked').val();
+
+	                	// var dataString = 'nome=' + nome + '&rg=' + rg + '&cpf=' + cpf + '&data_nascimento=' + data_nascimento + '&naturalidade=' + naturalidade + '&uf_naturalidade=' + uf_naturalidade + '&cad_unico=' + cad_unico + '&cartao_sus=' + cartao_sus + '&pis=' + pis + '&cor_raca=' + cor_raca + '&possui_filhos=' + possui_filhos + '&csrf_name=' + csrf_name + '&csrf_value=' + csrf_value;
+
+	                	var dataString = $("#validation").serialize();
+
+	                	// alert(dataString);
+
+	                	$.ajax({
+				            type: "POST",
+				            url: "{{path_for('post_cadastrar_acolhido')}}",
+				            data: dataString,
+				            success: function(data) {
+				            	// swal("Good job!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.", "success");
+				            	swal({   
+						            title: "Dados gravados!",   
+						            text: "E agora, qual será seu próximo passo...?",   
+						            type: "success",
+						            showCancelButton: true,   
+						            // confirmButtonColor: "#DD6B55",
+						            confirmButtonText: "Iniciar acolhimento",   
+						            cancelButtonText: "Acolhidos",   
+						            closeOnConfirm: false,   
+						            closeOnCancel: false 
+						        }, function(isConfirm){   
+						            if (isConfirm) {     
+						                window.location.href='{{path_for('acolhimentos')}}?openmodal='+data  
+						            } else {     
+						                window.location.href='{{path_for('listar_acolhidos')}}'  
+						            } 
+						        });
+				            	
+				            },
+				            error: function() {
+				            	swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+				            }
+				        });
+	                // });
+	                // swal("Good job!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.", "success")
+	            }
+	        });
+	    })();
+    </script>
+
+    <script type="text/javascript">
+		var quantidadeFilhos = document.getElementById("quantidadeFilhos");
+		var btnAdicionar = document.getElementById("btnAdicionar");
+		var divForm = document.getElementById("divForm");
+		var tmplLinha = document.getElementById("tmplLinha").content;
+
+		btnAdicionar.addEventListener("click", function () {
+			var quantidade = {};
+			quantidade.old = parseInt(divForm.dataset.qtd) || 0;
+			quantidade.new = parseInt(quantidadeFilhos.value) || 0;
+
+			//adicionar novas linhas
+			if (quantidade.new > quantidade.old) {
+				for (var indice = quantidade.old; indice < quantidade.new; indice++) {
+					var linha = document.importNode(tmplLinha, true);
+					var inputs = linha.querySelectorAll("input[id]");
+
+					[].forEach.call(inputs, function (input){    
+						input.id = input.id + indice;
+					});
+					divForm.appendChild(linha);
+				}
+			} 
+
+			//remover linhas excedentes
+			if (quantidade.new < quantidade.old) {
+				var linhas = [].slice.call(divForm.children, quantidade.new);
+				linhas.forEach(function (linha, indice) {
+					divForm.removeChild(linha);    
+				});
+			}
+
+			divForm.dataset.qtd = quantidade.new;
+		});
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#cad_unico').mask('000 0000 0000 0000');
+			$('#cartao_sus').mask('000 0000 0000 0000');
+			$('#pis').mask('000.00000.00-0');
+
+			$("input[type=radio]").bind("click", function(){
+				// Possui filhos? Sim/Não
+				if($("input[name='possui_filhos']:checked").val() == "1") {
+					$("#rowQuantidadeFilhos").css("display", "block");
+					$("#quantidadeFilhos").attr("disabled", false);
+					$("#btnAdicionar").attr("disabled", false);
+				}
+				if($("input[name='possui_filhos']:checked").val() == "0") {
+					$("#rowQuantidadeFilhos").css("display", "none");
+					$("#quantidadeFilhos").attr("disabled", true);
+					$("#btnAdicionar").attr("disabled", true);
+				}
+
+				// Situação de rua? Sim/Não
+				if($("input[name='situacao_rua']:checked").val() == "1") {
+					$(".rowEndereco").css("display", "none");
+					$("#rowCidade").css("display", "block");
+				}
+				if($("input[name='situacao_rua']:checked").val() == "0") {
+					$(".rowEndereco").css("display", "block");
+					$("#rowCidade").css("display", "none");
+				}
+			});
+
+		});
+	</script>
+
+
+    <script type="text/javascript">
+		// Registra o evento blur do campo "cep", ou seja, quando o usuário sair do campo "cep" faremos a consulta dos dados
+		$("#cep").blur(function(){
+			// Para fazer a consulta, removemos tudo o que não é número do valor informado pelo usuário
+			var cep = this.value.replace(/[^0-9]/, "");
+				
+			// Validação do CEP; caso o CEP não possua 8 números, então cancela a consulta
+			if(cep.length!=8){
+				return false;
+			}
+				
+			// Utilizamos o webservice "viacep.com.br" para buscar as informações do CEP fornecido pelo usuário.
+			// A url consiste no endereço do webservice ("http://viacep.com.br/ws/"), mais o cep que o usuário
+			// informou e também o tipo de retorno que desejamos, podendo ser "xml", "piped", "querty" ou o que
+			// iremos utilizar, que é "json"
+			var url = "https://viacep.com.br/ws/"+cep+"/json/";
+				
+			// Aqui fazemos uma requisição ajax ao webservice, tratando o retorno com try/catch para que caso ocorra algum
+			// erro (o cep pode não existir, por exemplo) o usuário não seja afetado, assim ele pode continuar preenchendo os campos
+			$.getJSON(url, function(dadosRetorno){
+				try{
+					// Insere os dados em cada campo
+					$("#endereco").val(dadosRetorno.logradouro);
+					$("#bairro").val(dadosRetorno.bairro);
+					$("#cidade").val(dadosRetorno.localidade);
+					$("#uf").val(dadosRetorno.uf);
+					$("#num").focus();
+				}catch(ex){}
+			});
+		});
+	</script>
+
+    <script type="text/javascript">
+		// Registra o evento blur do campo "cep", ou seja, quando o usuário sair do campo "cep" faremos a consulta dos dados
+		$("#cep_contato").blur(function(){
+			// Para fazer a consulta, removemos tudo o que não é número do valor informado pelo usuário
+			var cep = this.value.replace(/[^0-9]/, "");
+				
+			// Validação do CEP; caso o CEP não possua 8 números, então cancela a consulta
+			if(cep.length!=8){
+				return false;
+			}
+				
+			// Utilizamos o webservice "viacep.com.br" para buscar as informações do CEP fornecido pelo usuário.
+			// A url consiste no endereço do webservice ("http://viacep.com.br/ws/"), mais o cep que o usuário
+			// informou e também o tipo de retorno que desejamos, podendo ser "xml", "piped", "querty" ou o que
+			// iremos utilizar, que é "json"
+			var url = "https://viacep.com.br/ws/"+cep+"/json/";
+				
+			// Aqui fazemos uma requisição ajax ao webservice, tratando o retorno com try/catch para que caso ocorra algum
+			// erro (o cep pode não existir, por exemplo) o usuário não seja afetado, assim ele pode continuar preenchendo os campos
+			$.getJSON(url, function(dadosRetorno){
+				try{
+					// Insere os dados em cada campo
+					$("#endereco_contato").val(dadosRetorno.logradouro);
+					$("#bairro_contato").val(dadosRetorno.bairro);
+					$("#cidade_contato").val(dadosRetorno.localidade);
+					$("#uf_contato").val(dadosRetorno.uf);
+					$("#num_contato").focus();
+				}catch(ex){}
+			});
+		});
+	</script>
+{% endblock %}

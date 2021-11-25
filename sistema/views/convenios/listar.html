@@ -1,0 +1,331 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                </div>
+                                <div class="col-xs-2">
+                                    {% if acesso_usuario.convenios.index.c == 'on' %}
+                                    <span data-toggle="modal" data-target="#adicionar-convenio">
+                                    	<button class="btn btn-info btn-circle btn-lg pull-right" data-toggle="tooltip" title="Novo Registro">
+                                    		<i class="fa fa-plus"></i>
+                                    	</button>
+                                    </span>
+                                    {% endif %}
+
+                                    <!-- /.modal add convenio -->
+                                    <div id="adicionar-convenio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    <h4 class="modal-title">Novo convênio</h4>
+                                                </div>
+                                                <form name="adicionar-convenio" id="validation" data-toggle="validator" novalidate="true" method="POST">
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="nome">Nome</label>
+                                                            <input type="text" class="form-control" name="nome" id="nome" required="">
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col-md-6">
+                                                                <label for="vagas">Vagas Ofertadas</label>
+                                                                <input type="number" class="form-control" name="vagas" id="vagas" required="">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="valor">Valor por Vaga</label>
+                                                                <input type="text" class="form-control dinheiro" name="valor" id="valor" required="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                                        <button type="button" class="btn btn-success" id="submit-adicionar-convenio">Adicionar registro</button>
+                                                    </div>
+                                                    <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                    <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                	<!-- <a href="#" class="">
+                                		<div class="circle-md pull-right circle bg-info mytooltip">
+                                			<i class="ti-plus"></i>
+                                			<span class="tooltip-content99">Novo registro</span>
+                                		</div>
+                                	</a> -->
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-responsive table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Valor por Vaga</th>
+                                            <th>Vagas Ofertadas</th>
+                                            <th>Ocupadas</th>
+                                            <th>Disponíveis</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in itens %}
+                                        <tr id="{{i.id}}">
+                                            <td>{{ i.nome }}</td>
+                                            <td>R${{ i.valor|number_format(2, ',', '.') }}</td>
+                                            <td>{{ i.vagas }}</td>
+                                            <td>{{ vagas_ocupadas[i.id] }}</td>
+                                            <td>
+                                                <div class="label label-info">{{ i.vagas - vagas_ocupadas[i.id] }}</div>
+                                            </td>
+                                            <td>
+                                                <a href="{{path_for('convenio_acolhimento', {'convenio' : i.id})}}" data-toggle="tooltip" title="Listar acolhidos" class="btn btn-success"><i class="fa fa-users"></i></a>
+
+                                                {% if acesso_usuario.convenios.index.u == 'on' %}                                                
+                                                <span data-toggle="tooltip" title="Editar"><a href="#" data-toggle="modal" data-target="#editar-convenio-{{i.id}}" class="btn btn-primary"><i class="fa fa-edit"></i></a></span>
+                                                {% endif %}
+                                                
+                                                {% if acesso_usuario.convenios.index.d == 'on' %}                                                
+                                                <span data-toggle="tooltip" title="Remover"><a href="#" class="btn btn-danger remover-{{ i.id }}"><i class="fa fa-trash-o"></i></a></span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+
+                                        <!-- /.modal editar convenios -->
+                                        <div id="editar-convenio-{{i.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                        <h4 class="modal-title">Editar convênio - {{i.nome}}</h4>
+                                                    </div>
+                                                    <form name="editar-convenio-{{i.id}}" id="validation" data-toggle="validator" novalidate="true" method="POST">
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label for="nome">Nome</label>
+                                                                <input type="text" class="form-control" name="nome" id="nome" value="{{i.nome}}" required="">
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col-md-6">
+                                                                    <label for="vagas">Vagas Ofertadas</label>
+                                                                    <input type="number" class="form-control" name="vagas" id="vagas" value="{{i.vagas}}" required="">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="valor">Valor por Vaga</label>
+                                                                    <input type="text" class="form-control dinheiro" name="valor" id="valor" value="{{i.valor}}" required="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                                            <button type="button" class="btn btn-primary" id="submit-editar-convenio-{{i.id}}">Salvar</button>
+                                                        </div>
+                                                        <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                        <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- Data Tables -->
+	<link href="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+{% endblock %}
+
+
+{% block include_js %}
+    <!--Data Tables -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/datatables/jquery.dataTables.min.js"></script>
+    <!-- start - This is for export functionality only -->
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- end - This is for export functionality only -->
+
+    <!-- Form Validator  -->
+    <script src="{{base_url()}}/public/assets/js/validator.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+
+        (function() {
+            $('#submit-adicionar-convenio').click( function(){
+                var dataString = $('form[name="adicionar-convenio"]').serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{path_for('post_cadastrar_convenio')}}",
+                    data: dataString,
+                    success: function() {
+                        swal({   
+                            title: "Dados gravados!",   
+                            text: "Convênio adicionado com sucesso.",   
+                            type: "success",
+                            // confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Continuar",   
+                            closeOnConfirm: false,   
+                        }, function(isConfirm){
+                            if(isConfirm){
+                                location.reload();
+                            }
+                        });
+                    },
+                    error: function() {
+                        swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+                    }
+                });
+
+                return false;
+            });
+
+            {% for i in itens %}
+            $('#submit-editar-convenio-{{i.id}}').click( function(){
+                var dataString = $('form[name="editar-convenio-{{i.id}}"]').serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{path_for('post_editar_convenio', { 'id' : i.id })}}",
+                    data: dataString,
+                    success: function() {
+                        swal({   
+                            title: "Dados gravados!",   
+                            text: "Convênio editado com sucesso.",   
+                            type: "success",
+                            // confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Continuar",   
+                            closeOnConfirm: false,   
+                        }, function(isConfirm){
+                            if(isConfirm){
+                                location.reload();
+                            }
+                        });
+                    },
+                    error: function() {
+                        swal("Ooopssss!", "Algo deu errado e não consegui gravar os dados no sistema ;'(", "error")
+                    }
+                });
+            });
+            {% endfor %}
+        })();
+
+        $(document).ready(function() {
+            $("input.dinheiro").maskMoney({showSymbol:true, symbol:"R$", decimal:".", thousands:""});
+
+            {% for i in itens %}
+            $('.remover-{{ i.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e todos os dados deste convênio serão deletados!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_convenio', { 'id' : i.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function() {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "Todos os dados deste convênio foram excluídos.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        $('#{{i.id}}').remove();
+                                    }
+                                 );
+                            },
+                            error: function() {
+                                swal("Ooopssss!", "Algo deu errado e não consegui deletar os dados do sistema ;'(", "error")
+                            }
+                        });
+                    } else {     
+                        swal("Cancelado!", "Os dados deste convênio estão a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+        });
+    </script>
+
+    <script>
+	    $(document).ready(function() {
+	        $('#myTable').DataTable();
+	    });
+	</script>
+
+    
+{% endblock %}

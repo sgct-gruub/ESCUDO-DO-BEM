@@ -1,0 +1,268 @@
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <nav class="navbar navbar-default navbar-static-top m-b-0">
+            <div class="navbar-header">
+                <div class="top-left-part">
+                    <!-- Logo -->
+                    <a class="logo" href="{{path_for('home')}}">
+                        <!-- Logo icon image, you can use font-icon also --><b>
+                        <!--This is dark logo icon-->
+                        <img src="{{base_url()}}/public/assets/images/admin-logo2.png" alt="home" class="dark-logo" />
+                        <!--This is light logo icon-->
+                        <img src="{{base_url()}}/public/assets/images/admin-logo-dark.png" alt="home" class="light-logo" />
+                     </b>
+                        <!-- Logo text image you can use text also --><span class="hidden-xs">
+                        <!--This is dark logo text-->
+                        <!-- <img src="{{base_url()}}/public/assets/images/admin-text.png" alt="home" class="dark-logo" /> -->
+                        <!--This is light logo text-->
+                        <!-- <img src="{{base_url()}}/public/assets/images/admin-text-dark.png" alt="home" class="light-logo" /> -->
+                        <font style="color: #2F323E; text-align: center;">SGCT <strong>Gruub</strong></font>
+                     </span> </a>
+                </div>
+                <!-- /Logo -->
+                <!-- Search input and Toggle icon -->
+                <ul class="nav navbar-top-links navbar-left">
+                    <li>
+                        <a href="javascript:void(0)" class="open-close waves-effect waves-light">
+                            <i class="ti-menu"></i>
+                        </a>
+                    </li>
+                    
+                    <li class="dropdown">
+                        <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#">
+                            <i class="mdi mdi-home"></i>
+                            {% if session.Unidade == '' %}
+                                <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                            {% else %}
+                                &nbsp; {{nome_unidade[session.Unidade].nome}}
+                                <div class="notify"><span class=""></span><span class="point" style="background: none;"></span></div>
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu dropdown-tasks animated slideInUp">
+                            {% for unidade in topbar.unidades %}
+                            {% set porcentagem_vagas_ocupadas = vagas_ocupadas_unidade[unidade.id] * 100 / vagas[unidade.id] %}
+                            {% set porcentagem_vagas_ocupadas = porcentagem_vagas_ocupadas|number_format(2) %}
+
+                            {% if porcentagem_vagas_ocupadas > 0 and porcentagem_vagas_ocupadas < 50 %}
+                            {% set progress_bar = 'progress-bar-primary' %}
+                            {% endif %}
+
+                            {% if porcentagem_vagas_ocupadas > 50 and porcentagem_vagas_ocupadas < 75 %}
+                            {% set progress_bar = 'progress-bar-success' %}
+                            {% endif %}
+
+                            {% if porcentagem_vagas_ocupadas > 75 and porcentagem_vagas_ocupadas < 100 %}
+                            {% set progress_bar = 'progress-bar-warning' %}
+                            {% endif %}
+
+                            {% if porcentagem_vagas_ocupadas >= 100 %}
+                            {% set progress_bar = 'progress-bar-danger' %}
+                            {% endif %}
+                            <li {% if session.Unidade == unidade.id %} style="background: #F7FAFC" {% endif %}>
+                                {% if session.Unidade == unidade.id %}
+                                <a href="#" class="sair-{{ unidade.id }}" data-toggle="tooltip" data-placement="right" title="Sair da unidade">
+                                    <div>
+                                        <p> <strong>{{unidade.nome}}</strong> <span class="pull-right text-muted">{{porcentagem_vagas_ocupadas}}%</span> </p>
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar {{progress_bar}}" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{porcentagem_vagas_ocupadas}}%"></div>
+                                        </div>
+                                    </div>
+                                </a>
+                                {% else %}
+                                <a href="#" class="acessar-{{ unidade.id }}" data-toggle="tooltip" data-placement="right" title="Acessar unidade">
+                                    <div>
+                                        <p> <strong>{{unidade.nome}}</strong> <span class="pull-right text-muted">{{porcentagem_vagas_ocupadas}}%</span> </p>
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar {{progress_bar}}" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{porcentagem_vagas_ocupadas}}%"></div>
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endif %}
+                            </li>
+                            <li class="divider"></li>
+                            {% endfor %}
+                            <li>
+                                <a class="text-center" href="{{path_for('unidades')}}"> <strong>Gerenciar Unidades </strong> <i class="fa fa-angle-right"></i> </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    {% if session.Unidade != '' %}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#"> <i class="mdi mdi-hotel"></i>
+                            &nbsp; Quartos
+                            <div class="notify">
+                            </div>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-tasks animated slideInUp">
+                            {% for quarto in topbar.quartos %}
+                            {% set porcentagem_vagas_ocupadas_quarto = vagas_ocupadas_quarto[quarto.id] * 100 / vagas_quarto[quarto.id] %}
+                            {% set porcentagem_vagas_ocupadas_quarto = porcentagem_vagas_ocupadas_quarto|number_format(2) %}
+
+                            {% if porcentagem_vagas_ocupadas_quarto > 0 and porcentagem_vagas_ocupadas_quarto < 50 %}
+                            {% set progress_bar = 'progress-bar-primary' %}
+                            {% endif %}
+
+                            {% if porcentagem_vagas_ocupadas_quarto > 50 and porcentagem_vagas_ocupadas_quarto < 75 %}
+                            {% set progress_bar = 'progress-bar-success' %}
+                            {% endif %}
+
+                            {% if porcentagem_vagas_ocupadas_quarto > 75 and porcentagem_vagas_ocupadas_quarto < 100 %}
+                            {% set progress_bar = 'progress-bar-warning' %}
+                            {% endif %}
+
+                            {% if porcentagem_vagas_ocupadas_quarto >= 100 %}
+                            {% set progress_bar = 'progress-bar-danger' %}
+                            {% endif %}
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <p> <strong>{{quarto.nome}}</strong> <span class="pull-right text-muted">{{porcentagem_vagas_ocupadas_quarto}}%</span> </p>
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar {{progress_bar}}" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{porcentagem_vagas_ocupadas_quarto}}%"></div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            {% endfor %}
+                            <li>
+                                <a class="text-center" href="{{path_for('quartos_unidade')}}"> <strong>Gerenciar Quartos </strong> <i class="fa fa-angle-right"></i> </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% endif %}
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#"> <i class="mdi mdi-email"></i> Mensagens
+                            <div class="notify"> </div>
+                        </a>
+                        <ul class="dropdown-menu mailbox animated bounceInDown">
+                            <li>
+                            	{% if topbar.count_mensagens > 0 and topbar.count_mensagens > 1 %}
+                            	{% set count_mensagens = 'Você tem' ~ topbar.count_mensagens ~ 'mensagens não lidas' %}
+                            	{% else %}
+                            	{% set count_mensagens = 'Nenhuma nova mensagem' %}
+                            	{% endif %}
+                                <div class="drop-title">{{count_mensagens}}</div>
+                            </li>
+                            <li>
+                                <div class="message-center">
+                                	{% for m in mensagens %}
+                                    <a href="{{path_for('ler_mensagem', {'id' : m.id})}}">
+                                        <div class="mail-contnet">
+                                            <h5>{{remetente[m.id].name}}</h5> 
+                                            <span class="mail-desc">{{m.mensagem}}</span>
+                                            <span class="time">{{created_at|date('d/m/Y')}}</span>
+                                        </div>
+                                    </a>
+                                    {% endfor %}                                 
+                                </div>
+                            </li>
+                            <li>
+                                <a class="text-center" href="{{path_for('mensagens')}}"> <strong>Ver todas as mensagens</strong> <i class="fa fa-angle-right"></i> </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="waves-effect waves-light" data-toggle="modal" data-target="#nova-mensagem"> <i class="mdi mdi-email"></i> Nova mensagem
+                            <div class="notify">
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- .Megamenu --
+                    <li class="mega-dropdown"> <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#"><span class="hidden-xs">Mega</span> <i class="icon-options-vertical"></i> <span class="label label-rouded label-success">novo</span></a>
+                        <ul class="dropdown-menu mega-dropdown-menu animated bounceInDown">
+                            <li class="col-sm-3">
+                                <ul>
+                                    <li class="dropdown-header">Forms Elements</li>
+                                    <li><a href="form-basic.html">Basic Forms</a></li>
+                                    <li><a href="form-layout.html">Form Layout</a></li>
+                                    <li><a href="form-advanced.html">Form Addons</a></li>
+                                    <li><a href="form-material-elements.html">Form Material</a></li>
+                                    <li><a href="form-float-input.html">Form Float Input</a></li>
+                                    <li><a href="form-upload.html">File Upload</a></li>
+                                    <li><a href="form-mask.html">Form Mask</a></li>
+                                    <li><a href="form-img-cropper.html">Image Cropping</a></li>
+                                    <li><a href="form-validation.html">Form Validation</a></li>
+                                </ul>
+                            </li>
+                            <li class="col-sm-3">
+                                <ul>
+                                    <li class="dropdown-header">Advance Forms</li>
+                                    <li><a href="form-dropzone.html">File Dropzone</a></li>
+                                    <li><a href="form-pickers.html">Form-pickers</a></li>
+                                    <li><a href="form-wizard.html">Form-wizards</a></li>
+                                    <li><a href="form-typehead.html">Typehead</a></li>
+                                    <li><a href="form-xeditable.html">X-editable</a></li>
+                                    <li><a href="form-summernote.html">Summernote</a></li>
+                                    <li><a href="form-bootstrap-wysihtml5.html">Bootstrap wysihtml5</a></li>
+                                    <li><a href="form-tinymce-wysihtml5.html">Tinymce wysihtml5</a></li>
+                                </ul>
+                            </li>
+                            <li class="col-sm-3">
+                                <ul>
+                                    <li class="dropdown-header">Table Example</li>
+                                    <li><a href="basic-table.html">Basic Tables</a></li>
+                                    <li><a href="table-layouts.html">Table Layouts</a></li>
+                                    <li><a href="data-table.html">Data Table</a></li>
+                                    <li><a href="bootstrap-tables.html">Bootstrap Tables</a></li>
+                                    <li><a href="responsive-tables.html">Responsive Tables</a></li>
+                                    <li><a href="editable-tables.html">Editable Tables</a></li>
+                                    <li><a href="foo-tables.html">FooTables</a></li>
+                                    <li><a href="jsgrid.html">JsGrid Tables</a></li>
+                                </ul>
+                            </li>
+                            <li class="col-sm-3">
+                                <ul>
+                                    <li class="dropdown-header">Charts</li>
+                                    <li> <a href="flot.html">Flot Charts</a> </li>
+                                    <li><a href="morris-chart.html">Morris Chart</a></li>
+                                    <li><a href="chart-js.html">Chart-js</a></li>
+                                    <li><a href="peity-chart.html">Peity Charts</a></li>
+                                    <li><a href="knob-chart.html">Knob Charts</a></li>
+                                    <li><a href="sparkline-chart.html">Sparkline charts</a></li>
+                                    <li><a href="extra-charts.html">Extra Charts</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- /.Megamenu -->
+                </ul>
+                <ul class="nav navbar-top-links navbar-right pull-right">
+                    <!-- <li>
+                        <form role="search" class="app-search hidden-sm hidden-xs m-r-10">
+                            <input type="text" placeholder="Procurar..." class="form-control"> <a href=""><i class="fa fa-search"></i></a> </form>
+                    </li> -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#">
+                            <!-- <img src="{{base_url()}}/public/assets/images/users/varun.jpg" alt="user-img" width="36" class="img-circle"> -->
+                            <b class="hidden-xs">{{session.UserName}}</b><span class="caret"></span> </a>
+                        <ul class="dropdown-menu dropdown-user animated flipInY">
+                            <li>
+                                <div class="dw-user-box">
+                                    <!-- <div class="u-img"><img src="{{base_url()}}/public/assets/images/users/varun.jpg" alt="user" /></div> -->
+                                    <div class="u-text">
+                                        <h4>{{session.UserName}}</h4>
+                                        <p class="text-muted"><small>{{session.UserEmail}}</small></p><a href="#" class="btn btn-rounded btn-danger btn-sm">Editar Perfil</a></div>
+                                </div>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#"><i class="ti-user"></i> Meu Perfil</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{path_for('logout')}}"><i class="fa fa-power-off"></i> Logout</a></li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                    <!-- /.dropdown -->
+                </ul>
+            </div>
+            <!-- /.navbar-header -->
+            <!-- /.navbar-top-links -->
+            <!-- /.navbar-static-side -->
+        </nav>
+        <!-- End Top Navigation -->

@@ -1,0 +1,1779 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina_Mae}} {{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="list-group">
+                            <a href="{{path_for('config')}}" class="list-group-item {% if view == 'listar' %}active{% endif %}">Instituição</a>
+                            <a href="{{path_for('config_cronograma_atividades')}}" class="list-group-item {% if view == 'cronograma_atividades' %}active{% endif %}">Cronograma de atividades</a>
+                            <a href="{{path_for('config_usuarios')}}" class="list-group-item {% if view == 'usuarios' %}active{% endif %}">Grupos de usuários</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h2 class="font-medium m-t-0">{{titulo}}</h2>
+                                    <h5 class="text-muted m-b-40">{{subtitulo}}</h5>
+                                    <hr class="m-b-30" />
+                                </div>
+                            </div>
+
+                            {% if view == 'listar' %}
+                            <form action="{{path_for('salvar_config')}}" data-toggle="validator" method="POST" enctype="multipart/form-data">
+                                <div class="row form-group">
+                                    <div class="col-sm-4">
+                                        <label for="cnpj" class="control-label"><i class="fa fa-asterisk text-danger"></i> CNPJ</label>
+                                        <input type="text" class="form-control" name="cnpj" id="cnpj" value="{{item.cnpj}}" placeholder="00.000.000/0000-00" required /> 
+                                    </div>
+
+                                    <div class="col-sm-8">
+                                        <label for="razao_social" class="control-label"><i class="fa fa-asterisk text-danger"></i> Razão Social</label>
+                                        <input type="text" class="form-control" name="razao_social" id="razao_social" value="{{item.razao_social}}" placeholder="Minha Comunidade Terapêutica" required /> 
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-8">
+                                        <label for="nome_fantasia" class="control-label"><i class="fa fa-asterisk text-danger"></i> Nome Fantasia</label>
+                                        <input type="text" class="form-control" name="nome_fantasia" id="nome_fantasia" value="{{item.nome_fantasia}}" placeholder="Comunidade Terapêutica" required /> 
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label for="tempo_tratamento" class="control-label"><i class="fa fa-asterisk text-danger"></i> Tempo de tratamento</label>
+                                        <input type="number" class="form-control" name="tempo_tratamento" id="tempo_tratamento" value="{{item.tempo_tratamento}}" placeholder="Em meses" required /> 
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-md-3">
+                                        <label for="cep">CEP</label>
+                                        <input type="text" class="form-control" name="cep" id="cep" value="{{item.cep}}" /> 
+                                    </div>
+                                    <div class="col-md-7">
+                                        <label for="endereco">Endereço</label>
+                                        <input type="text" class="form-control" name="endereco" id="endereco" value="{{item.endereco}}" /> 
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="num">Nº</label>
+                                        <input type="text" class="form-control" name="num" id="num" value="{{item.num}}" /> 
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-md-3">
+                                        <label for="complemento">Complemento</label>
+                                        <input type="text" class="form-control" name="complemento" id="complemento" value="{{item.complemento}}" /> 
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="bairro">Bairro</label>
+                                        <input type="text" class="form-control" name="bairro" id="bairro" value="{{item.bairro}}" /> 
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="cidade">Cidade</label>
+                                        <input type="text" class="form-control" name="cidade" id="cidade" value="{{item.cidade}}" /> 
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="uf">UF</label>
+                                        <input type="text" class="form-control" name="uf" id="uf" value="{{item.uf}}" /> 
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-6">
+                                        <label for="logo" class="control-label">Logo &nbsp;<i class="fa fa-info-circle" data-toggle="tooltip" title="Aparecerá no login e algumas outras seções do sistema" data-placement="right"></i></label>
+                                        <input type="file" name="logo" id="logo" class="dropify" data-height="250" data-default-file="{{base_url()}}/public/uploads/config/logo/{{item.logo}}">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="timbre" class="control-label">Timbre/Cabeçalho &nbsp;<i class="fa fa-info-circle" data-toggle="tooltip" title="Aparecerá em todos os arquivos .PDF gerados pelo sistema" data-placement="right"></i></label>
+                                        <input type="file" name="timbre" id="timbre" class="dropify" data-height="250" data-default-file="{{base_url()}}/public/uploads/config/timbre/{{item.timbre}}">
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <hr />
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <button type="submit" name="salvar" class="btn btn-rounded btn-success m-t-10"><i class="fa fa-check"></i> &nbsp;Salvar</button>
+                                        <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                        <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                    </div>
+                                </div>
+                            </form>
+                            {% endif %}
+
+                            {% if view == 'cronograma_atividades' %}
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-responsive table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Atividade</th>
+                                            <th>Período</th>
+                                            <th>
+                                                <span data-toggle="modal" data-target="#adicionar-atividade">
+                                                    <button class="btn btn-info btn-circle btn-sm pull-right" data-toggle="tooltip" title="Novo Registro">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- {% for i in itens %}
+                                        {% if i.grupo != 0 %}
+                                        <tr>
+                                            <td colspan="2">{{grupo[i.grupo].nome}}</td>
+                                            <td align="right">
+                                                <span data-toggle="tooltip" title="Editar">
+                                                    <a href="#" data-toggle="modal" data-target="#editar-grupo-{{i.grupo}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                                                </span>
+                                                <span data-toggle="tooltip" title="Remover">
+                                                    <a href="#" class="btn btn-danger btn-xs remover-{{ i.id }}"><i class="fa fa-trash-o"></i></a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr id="{{i.id}}">
+                                            <td>
+                                                {{ i.nome }}
+                                            </td>
+                                            <td>
+                                                {{ i.periodo }}
+                                            </td>
+                                            <td align="right">
+                                                <span data-toggle="tooltip" title="Editar">
+                                                    <a href="#" data-toggle="modal" data-target="#editar-atividade-{{i.id}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                                                </span>
+                                                <span data-toggle="tooltip" title="Remover">
+                                                    <a href="#" class="btn btn-danger btn-xs remover-{{ i.id }}"><i class="fa fa-trash-o"></i></a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %} -->
+
+                                        <!-- {% for g in grupos %}
+                                        <tr>
+                                            <td colspan="2">
+                                                {{g.nome}}
+                                            </td>
+
+                                            <td align="right">
+                                                <span data-toggle="tooltip" title="Editar">
+                                                    <a href="#" data-toggle="modal" data-target="#editar-atividade-{{i.id}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                                                </span>
+                                                <span data-toggle="tooltip" title="Remover">
+                                                    <a href="#" class="btn btn-danger btn-xs remover-{{ i.id }}"><i class="fa fa-trash-o"></i></a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% for i in itens %}
+                                        {% if i.grupo != 0 and i.grupo == g.id %}
+                                        <tr id="{{i.id}}">
+                                            <td>
+                                                - - - {{ i.nome }}
+                                            </td>
+                                            <td>
+                                                {{ i.periodo }}
+                                            </td>
+                                            <td align="right">
+                                                <span data-toggle="tooltip" title="Editar">
+                                                    <a href="#" data-toggle="modal" data-target="#editar-atividade-{{i.id}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                                                </span>
+                                                <span data-toggle="tooltip" title="Remover">
+                                                    <a href="#" class="btn btn-danger btn-xs remover-{{ i.id }}"><i class="fa fa-trash-o"></i></a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <tr id="{{i.id}}">
+                                            <td>
+                                                {{ i.nome }}
+                                            </td>
+                                            <td>
+                                                {{ i.periodo }}
+                                            </td>
+                                            <td align="right">
+                                                <span data-toggle="tooltip" title="Editar">
+                                                    <a href="#" data-toggle="modal" data-target="#editar-atividade-{{i.id}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                                                </span>
+                                                <span data-toggle="tooltip" title="Remover">
+                                                    <a href="#" class="btn btn-danger btn-xs remover-{{ i.id }}"><i class="fa fa-trash-o"></i></a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                        {% endfor %} -->
+                                        {% for i in itens %}
+                                            {% if i.grupo == 0 or i.grupo == '' %}
+                                                <tr>
+                                                    <td>{{i.nome}}</td>
+                                                    <td>{{i.periodo}}</td>
+                                                    <td align="right">
+                                                        <span data-toggle="tooltip" title="Editar">
+                                                            <a href="#" data-toggle="modal" data-target="#editar-atividade-{{i.id}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                                                        </span>
+                                                        <span data-toggle="tooltip" title="Remover">
+                                                            <a href="#" class="btn btn-danger btn-xs remover-{{ i.id }}"><i class="fa fa-trash-o"></i></a>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {% for g in grupos %}
+                                            <tr>
+                                                <td colspan="2"><strong>{{g.nome}}</strong></td>
+                                                <td align="right">
+                                                    <span data-toggle="tooltip" title="Editar">
+                                                        <a href="#" data-toggle="modal" data-target="#editar-grupo-{{g.id}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                                                    </span>
+                                                    
+                                                    {% if count_atividades[g.id] == 0 %}
+                                                    <span data-toggle="tooltip" title="Remover">
+                                                        <a href="#" class="btn btn-danger btn-xs remover-grupo-{{ g.id }}"><i class="fa fa-trash-o"></i></a>
+                                                    </span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+
+                                            {% for i in itens %}
+                                                {% if i.grupo == g.id %}
+                                                <tr>
+                                                    <td>- - - {{i.nome}}</td>
+                                                    <td>{{i.periodo}}</td>
+                                                    <td align="right">
+                                                        <span data-toggle="tooltip" title="Editar">
+                                                            <a href="#" data-toggle="modal" data-target="#editar-atividade-{{i.id}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                                                        </span>
+                                                        <span data-toggle="tooltip" title="Remover">
+                                                            <a href="#" class="btn btn-danger btn-xs remover-{{ i.id }}"><i class="fa fa-trash-o"></i></a>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <div id="adicionar-atividade" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h4 class="modal-title">Nova atividade</h4>
+                                            </div>
+                                            <form action="{{path_for('post_criar_atividade')}}" id="validation" data-toggle="validator" novalidate="true" method="POST">
+                                                <div class="modal-body">
+                                                    <div class="row form-group">
+                                                        <div class="col-md-5">
+                                                            <label for="nome">Nome da atividade</label>
+                                                            <input type="text" class="form-control" name="nome" id="nome" required="">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label for="periodo">Período</label>
+                                                            <input type="text" class="form-control" name="periodo" id="periodo">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="grupo">Grupo</label>
+                                                            <select class="form-control" name="grupo" id="grupo">
+                                                                <option>-- SELECIONE</option>
+                                                                {% for g in grupos %}
+                                                                    <option value="{{g.id}}">{{g.nome}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col-md-12">
+                                                            <label for="is_grupo">
+                                                                <input type="checkbox" name="is_grupo" id="is_grupo"> É um grupo?
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                                    <button type="submit" class="btn btn-success">Adicionar registro</button>
+                                                </div>
+                                                <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% for i in itens %}
+                                    <div id="editar-atividade-{{i.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    <h4 class="modal-title">Editar atividade</h4>
+                                                </div>
+                                                <form action="{{path_for('post_editar_atividade', {'id' : i.id})}}" id="validation" data-toggle="validator" novalidate="true" method="POST">
+                                                    <div class="modal-body">
+                                                        <div class="row form-group">
+                                                            <div class="col-md-5">
+                                                                <label for="nome">Nome da atividade</label>
+                                                                <input type="text" class="form-control" name="nome" id="nome" value="{{i.nome}}">
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label for="cor">Período</label>
+                                                                <input type="text" class="form-control" name="periodo" id="periodo" value="{{i.periodo}}">
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <label for="grupo">Grupo</label>
+                                                                <select class="form-control" name="grupo" id="grupo">
+                                                                    <option>-- SELECIONE</option>
+                                                                    {% for g in grupos %}
+                                                                        <option value="{{g.id}}" {% if i.grupo == g.id %} selected {% endif %}>{{g.nome}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                                        <button type="submit" class="btn btn-primary">Salvar</button>
+                                                    </div>
+                                                    <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                    <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                                {% for g in grupos %}
+                                    <div id="editar-grupo-{{g.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    <h4 class="modal-title">Editar grupo de atividades</h4>
+                                                </div>
+                                                <form action="{{path_for('post_editar_grupo_atividade', {'id' : g.id})}}" id="validation" data-toggle="validator" novalidate="true" method="POST">
+                                                    <div class="modal-body">
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <label for="nome">Nome do grupo de atividades</label>
+                                                                <input type="text" class="form-control" name="nome" id="nome" value="{{g.nome}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                                        <button type="submit" class="btn btn-primary">Salvar</button>
+                                                    </div>
+                                                    <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                    <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            {% if view == 'usuarios' %}
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-responsive table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome do grupo de usuários</th>
+                                            <th>
+                                                <span data-toggle="modal" data-target="#adicionar-role">
+                                                    <button class="btn btn-info btn-circle btn-sm pull-right" data-toggle="tooltip" title="Novo Registro">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in itens %}
+                                        <tr id="{{i.id}}">
+                                            <td>
+                                                <div class="label" style="background: {{i.cor}}">{{ i.nome }}</div>
+                                            </td>
+                                            <td align="right">
+                                                <span data-toggle="tooltip" title="Editar">
+                                                    <a href="#" data-toggle="modal" data-target="#editar-role-{{i.id}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>
+                                                </span>
+                                                <span data-toggle="tooltip" title="Remover">
+                                                    <a href="#" class="btn btn-danger btn-xs remover-{{ i.id }}"><i class="fa fa-trash-o"></i></a>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <div id="adicionar-role" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    <h4 class="modal-title">Novo grupo de usuários</h4>
+                                                </div>
+                                                <form action="{{path_for('post_criar_grupo')}}" id="validation" data-toggle="validator" novalidate="true" method="POST">
+                                                    <div class="modal-body">
+                                                        <div class="row form-group">
+                                                            <div class="col-md-8">
+                                                                <label for="nome">Nome do grupo de usuários</label>
+                                                                <input type="text" class="form-control" name="nome" id="nome" required="">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label for="cor">Identificação</label>
+                                                                <input type="text" class="form-control colorpicker" name="cor" id="cor" value="{{color}}">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <table class="table">
+                                                                    <tr>
+                                                                        <th>Módulo / Página</th>
+                                                                        <th>Visualizar</th>
+                                                                        <th>Cadastrar</th>
+                                                                        <th>Editar</th>
+                                                                        <th>Remover</th>
+                                                                    </tr>
+
+                                                                    <!-- FINANCEIRO -->
+                                                                    <tr>
+                                                                        <th colspan="5"><i class="mdi mdi-currency-usd"></i> Financeiro</th>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>Contas a pagar</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_pagar][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_pagar][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_pagar][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_pagar][d]">
+                                                                        </td>
+                                                                    </tr><!-- CONTAS A PAGAR -->
+                                                                    <tr>
+                                                                        <td>Contas a receber</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_receber][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_receber][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_receber][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_receber][d]">
+                                                                        </td>
+                                                                    </tr><!-- CONTAS A RECEBER -->
+                                                                    <tr>
+                                                                        <td>Fluxo de caixa</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][fluxo_de_caixa][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][fluxo_de_caixa][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][fluxo_de_caixa][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][fluxo_de_caixa][d]">
+                                                                        </td>
+                                                                    </tr><!-- FLUXO DE CAIXA -->
+                                                                    <tr>
+                                                                        <td>Mensalidades</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][mensalidades][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][mensalidades][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][mensalidades][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][mensalidades][d]">
+                                                                        </td>
+                                                                    </tr><!-- MENSALIDADES -->
+                                                                    <tr>
+                                                                        <td>Matrículas</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][matriculas][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][matriculas][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][matriculas][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][matriculas][d]">
+                                                                        </td>
+                                                                    </tr><!-- MATRICULAS -->
+                                                                    <tr>
+                                                                        <td>Categorias</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][categorias][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][categorias][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][categorias][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][categorias][d]">
+                                                                        </td>
+                                                                    </tr><!-- CATEGORIAS -->
+                                                                    <tr>
+                                                                        <td>Contas Bancárias</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_bancarias][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_bancarias][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_bancarias][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_bancarias][d]">
+                                                                        </td>
+                                                                    </tr><!-- CONTAS BANCÁRIAS -->
+                                                                    <tr>
+                                                                        <td>Calendário</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][calendario][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][calendario][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][calendario][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][calendario][d]">
+                                                                        </td>
+                                                                    </tr><!-- CALENDÁRIO -->
+
+                                                                    <!-- UNIDADES -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-home"></i> Unidades</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[unidades][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[unidades][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[unidades][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[unidades][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- QUARTOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-hotel"></i> Quartos</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[quartos][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[quartos][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[quartos][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[quartos][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- ACOLHIDOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-account-multiple"></i> Acolhidos</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhidos][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhidos][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhidos][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhidos][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- CAIXA ACOLHIDOS -->
+                                                                    <tr>
+                                                                        <td><i class="fa fa-money"></i> Caixa</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[acolhidos][caixa][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[acolhidos][caixa][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[acolhidos][caixa][u]" disabled="">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[acolhidos][caixa][d]">
+                                                                        </td>
+                                                                    </tr><!-- TODOS OS PRODUTOS -->
+
+                                                                    <!-- ACOLHIMENTOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-hotel"></i> Acolhimentos</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhimentos][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhimentos][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhimentos][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhimentos][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- CALENDÁRIO GERAL -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-calendar"></i> Calendário Geral</th>
+                                                                        <th colspan="4">
+                                                                            <input type="checkbox" name="acesso[calendario_geral][index][r]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- ENCAMINHAMENTOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-call-split"></i> Encaminhamentos</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[encaminhamentos][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[encaminhamentos][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[encaminhamentos][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[encaminhamentos][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- RESSOCIALIZAÇÕES -->
+                                                                    <tr>
+                                                                        <th><i class="ti-direction-alt"></i> Ressocializações</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[ressocializacoes][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[ressocializacoes][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[ressocializacoes][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[ressocializacoes][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- ATIVIDADES TERAPÊUTICAS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-briefcase"></i> Atividades Terapêuticas</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[atividades_terapeuticas][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[atividades_terapeuticas][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[atividades_terapeuticas][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[atividades_terapeuticas][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- TÉCNICOS DE REFERÊNCIA -->
+                                                                    <tr>
+                                                                        <th><i class="fa fa-users"></i> Terapeutas</th> <!-- Antigo: Técnicos de Referência -->
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[tecnicos_referencia][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[tecnicos_referencia][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[tecnicos_referencia][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[tecnicos_referencia][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- CONVÊNIOS -->
+                                                                    <!-- <tr>
+                                                                        <th><i class="mdi mdi-hospital"></i> Convênios</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[convenios][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[convenios][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[convenios][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[convenios][index][d]">
+                                                                        </th>
+                                                                    </tr> -->
+
+                                                                    <!-- CANTINA -->
+                                                                    <tr>
+                                                                        <th colspan="5"><i class="mdi mdi-food"></i> Cantina</th>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>Lançamentos</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][lancamentos][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][lancamentos][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][lancamentos][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][lancamentos][d]">
+                                                                        </td>
+                                                                    </tr><!-- LANÇAMENTOS -->
+
+                                                                    <!-- <tr>
+                                                                        <td>Baixa/Liquidação de Lançamentos</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][baixa][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][baixa][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][baixa][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][baixa][d]">
+                                                                        </td>
+                                                                    </tr> --><!-- Baixa/Liquidação de LANÇAMENTOS -->
+
+                                                                    <tr>
+                                                                        <td>Todos os produtos</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][produtos][r]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][produtos][c]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][produtos][u]">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][produtos][d]">
+                                                                        </td>
+                                                                    </tr><!-- TODOS OS PRODUTOS -->
+
+                                                                    <!-- FORNECEDORES -->
+                                                                    <!-- <tr>
+                                                                        <th><i class="mdi mdi-cube-send"></i> Fornecedores</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[fornecedores][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[fornecedores][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[fornecedores][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[fornecedores][index][d]">
+                                                                        </th>
+                                                                    </tr> -->
+
+                                                                    <!-- DOADORES -->
+                                                                    <!-- <tr>
+                                                                        <th><i class="mdi mdi-cube-send"></i> Doadores</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[doadores][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[doadores][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[doadores][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[doadores][index][d]">
+                                                                        </th>
+                                                                    </tr> -->
+
+                                                                    <!-- GRÁFICOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-chart-areaspline"></i> Gráficos</th>
+                                                                        <th colspan="4">
+                                                                            <input type="checkbox" name="acesso[graficos][index][r]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- RELATÓRIOS -->
+                                                                    <tr>
+                                                                        <th colspan="5"><i class="mdi mdi-checkbox-multiple-marked-outline"></i> Relatórios</th>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>Acolhidos por Período</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[relatorios][acolhidos_periodo][r]">
+                                                                        </td>
+                                                                    </tr><!-- ACOLHIDOS POR PERÍODO -->
+
+                                                                    <tr>
+                                                                        <td>Altas por Período</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[relatorios][altas_periodo][r]">
+                                                                        </td>
+                                                                    </tr><!-- ALTAS POR PERÍODO -->
+
+                                                                    <tr>
+                                                                        <td>Planilha Matriz</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[relatorios][planilha_matriz][r]">
+                                                                        </td>
+                                                                    </tr><!-- PLANILHA MATRIZ -->
+
+                                                                    <!-- LISTAS -->
+                                                                    <tr>
+                                                                        <th colspan="5"><i class="mdi mdi-format-list-bulleted"></i> Listas</th>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>Lista Dinâmica</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[relatorios][lista_dinamica][r]">
+                                                                        </td>
+                                                                    </tr><!-- LISTA DINÂMICA -->
+
+                                                                    <tr>
+                                                                        <td>Lista de Chamada</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[listas][lista_chamada][r]">
+                                                                        </td>
+                                                                    </tr><!-- LISTA DE CHAMADA -->
+
+                                                                    <tr>
+                                                                        <td>Lista de Medicação Diária</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[listas][lista_medicacao_diaria][r]">
+                                                                        </td>
+                                                                    </tr><!-- LISTA DE MEDICAÇÃO DIÁRIA -->
+
+                                                                    <!-- CONTRATOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-file-pdf"></i> Contratos</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[contratos][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[contratos][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[contratos][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[contratos][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- USUÁRIOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-account-settings-variant "></i> Usuários</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[usuarios][index][r]" checked="">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[usuarios][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[usuarios][index][u]" checked="">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[usuarios][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- FUNCIONÁRIOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-account-box "></i> Funcionários</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[funcionarios][index][r]" checked="">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[funcionarios][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[funcionarios][index][u]" checked="">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[funcionarios][index][d]">
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- CONFIGURAÇÕES -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-settings"></i> Configurações</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[config][index][r]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[config][index][c]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[config][index][u]">
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[config][index][d]">
+                                                                        </th>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                                        <button type="submit" class="btn btn-success">Adicionar registro</button>
+                                                    </div>
+                                                    <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                    <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                                </form>
+                                            </div>
+                                        </div>
+                                </div>
+
+                                {% for i in itens %}
+                                    <div id="editar-role-{{i.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    <h4 class="modal-title">Editar grupo de usuários</h4>
+                                                </div>
+                                                <form action="{{path_for('post_editar_grupo', {'id' : i.id})}}" id="validation" data-toggle="validator" novalidate="true" method="POST">
+                                                    <div class="modal-body">
+                                                        <div class="row form-group">
+                                                            <div class="col-md-8">
+                                                                <label for="nome">Nome do grupo de usuários</label>
+                                                                <input type="text" class="form-control" name="nome" id="nome" value="{{i.nome}}">
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <label for="cor">Identificação</label>
+                                                                <input type="text" class="form-control colorpicker" name="cor" id="cor" value="{{i.cor}}">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row form-group">
+                                                            <div class="col-md-12">
+                                                                <table class="table">
+                                                                    <tr>
+                                                                        <th>Módulo / Página</th>
+                                                                        <th>Visualizar</th>
+                                                                        <th>Cadastrar</th>
+                                                                        <th>Editar</th>
+                                                                        <th>Remover</th>
+                                                                    </tr>
+
+                                                                    <!-- FINANCEIRO -->
+                                                                    <tr>
+                                                                        <th colspan="5"><i class="mdi mdi-currency-usd"></i> Financeiro</th>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>Contas a pagar</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_pagar][r]" {% if acesso[i.id].financeiro.contas_a_pagar.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_pagar][c]" {% if acesso[i.id].financeiro.contas_a_pagar.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_pagar][u]" {% if acesso[i.id].financeiro.contas_a_pagar.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_pagar][d]" {% if acesso[i.id].financeiro.contas_a_pagar.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- CONTAS A PAGAR -->
+                                                                    <tr>
+                                                                        <td>Contas a receber</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_receber][r]" {% if acesso[i.id].financeiro.contas_a_receber.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_receber][c]" {% if acesso[i.id].financeiro.contas_a_receber.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_receber][u]" {% if acesso[i.id].financeiro.contas_a_receber.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_a_receber][d]" {% if acesso[i.id].financeiro.contas_a_receber.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- CONTAS A RECEBER -->
+                                                                    <tr>
+                                                                        <td>Fluxo de caixa</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][fluxo_de_caixa][r]" {% if acesso[i.id].financeiro.fluxo_de_caixa.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][fluxo_de_caixa][c]" {% if acesso[i.id].financeiro.fluxo_de_caixa.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][fluxo_de_caixa][u]" {% if acesso[i.id].financeiro.fluxo_de_caixa.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][fluxo_de_caixa][d]" {% if acesso[i.id].financeiro.fluxo_de_caixa.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- FLUXO DE CAIXA -->
+                                                                    <tr>
+                                                                        <td>Mensalidades</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][mensalidades][r]" {% if acesso[i.id].financeiro.mensalidades.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][mensalidades][c]" {% if acesso[i.id].financeiro.mensalidades.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][mensalidades][u]" {% if acesso[i.id].financeiro.mensalidades.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][mensalidades][d]" {% if acesso[i.id].financeiro.mensalidades.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- MENSALIDADES -->
+                                                                    <tr>
+                                                                        <td>Matrículas</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][matriculas][r]" {% if acesso[i.id].financeiro.matriculas.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][matriculas][c]" {% if acesso[i.id].financeiro.matriculas.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][matriculas][u]" {% if acesso[i.id].financeiro.matriculas.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][matriculas][d]" {% if acesso[i.id].financeiro.matriculas.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- MATRICULAS -->
+                                                                    <tr>
+                                                                        <td>Categorias</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][categorias][r]" {% if acesso[i.id].financeiro.categorias.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][categorias][c]" {% if acesso[i.id].financeiro.categorias.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][categorias][u]" {% if acesso[i.id].financeiro.categorias.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][categorias][d]" {% if acesso[i.id].financeiro.categorias.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- CATEGORIAS -->
+                                                                    <tr>
+                                                                        <td>Contas Bancárias</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_bancarias][r]" {% if acesso[i.id].financeiro.contas_bancarias.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_bancarias][c]" {% if acesso[i.id].financeiro.contas_bancarias.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_bancarias][u]" {% if acesso[i.id].financeiro.contas_bancarias.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][contas_bancarias][d]" {% if acesso[i.id].financeiro.contas_bancarias.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- CONTAS BANCÁRIAS -->
+                                                                    <tr>
+                                                                        <td>Calendário</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][calendario][r]" {% if acesso[i.id].financeiro.calendario.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][calendario][c]" {% if acesso[i.id].financeiro.calendario.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][calendario][u]" {% if acesso[i.id].financeiro.calendario.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[financeiro][calendario][d]" {% if acesso[i.id].financeiro.matriculas.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- CALENDÁRIO -->
+
+                                                                    <!-- UNIDADES -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-home"></i> Unidades</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[unidades][index][r]" {% if acesso[i.id].unidades.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[unidades][index][c]" {% if acesso[i.id].unidades.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[unidades][index][u]" {% if acesso[i.id].unidades.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[unidades][index][d]" {% if acesso[i.id].unidades.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- UNIDADES -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-hotel"></i> Quartos</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[quartos][index][r]" {% if acesso[i.id].unidades.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[quartos][index][c]" {% if acesso[i.id].unidades.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[quartos][index][u]" {% if acesso[i.id].unidades.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[quartos][index][d]" {% if acesso[i.id].unidades.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- ACOLHIDOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-account-multiple"></i> Acolhidos</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhidos][index][r]" {% if acesso[i.id].acolhidos.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhidos][index][c]" {% if acesso[i.id].acolhidos.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhidos][index][u]" {% if acesso[i.id].acolhidos.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhidos][index][d]" {% if acesso[i.id].acolhidos.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- CAIXA ACOLHIDOS -->
+                                                                    <tr>
+                                                                        <td><i class="fa fa-money"></i> Caixa</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[acolhidos][caixa][r]" {% if acesso[i.id].acolhidos.caixa.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[acolhidos][caixa][c]" {% if acesso[i.id].acolhidos.caixa.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[acolhidos][caixa][u]" {% if acesso[i.id].acolhidos.caixa.u == 'on' %} checked="" {% endif %} disabled="">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[acolhidos][caixa][d]" {% if acesso[i.id].acolhidos.caixa.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- TODOS OS PRODUTOS -->
+
+                                                                    <!-- ACOLHIMENTOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-hotel"></i> Acolhimentos</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhimentos][index][r]" {% if acesso[i.id].acolhimentos.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhimentos][index][c]" {% if acesso[i.id].acolhimentos.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhimentos][index][u]" {% if acesso[i.id].acolhimentos.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[acolhimentos][index][d]" {% if acesso[i.id].acolhimentos.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- CALENDÁRIO GERAL -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-calendar"></i> Calendário Geral</th>
+                                                                        <th colspan="4">
+                                                                            <input type="checkbox" name="acesso[calendario_geral][index][r]" {% if acesso[i.id].calendario_geral.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- ENCAMINHAMENTOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-call-split"></i> Encaminhamentos</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[encaminhamentos][index][r]" {% if acesso[i.id].encaminhamentos.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[encaminhamentos][index][c]" {% if acesso[i.id].encaminhamentos.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[encaminhamentos][index][u]" {% if acesso[i.id].encaminhamentos.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[encaminhamentos][index][d]" {% if acesso[i.id].encaminhamentos.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- RESSOCIALIZAÇÕES -->
+                                                                    <tr>
+                                                                        <th><i class="ti-direction-alt"></i> Ressocializações</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[ressocializacoes][index][r]" {% if acesso[i.id].ressocializacoes.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[ressocializacoes][index][c]" {% if acesso[i.id].ressocializacoes.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[ressocializacoes][index][u]" {% if acesso[i.id].ressocializacoes.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[ressocializacoes][index][d]" {% if acesso[i.id].ressocializacoes.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- ATIVIDADES TERAPÊUTICAS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-briefcase"></i> Atividades Terapêuticas</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[atividades_terapeuticas][index][r]" {% if acesso[i.id].atividades_terapeuticas.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[atividades_terapeuticas][index][c]" {% if acesso[i.id].atividades_terapeuticas.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[atividades_terapeuticas][index][u]" {% if acesso[i.id].atividades_terapeuticas.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[atividades_terapeuticas][index][d]" {% if acesso[i.id].atividades_terapeuticas.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- TÉCNICOS DE REFERÊNCIA -->
+                                                                    <tr>
+                                                                        <th><i class="fa fa-users"></i> Terapeutas</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[tecnicos_referencia][index][r]" {% if acesso[i.id].tecnicos_referencia.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[tecnicos_referencia][index][c]" {% if acesso[i.id].tecnicos_referencia.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[tecnicos_referencia][index][u]" {% if acesso[i.id].tecnicos_referencia.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[tecnicos_referencia][index][d]" {% if acesso[i.id].tecnicos_referencia.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- CONVÊNIOS -->
+                                                                    <!-- <tr>
+                                                                        <th><i class="mdi mdi-hospital"></i> Convênios</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[convenios][index][r]" {% if acesso[i.id].convenios.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[convenios][index][c]" {% if acesso[i.id].convenios.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[convenios][index][u]" {% if acesso[i.id].convenios.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[convenios][index][d]" {% if acesso[i.id].convenios.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr> -->
+
+                                                                    <!-- CANTINA -->
+                                                                    <tr>
+                                                                        <th colspan="5"><i class="mdi mdi-food"></i> Cantina</th>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>Lançamentos</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][lancamentos][r]" {% if acesso[i.id].cantina.lancamentos.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][lancamentos][c]" {% if acesso[i.id].cantina.lancamentos.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][lancamentos][u]" {% if acesso[i.id].cantina.lancamentos.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][lancamentos][d]" {% if acesso[i.id].cantina.lancamentos.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- LANÇAMENTOS -->
+
+                                                                    <!-- <tr>
+                                                                        <td>Baixa/Liquidação de Lançamentos</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][baixa][r]" {% if acesso[i.id].cantina.baixa.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][baixa][c]" {% if acesso[i.id].cantina.baixa.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][baixa][u]" {% if acesso[i.id].cantina.baixa.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][baixa][d]" {% if acesso[i.id].cantina.baixa.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr> --><!-- Baixa/Liquidação de LANÇAMENTOS -->
+
+                                                                    <tr>
+                                                                        <td>Todos os produtos</td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][produtos][r]" {% if acesso[i.id].cantina.produtos.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][produtos][c]" {% if acesso[i.id].cantina.produtos.c == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][produtos][u]" {% if acesso[i.id].cantina.produtos.u == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="checkbox" name="acesso[cantina][produtos][d]" {% if acesso[i.id].cantina.produtos.d == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- TODOS OS PRODUTOS -->
+
+                                                                    <!-- FORNECEDORES -->
+                                                                    <!-- <tr>
+                                                                        <th><i class="mdi mdi-cube-send"></i> Fornecedores</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[fornecedores][index][r]" {% if acesso[i.id].fornecedores.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[fornecedores][index][c]" {% if acesso[i.id].fornecedores.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[fornecedores][index][u]" {% if acesso[i.id].fornecedores.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[fornecedores][index][d]" {% if acesso[i.id].fornecedores.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr> -->
+
+                                                                    <!-- DOADORES -->
+                                                                    <!-- <tr>
+                                                                        <th><i class="mdi mdi-cube-send"></i> Doadores</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[doadores][index][r]" {% if acesso[i.id].doadores.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[doadores][index][c]" {% if acesso[i.id].doadores.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[doadores][index][u]" {% if acesso[i.id].doadores.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[doadores][index][d]" {% if acesso[i.id].fornecedores.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr> -->
+
+                                                                    <!-- GRÁFICOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-chart-areaspline"></i> Gráficos</th>
+                                                                        <th colspan="4">
+                                                                            <input type="checkbox" name="acesso[graficos][index][r]" {% if acesso[i.id].graficos.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- RELATÓRIOS -->
+                                                                    <tr>
+                                                                        <th colspan="5"><i class="mdi mdi-checkbox-multiple-marked-outline"></i> Relatórios</th>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+                                                                        <td>Acolhidos por Período</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[relatorios][acolhidos_periodo][r]" {% if acesso[i.id].relatorios.acolhidos_periodo.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- ACOLHIDOS POR PERÍODO -->
+                                                                    
+                                                                    <tr>
+                                                                        <td>Altas por Período</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[relatorios][altas_periodo][r]" {% if acesso[i.id].relatorios.altas_periodo.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- ALTAS POR PERÍODO -->
+
+                                                                    <tr>
+                                                                        <td>Planilha Matriz</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[relatorios][planilha_matriz][r]" {% if acesso[i.id].relatorios.planilha_matriz.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- PLANILHA MATRIZ -->
+
+                                                                    <!-- LISTAS -->
+                                                                    <tr>
+                                                                        <th colspan="5"><i class="mdi mdi-format-list-bulleted"></i> Listas</th>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>Lista Dinâmica</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[relatorios][lista_dinamica][r]" {% if acesso[i.id].relatorios.lista_dinamica.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- LISTA DINÂMICA -->
+
+                                                                    <tr>
+                                                                        <td>Lista de Chamada</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[listas][lista_chamada][r]" {% if acesso[i.id].listas.lista_chamada.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- LISTA DE CHAMADA -->
+
+                                                                    <tr>
+                                                                        <td>Lista de Medicação Diária</td>
+                                                                        <td colspan="4">
+                                                                            <input type="checkbox" name="acesso[listas][lista_medicacao_diaria][r]" {% if acesso[i.id].listas.lista_medicacao_diaria.r == 'on' %} checked="" {% endif %}>
+                                                                        </td>
+                                                                    </tr><!-- LISTA DE CHAMADA -->
+
+                                                                    <!-- CONTRATOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-file-pdf"></i> Contratos</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[contratos][index][r]" {% if acesso[i.id].contratos.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[contratos][index][c]" {% if acesso[i.id].contratos.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[contratos][index][u]" {% if acesso[i.id].contratos.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[contratos][index][d]" {% if acesso[i.id].contratos.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- USUÁRIOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-account-settings-variant "></i> Usuários</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[usuarios][index][r]" {% if acesso[i.id].usuarios.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[usuarios][index][c]" {% if acesso[i.id].usuarios.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[usuarios][index][u]" {% if acesso[i.id].usuarios.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[usuarios][index][d]" {% if acesso[i.id].usuarios.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- FUNCIONÁRIOS -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-account-box "></i> Funcionários</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[funcionarios][index][r]" {% if acesso[i.id].funcionarios.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[funcionarios][index][c]" {% if acesso[i.id].funcionarios.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[funcionarios][index][u]" {% if acesso[i.id].funcionarios.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[funcionarios][index][d]" {% if acesso[i.id].funcionarios.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+
+                                                                    <!-- CONFIGURAÇÕES -->
+                                                                    <tr>
+                                                                        <th><i class="mdi mdi-settings"></i> Configurações</th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[config][index][r]" {% if acesso[i.id].config.index.r == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[config][index][c]" {% if acesso[i.id].config.index.c == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[config][index][u]" {% if acesso[i.id].config.index.u == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                        <th>
+                                                                            <input type="checkbox" name="acesso[config][index][d]" {% if acesso[i.id].config.index.d == 'on' %} checked="" {% endif %}>
+                                                                        </th>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fechar</button>
+                                                        <button type="submit" class="btn btn-primary">Salvar</button>
+                                                    </div>
+                                                    <input type="hidden" name="{{ csrf.TokenNameKey }}" value="{{ csrf.TokenName }}"/>
+                                                    <input type="hidden" name="{{ csrf.TokenValueKey }}" value="{{ csrf.TokenValue }}"/>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+	<!-- Dropify -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/dropify/dist/css/dropify.min.css" rel="stylesheet">
+
+    <!-- Color picker plugins css -->
+    <link href="{{base_url()}}/public/assets/plugins/bower_components/jquery-asColorPicker-master/css/asColorPicker.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block include_js %}
+    <!-- jQuery file upload -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/dropify/dist/js/dropify.min.js"></script>
+
+    <!-- Form Validator  -->
+    <script src="{{base_url()}}/public/assets/js/validator.js"></script>
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+
+    <!-- Color Picker Plugin JavaScript -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-asColorPicker-master/libs/jquery-asColor.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-asColorPicker-master/libs/jquery-asGradient.js"></script>
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/jquery-asColorPicker-master/dist/jquery-asColorPicker.min.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script>
+	    $(document).ready(function() {
+            {% if flash %}
+                {% if flash['success'] %}
+                    swal("Sucesso!", "{{flash.success | first}}", "success");
+                {% endif %}
+
+                {% if flash['error'] %}
+                    swal("Erro!", "{{flash.error | first}}", "error");
+                {% endif %}
+            {% endif %}
+
+	        // Basic
+            $('.dropify').dropify();
+
+            // Colorpicker
+            $(".colorpicker").asColorPicker();
+
+            {% for i in itens %}
+            $('.remover-{{ i.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    {% if view == 'cronograma_atividades' %}
+                    text: "Esta ação é irreversível e esta atividade será deletada!",   
+                    {% endif %}
+                    {% if view == 'usuarios' %}
+                    text: "Esta ação é irreversível e todos os dados deste grupo de usuário serão deletados!",   
+                    {% endif %}
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            {% if view == 'cronograma_atividades' %}
+                            url: "{{path_for('remover_atividade', { 'id' : i.id })}}",
+                            {% endif %}
+
+                            {% if view == 'usuarios' %}
+                            url: "{{path_for('remover_grupo', { 'id' : i.id })}}",
+                            {% endif %}
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function(res) {
+                                if(res == 'erro'){
+                                    {% if view == 'cronograma_atividades' %}
+                                    swal("Ooopssss!", "Não consegui deletar esta atividade do sistema!", "error");
+                                    {% endif %}
+                                    {% if view == 'usuarios' %}
+                                    swal("Ooopssss!", "Este grupo está sendo utilizado para 1 ou mais usuários!", "error");
+                                    {% endif %}
+                                } else {
+                                swal({
+                                    title: "Deletado!", 
+                                    {% if view == 'cronograma_atividades' %}
+                                    text: "Atividade excluída com sucesso.", 
+                                    {% endif %}
+                                    {% if view == 'usuarios' %}
+                                    text: "Todos os dados deste grupo de usuário foram excluídos.", 
+                                    {% endif %}
+                                    type: "success"
+                                    },
+                                    function(){
+                                        location.reload();
+                                    }
+                                );
+                                }
+                            },
+                        });
+                    } else {     
+                        {% if view == 'cronograma_atividades' %}
+                        swal("Cancelado!", "Os dados desta atividade estão a salvo :)", "error");   
+                        {% endif %}
+                        {% if view == 'usuarios' %}
+                        swal("Cancelado!", "Os dados deste grupo de usuário estão a salvo :)", "error");   
+                        {% endif %}
+                    } 
+                });
+            });
+            {% endfor %}
+
+            {% for g in grupos %}
+            $('.remover-grupo-{{ g.id }}').click(function(){
+                swal({   
+                    title: "Você tem certeza?",   
+                    text: "Esta ação é irreversível e todos os dados deste grupo de atividades serão deletados!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Sim, deletar!",   
+                    cancelButtonText: "Não, cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function(isConfirm){   
+                    if (isConfirm) {
+                        $.ajax({
+                            type: "GET",
+                            url: "{{path_for('remover_grupo_atividade', { 'id' : g.id })}}",
+                            // data: 'id=' + '{{ i.id}}',
+                            success: function(res) {
+                                if(res == 'erro'){
+                                    swal("Ooopssss!", "Este grupo está sendo utilizado para 1 ou mais atividades!", "error");
+                                } else {
+                                swal({
+                                    title: "Deletado!", 
+                                    text: "Todos os dados deste grupo de atividades foram excluídos.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        location.reload();
+                                    }
+                                );
+                                }
+                            },
+                        });
+                    } else {     
+                        swal("Cancelado!", "Os dados deste grupo de atividades estão a salvo :)", "error");   
+                    } 
+                });
+            });
+            {% endfor %}
+	    });
+	</script>
+
+    <script type="text/javascript">
+        // Registra o evento blur do campo "cep", ou seja, quando o usuário sair do campo "cep" faremos a consulta dos dados
+        $("#cep").blur(function(){
+            // Para fazer a consulta, removemos tudo o que não é número do valor informado pelo usuário
+            var cep = this.value.replace(/[^0-9]/, "");
+                
+            // Validação do CEP; caso o CEP não possua 8 números, então cancela a consulta
+            if(cep.length!=8){
+                return false;
+            }
+                
+            // Utilizamos o webservice "viacep.com.br" para buscar as informações do CEP fornecido pelo usuário.
+            // A url consiste no endereço do webservice ("http://viacep.com.br/ws/"), mais o cep que o usuário
+            // informou e também o tipo de retorno que desejamos, podendo ser "xml", "piped", "querty" ou o que
+            // iremos utilizar, que é "json"
+            var url = "https://viacep.com.br/ws/"+cep+"/json/";
+                
+            // Aqui fazemos uma requisição ajax ao webservice, tratando o retorno com try/catch para que caso ocorra algum
+            // erro (o cep pode não existir, por exemplo) o usuário não seja afetado, assim ele pode continuar preenchendo os campos
+            $.getJSON(url, function(dadosRetorno){
+                try{
+                    // Insere os dados em cada campo
+                    $("#endereco").val(dadosRetorno.logradouro);
+                    $("#bairro").val(dadosRetorno.bairro);
+                    $("#cidade").val(dadosRetorno.localidade);
+                    $("#uf").val(dadosRetorno.uf);
+                    $("#num").focus();
+                }catch(ex){}
+            });
+        });
+    </script>    
+{% endblock %}

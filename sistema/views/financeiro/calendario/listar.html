@@ -1,0 +1,485 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+		<!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        {% include 'layout/topbar.html' %}
+        <!-- End Top Navigation -->
+        <!-- ============================================================== -->
+        
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        {% include 'layout/navbar.html' %}
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar -->
+
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{Titulo_Pagina}}</h4> </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                        <!-- <button class="right-side-toggle waves-effect waves-light btn-info btn-circle pull-right m-l-20"><i class="ti-settings text-white"></i></button> -->
+                        <!-- <a href="javascript: void(0);" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Buy Admin Now</a> -->
+                        <ol class="breadcrumb">
+                            <li><a href="{{path_for('home')}}">Dashboard</a></li>
+                            <li class="active">{{Titulo_Pagina}}</li>
+                        </ol>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- row -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <i class="fa fa-circle text-success"></i> &nbsp; Entrada / Recebido 
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <i class="fa fa-circle text-info"></i> &nbsp; Entrada / A receber 
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <i class="fa fa-circle text-danger"></i> &nbsp; Saída / Pago 
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <i class="fa fa-circle text-warning"></i> &nbsp; Saída / A pagar 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="white-box">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+                <!-- BEGIN MODAL -->
+                <div class="modal fade none-border" id="my-event">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title"><strong>Evento</strong></h4>
+                            </div>
+                            <div class="modal-body"></div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-white waves-effect pull-left" data-dismiss="modal">Fechar</button>
+                                <button type="button" class="btn btn-success save-event waves-effect waves-light">Criar evento</button>
+                                <button type="button" class="btn btn-danger delete-event waves-effect waves-light" data-dismiss="modal">Deletar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal Add Category --
+                <div class="modal fade none-border" id="add-new-event">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title"><strong>Add</strong> a category</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label class="control-label">Category Name</label>
+                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="category-name" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="control-label">Choose Category Color</label>
+                                            <select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
+                                                <option value="success">Success</option>
+                                                <option value="danger">Danger</option>
+                                                <option value="info">Info</option>
+                                                <option value="primary">Primary</option>
+                                                <option value="warning">Warning</option>
+                                                <option value="inverse">Inverse</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger waves-effect waves-light save-category" data-dismiss="modal">Save</button>
+                                <button type="button" class="btn btn-white waves-effect" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END MODAL -->
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+
+{% endblock %}
+
+{% block include_css %}
+{% endblock %}
+
+
+{% block include_js %}
+    <!-- Calendar JavaScript -->
+    <!-- <script src="{{base_url()}}/public/assets/plugins/bower_components/calendar/jquery-ui.min.js"></script> -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/moment/moment.js"></script>
+    <script src='{{base_url()}}/public/assets/plugins/bower_components/calendar/dist/fullcalendar.min.js'></script>
+    <!-- <script src="{{base_url()}}/public/assets/plugins/bower_components/calendar/dist/lang/pt-br.js"></script> -->
+    <!-- <script src="{{base_url()}}/public/assets/plugins/bower_components/calendar/dist/jquery.fullcalendar.js"></script> -->
+    <!-- <script src="{{base_url()}}/public/assets/plugins/bower_components/calendar/dist/cal-init.js"></script> -->
+
+    <script src="{{base_url()}}/public/assets/js/mask.js"></script>
+    <script src="{{base_url()}}/public/assets/js/jquery.maskMoney.js"></script>
+    <script src="{{base_url()}}/public/assets/js/mascaras.js"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{base_url()}}/public/assets/plugins/bower_components/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("input.dinheiro").maskMoney({showSymbol:true, symbol:"R$", decimal:".", thousands:""});
+
+            {% if flash %}
+                {% if flash['success'] %}
+                    swal("Sucesso!", "{{flash.success | first}}", "success");
+                {% endif %}
+
+                {% if flash['error'] %}
+                    swal("Erro!", "{{flash.error | first}}", "error");
+                {% endif %}
+            {% endif %}
+        });
+
+
+        !function($) {
+            "use strict";
+
+            var CalendarApp = function() {
+                this.$body = $("body")
+                this.$calendar = $('#calendar'),
+                this.$event = ('#calendar-events div.calendar-events'),
+                this.$categoryForm = $('#add-new-event form'),
+                this.$extEvents = $('#calendar-events'),
+                this.$modal = $('#my-event'),
+                this.$saveCategoryBtn = $('.save-category'),
+                this.$calendarObj = null
+            };
+
+
+            /* on drop */
+            CalendarApp.prototype.onDrop = function (eventObj, date) { 
+                var $this = this;
+                    // retrieve the dropped element's stored Event Object
+                    var originalEventObject = eventObj.data('eventObject');
+                    var $categoryClass = eventObj.attr('data-class');
+                    // we need to copy it, so that multiple events don't have a reference to the same object
+                    var copiedEventObject = $.extend({}, originalEventObject);
+                    // assign it the date that was reported
+                    copiedEventObject.start = date;
+                    if ($categoryClass)
+                        copiedEventObject['className'] = [$categoryClass];
+                    // render the event on the calendar
+                    $this.$calendar.fullCalendar('renderEvent', copiedEventObject, true);
+                    // is the "remove after drop" checkbox checked?
+                    if ($('#drop-remove').is(':checked')) {
+                        // if so, remove the element from the "Draggable Events" list
+                        eventObj.remove();
+                    }
+            },
+            /* on click on event */
+            CalendarApp.prototype.onEventClick =  function (calEvent, jsEvent, view) {
+                var $this = this;
+                    // var form = $("<form></form>");
+                    // form.append("<label>Alterar nome do evento</label>");
+                    // form.append("<div class='input-group'><input class='form-control' type=text value='" + calEvent.title + "' /><span class='input-group-btn'><button type='submit' class='btn btn-success waves-effect waves-light'><i class='fa fa-check'></i> Salvar</button></span></div>");
+                    var form = $("<form></form>");
+                    form.append("<div class='row'></div>");
+                    form.find(".row")
+                        .append("<div class='col-md-2'><div class='form-group'><label class='control-label'>Nº Nota Fiscal</label><input class='form-control' type='text' name='num_nf' value='" +calEvent.num_nf+ "' /></div></div>")
+                        .append("<div class='col-md-7'><div class='form-group'><label class='control-label'>Descrição</label><input class='form-control' type='text' name='title' value='" +calEvent.title+ "' /></div></div>")
+                        .append("<div class='col-md-3'><div class='form-group'><label class='control-label'>Data Prevista</label><input class='form-control' type='text' name='start' value='" +calEvent.inicio+ "' data-mask='99/99/9999' /></div></div>")
+
+                        .append("<div class='col-md-3'><div class='form-group'><label class='control-label'>Valor Previsto</label><input class='form-control' type='text' name='valor_previsto' value='" +calEvent.valor_previsto+ "' onkeyup='mascara(this, mvalor);'/></div></div>")
+                        .append("<div class='col-md-4'><div class='form-group'><label class='control-label'>Categoria</label><select class='form-control select2' name='categoria'></select></div></div>")
+
+                        .append("<div class='col-md-4'><div class='form-group'><label class='control-label'>Cidade</label><input class='form-control' type='text' placeholder='Curitiba' name='cidade' value='" +calEvent.cidade+ "'/></div></div>")
+                        .append("<div class='col-md-2'><div class='form-group'><label class='control-label'>Estado</label><input class='form-control' type='text' placeholder='PR' name='uf' value='" +calEvent.uf+ "' maxlength='2'/></div></div>")
+                        .append("<div class='col-md-12'><div class='form-group'><label class='control-label'><i class='fa fa-facebook'></i> Link do evento</label><input class='form-control' type='text' placeholder='https://www.facebook.com/events/268524317103932/' name='url_facebook' value='" +calEvent.url_facebook+ "'/></div></div>")
+                        .append("<div class='col-md-12'><div class='form-group'><button type='submit' class='btn btn-success waves-effect waves-light btn-block'><i class='fa fa-check'></i> Salvar</button></div></div>")
+                        .append("<input type='hidden' name='{{ csrf.TokenNameKey }}' value='{{ csrf.TokenName }}'/>")
+                        .append("<input type='hidden' name='{{ csrf.TokenValueKey }}' value='{{ csrf.TokenValue }}'/>")
+                        .find("select[name='categoria']")
+                        .append("<option value='' selected='' disabled''>-- SELECIONE</option>")
+                        .append("<optgroup label='DESPESA / SAÍDA'>")
+                        {% for cd in categorias_despesa %}
+                        .append("<option value='{{cd.id}}'>{{cd.nome}}</option>")
+                        {% endfor %}
+                        .append("</optgroup>")
+                        .append("<optgroup label='ENTRADA / RECEITA'>")
+                        {% for cr in categorias_receita %}
+                        .append("<option value='{{cr.id}}'>{{cr.nome}}</option>")
+                        {% endfor %}
+                        .append("</optgroup>")
+                    $this.$modal.modal({
+                        backdrop: 'static'
+                    });
+                    $this.$modal.find('.delete-event').show().end().find('.save-event').hide().end().find('.modal-body').empty().prepend(form).end().find('.delete-event').unbind('click').click(function () {
+                        swal({   
+                            title: "Você tem certeza?",   
+                            text: "Esta ação é irreversível e o evento será deletado do sistema!",   
+                            type: "warning",   
+                            showCancelButton: true,   
+                            confirmButtonColor: "#DD6B55",   
+                            confirmButtonText: "Sim, deletar!",   
+                            cancelButtonText: "Não, cancelar!",   
+                            closeOnConfirm: false,   
+                            closeOnCancel: false 
+                        }, function(isConfirm){   
+                            if (isConfirm) {
+                                $.ajax({
+                                    type: "GET",
+                                    url: '/sistema/financeiro/calendario/remover/' + calEvent._id,
+                                    // data: 'id=' + '{{ i.id}}',
+                                    success: function() {
+                                        swal({
+                                            title: "Deletado!", 
+                                            text: "Este evento foi removido do sistema e do site.", 
+                                            type: "success"
+                                            },
+                                            function(){
+                                                $this.$calendarObj.fullCalendar('removeEvents', function (ev) {
+                                                    return (ev._id == calEvent._id);
+                                                });
+                                            }
+                                         );
+                                    },
+                                    error: function() {
+                                        swal("Ooopssss!", "Algo deu errado e não consegui deletar o evento do sistema ;'(", "error")
+                                    }
+                                });
+                            } else {     
+                                swal("Cancelado!", "Este evento está a salvo :)", "error");   
+                            } 
+                        });
+
+                        $this.$modal.modal('hide');
+                    });
+                    $this.$modal.find('form').on('submit', function () {
+                        var dataString =  $this.$modal.find('form').serialize();
+
+                        $.ajax({
+                            type: 'GET',
+                            url: '/admin/agenda/editar/' + calEvent._id,
+                            data: dataString,
+                            success: function() {
+                                swal({
+                                    title: "Editado!", 
+                                    text: "Informações do evento atualizadas com sucesso.", 
+                                    type: "success"
+                                    },
+                                    function(){
+                                        location.reload();
+                                    }
+                                );
+                            },
+                            error: function () {
+                                alert('Erro ao editar evento!');
+                            }
+                        });
+
+                        calEvent.title = form.find("input[type=text]").val();
+                        calEvent.start = form.find("input[name='start']").val();
+                        calEvent.end = form.find("input[name='end']").val();
+                        $this.$calendarObj.fullCalendar('updateEvent', calEvent);
+                        $this.$modal.modal('hide');
+                        return false;
+                    });
+            },
+            /* on select */
+            // CalendarApp.prototype.onSelect = function (start, end, allDay) {
+            //     var $this = this;
+            //         $this.$modal.modal({
+            //             backdrop: 'static'
+            //         });
+            //         var form = $("<form></form>");
+            //         form.append("<div class='row'></div>");
+            //         form.find(".row")
+            //             .append("<div class='col-md-2'><div class='form-group'><label class='control-label'>Nº Nota Fiscal</label><input class='form-control' type='text' name='title'/></div></div>")
+            //             .append("<div class='col-md-7'><div class='form-group'><label class='control-label'>Descrição</label><input class='form-control' type='text' name='title'/></div></div>")
+            //             .append("<div class='col-md-3'><div class='form-group'><label class='control-label'>Data Prevista</label><input class='form-control' placeholder='{{now|date('d/m/Y')}}' type='text' name='start'/></div></div>")
+
+            //             .append("<div class='col-md-3'><div class='form-group'><label class='control-label'>Valor Previsto</label><input class='form-control' placeholder='R$' type='text' name='title'/></div></div>")
+            //             .append("<div class='col-md-4'><div class='form-group'><label class='control-label'>Categoria</label><select class='form-control select2' name='category'></select></div></div>")
+            //             // .append("<div class='col-md-6'><div class='form-group'><label class='control-label'>Data de término</label><input class='form-control' type='text' placeholder='{{now|date('d/m/Y')}}' name='end'/></div></div>")
+            //             .append("<div class='col-md-6'><div class='form-group'><label class='control-label'>Local</label><input class='form-control' type='text' placeholder='Park Art' name='local'/></div></div>")
+            //             .append("<div class='col-md-4'><div class='form-group'><label class='control-label'>Cidade</label><input class='form-control' type='text' placeholder='Curitiba' name='cidade'/></div></div>")
+            //             .append("<div class='col-md-2'><div class='form-group'><label class='control-label'>UF</label><input class='form-control' type='text' placeholder='PR' name='uf' maxlength='2' /></div></div>")
+            //             .append("<div class='col-md-12'><div class='form-group'><label class='control-label'><i class='fa fa-facebook'></i> Link do evento</label><input class='form-control' type='text' placeholder='https://www.facebook.com/events/268524317103932/' name='url_facebook'/></div></div>")
+            //             .append("<input type='hidden' name='{{ csrf.TokenNameKey }}' value='{{ csrf.TokenName }}'/>")
+            //             .append("<input type='hidden' name='{{ csrf.TokenValueKey }}' value='{{ csrf.TokenValue }}'/>")
+            //             // .append("<div class='col-md-6'><div class='form-group'><label class='control-label'>Hora</label><input class='form-control' type='time' name='hora'/></div></div>")
+            //             .find("select[name='category']")
+            //             .append("<option value='' selected='' disabled''>-- SELECIONE</option>")
+            //             .append("<optgroup label='DESPESA / SAÍDA'>")
+            //             {% for cd in categorias_despesa %}
+            //             .append("<option value='{{cd.id}}'>{{cd.nome}}</option>")
+            //             {% endfor %}
+            //             .append("</optgroup>")
+            //             .append("<optgroup label='ENTRADA / RECEITA'>")
+            //             {% for cr in categorias_receita %}
+            //             .append("<option value='{{cr.id}}'>{{cr.nome}}</option>")
+            //             {% endfor %}
+            //             .append("</optgroup>")
+            //         $this.$modal.find('.delete-event').hide().end().find('.save-event').show().end().find('.modal-body').empty().prepend(form).end().find('.save-event').unbind('click').click(function () {
+            //             form.submit();
+            //         });
+            //         $this.$modal.find('form').on('submit', function () {
+            //             var title = form.find("input[name='title']").val();
+            //             var beginning = form.find("input[name='start']").val();
+            //             var ending = form.find("input[name='ending']").val();
+
+            //             if (beginning !== null && beginning.length != 0) {
+            //                 var dataString =  $this.$modal.find('form').serialize();
+
+            //                 $.ajax({
+            //                     type: 'GET',
+            //                     url: '{{path_for("cadastrar_evento")}}',
+            //                     data: dataString,
+            //                     success: function () {
+            //                         swal({
+            //                             title: "Sucesso!", 
+            //                             text: "Evento inserido com sucesso na sua agenda!", 
+            //                             type: "success"
+            //                             },
+            //                             function(){
+            //                                 location.reload();
+            //                             }
+            //                         );
+            //                     },
+            //                     error: function () {
+            //                         swal({
+            //                             title: "Erro!", 
+            //                             text: "Algo deu errado e não consegui incluir o evento no sistema ;'(", 
+            //                             type: "warning"
+            //                             },
+            //                             function(){
+            //                                 location.reload();
+            //                             }
+            //                         );
+            //                     }
+            //                 });
+            //             } else {
+            //                 alert('Insira a data do evento');
+            //                 return false;
+            //             }
+
+            //             if (title !== null && title.length != 0) {
+            //                 $this.$calendarObj.fullCalendar('renderEvent', {
+            //                     title: title,
+            //                     start: beginning,
+            //                     end: end,
+            //                     allDay: false,
+            //                 }, true);  
+            //                 $this.$modal.modal('hide');
+            //             }
+            //             else{
+            //                 alert('Você precisa adicionar um título ao seu evento');
+            //             }
+            //             return false;
+                        
+            //         });
+            //         $this.$calendarObj.fullCalendar('unselect');
+            // },
+            CalendarApp.prototype.enableDrag = function() {
+                //init events
+                $(this.$event).each(function () {
+                    // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+                    // it doesn't need to have a start or end
+                    var eventObject = {
+                        title: $.trim($(this).text()), // use the element's text as the event title
+                    };
+                    // store the Event Object in the DOM element so we can get to it later
+                    $(this).data('eventObject', eventObject);
+                    // make the event draggable using jQuery UI
+                    $(this).draggable({
+                        zIndex: 999,
+                        revert: true,      // will cause the event to go back to its
+                        revertDuration: 0  //  original position after the drag
+                    });
+                });
+            }
+            /* Initializing */
+            CalendarApp.prototype.init = function() {
+                this.enableDrag();
+                /*  Initialize the calendar  */
+                var date = new Date();
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+                var form = '';
+                var today = new Date($.now());
+
+                var $this = this;
+                $this.$calendarObj = $this.$calendar.fullCalendar({
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sabado'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                    buttonText: {
+                        today: "Hoje",
+                        month: "Mês",
+                        week: "Semana",
+                        day: "Dia"
+                    },
+                    slotDuration: '00:30:00', /* If we want to split day time each 30 minutes */
+                    minTime: '01:00:00',
+                    maxTime: '24:00:00',  
+                    defaultView: 'month',  
+                    handleWindowResize: true,   
+                     
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,agendaWeek,agendaDay'
+                    },
+                    events: {{evento|json_encode|raw}},
+                    editable: true,
+                    droppable: true, // this allows things to be dropped onto the calendar !!!
+                    eventLimit: true, // allow "more" link when too many events
+                    selectable: true,
+                    drop: function(date) { $this.onDrop($(this), date); },
+                    select: function (start, end, allDay) { $this.onSelect(start, end, allDay); },
+                    eventClick: function(calEvent, jsEvent, view) { $this.onEventClick(calEvent, jsEvent, view); }
+
+                });
+
+                //on new event
+                this.$saveCategoryBtn.on('click', function(){
+                    var categoryName = $this.$categoryForm.find("input[name='category-name']").val();
+                    var categoryColor = $this.$categoryForm.find("select[name='category-color']").val();
+                    if (categoryName !== null && categoryName.length != 0) {
+                        $this.$extEvents.append('<div class="calendar-events bg-' + categoryColor + '" data-class="bg-' + categoryColor + '" style="position: relative;"><i class="fa fa-move"></i>' + categoryName + '</div>')
+                        $this.enableDrag();
+                    }
+
+                });
+            },
+
+           //init CalendarApp
+            $.CalendarApp = new CalendarApp, $.CalendarApp.Constructor = CalendarApp
+            
+        }(window.jQuery),
+
+        //initializing CalendarApp
+        function($) {
+            "use strict";
+            $.CalendarApp.init()
+        }(window.jQuery);
+    </script>    
+{% endblock %}

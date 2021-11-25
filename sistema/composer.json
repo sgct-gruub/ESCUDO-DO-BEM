@@ -1,0 +1,47 @@
+{
+    "name": "agenciagruub/sistema-cts",
+    "description": "Sistema para Gerenciamento de Comunidades Terapêuticas",
+    "keywords": ["delivery"],
+    "homepage": "https://www.agenciagruub.com.br/sistema-para-gerenciamento-de-comunidades-terapeuticas",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Agência Gruub",
+            "email": "agenciagruub@gmail.com",
+            "homepage": "https://www.agenciagruub.com.br/"
+        }
+    ],
+    "require": {
+        "slim/slim": "^3.5",
+        "slim/twig-view": "^2.1",
+        "illuminate/database": "^5.3",
+        "respect/validation": "^1.1",
+        "slim/csrf": "^0.7.0",
+        "slim/flash": "^0.2.0",
+        "guzzlehttp/guzzle": "^7.3",
+        "phpunit/phpunit": "^9.5",
+        "jetimob/juno-sdk-php-laravel": "^1.1"
+    },
+    "autoload":{
+      "psr-4":{
+        "App\\":["app/"],
+        "Jetimob\\Juno\\": "src"
+      }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jetimob\\Juno\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jetimob\\Juno\\JunoServiceProvider"
+            ],
+            "aliases": {
+                "Juno": "Jetimob\\Juno\\Facades\\Juno"
+            }
+        }
+    }
+}
